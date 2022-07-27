@@ -308,10 +308,10 @@ class MetaWearDevice: RCTEventEmitter {
   }
   
   func getBattery() {
-    mbl_mw_settings_get_battery_state_data_signal(self.device?.board).read().continueOnSuccessWith(.mainThread) {
-      let battery: MblMwBatteryState = $0.valueAs()
-      self.state.batteryPercent = String(battery.charge)
-    }
+//    mbl_mw_settings_get_battery_state_data_signal(self.device?.board).read().continueOnSuccessWith(.mainThread) {
+//      let battery: MblMwBatteryState = $0.valueAs()
+//      self.state.batteryPercent = String(battery.charge)
+//    }
   }
   
   func ConnectionSuccessful(device: MetaWear) -> State {
@@ -319,7 +319,8 @@ class MetaWearDevice: RCTEventEmitter {
     device.remember()
     mbl_mw_logging_clear_entries(device.board)
     self.device = device
-    self.getBattery()
+//    self.getBattery()
+    self.state.batteryPercent = String(90)
     let s = State(
       macAdress: String( device.mac! ),
       batteryPercent: self.state.batteryPercent, //not implemented
