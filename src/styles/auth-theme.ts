@@ -2,12 +2,16 @@ import {Platform, StyleSheet} from 'react-native';
 import {theme} from './index';
 const deepSquidInk = '#152939';
 const textInputColor = '#000000';
+const linkUnderlayColor = '#FFF';
 const textInputBorderColor = '#C4C4C4';
 const buttonColor = theme.colors.primary;
 const disabledButtonColor = theme.colors.disabledPrimary;
 
 // Theme
 export default StyleSheet.create({
+  linkUnderlay: {
+    color: linkUnderlayColor,
+  },
   container: {
     flex: 1,
     flexDirection: 'column',

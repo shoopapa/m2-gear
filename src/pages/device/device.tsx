@@ -1,30 +1,43 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Auth, DataStore} from 'aws-amplify';
-import {View, NativeModules, NativeAppEventEmitter} from 'react-native';
-import styles from '../../styles';
+import {View} from 'react-native';
+import styles, { ThemeType } from '../../styles';
+import * as MetaWear from '../../device/ios/metawear'
 import AuthContext from '../../auth/auth-context';
-import {Text, Button, withTheme, Drawer, Appbar} from 'react-native-paper';
-import DeviceContext, {InitDeviceContext} from './device-context';
+import {Text, Button, withTheme, Drawer} from 'react-native-paper';
+import DeviceContext, {InitDeviceContext } from '../../device/ios/device-context';
 import {ActivityIndicator} from 'react-native-paper';
 //TODO: create npm package for metawear
 
+// const fn = async (time: number, label) => {
+// 	await new Promise((res) => setTimeout(res, time));
+// 	return label;
+// }
 interface ConnectProps {
-  deviceContext: InitDeviceContext;
   colors: any;
 }
-const Connect = ({deviceContext, colors}: ConnectProps) => {
+
+const Connect = ({colors}: ConnectProps ) => {
   const [blinking, setblinking] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const {device, setdevice} = useContext(DeviceContext);
 
-  if (deviceContext.device === null) {
+  useEffect(() => {
+    setisLoading(true)
+    const run = async () => {
+      const p = await MetaWear.connectToRemembered()
+      setdevice(p)
+      setisLoading(false)
+    }
+    run()
+  }, [])
+
+  if (device === null || isLoading === true) {
     return <ActivityIndicator animating={true} color={colors.primary} />;
   }
-  if (isLoading === true) {
-    return <ActivityIndicator animating={true} color={colors.primary} />;
-  }
 
-  if (deviceContext.device.isConnected === false) {
+  if (device?.isConnected === false) {
     return (
       <Button
         mode="contained"
@@ -32,9 +45,8 @@ const Connect = ({deviceContext, colors}: ConnectProps) => {
         icon="bluetooth"
         onPress={async () => {
           setisLoading(true);
-          const p = await NativeModules.MetaWearDevice.connect();
-          deviceContext.setdevice(JSON.parse(p));
-          console.log(deviceContext.device);
+          const p = await MetaWear.connect();
+          setdevice(p);
           setisLoading(false);
         }}>
         Connect
@@ -42,7 +54,7 @@ const Connect = ({deviceContext, colors}: ConnectProps) => {
     );
   }
 
-  if (deviceContext.device.isConnected === true) {
+  if (device?.isConnected === true) {
     return (
       <>
         <Button
@@ -51,7 +63,7 @@ const Connect = ({deviceContext, colors}: ConnectProps) => {
           icon="lightbulb-on"
           onPress={async () => {
             setblinking(true);
-            await NativeModules.MetaWearDevice.blinkLED();
+            await MetaWear.blinkLED()
             setblinking(false);
           }}>
           Blink
@@ -59,13 +71,13 @@ const Connect = ({deviceContext, colors}: ConnectProps) => {
         <Button
           mode="contained"
           disabled={blinking}
-          style={{backgroundColor: colors.accent, margin: '2%'}}
+          style={{backgroundColor: colors.error, margin: '2%'}}
           icon="bluetooth-off"
           onPress={async () => {
-            const p = await NativeModules.MetaWearDevice.disconnect();
-            deviceContext.setdevice(JSON.parse(p));
+            const p = await MetaWear.forget()
+            setdevice(p);
           }}>
-          Disconnect
+          Forget
         </Button>
       </>
     );
@@ -74,33 +86,18 @@ const Connect = ({deviceContext, colors}: ConnectProps) => {
   return null;
 };
 
-const Device = ({navigation, theme}: any) => {
-  const {colors} = theme;
+interface DeviceProps {
+  theme: ThemeType
+  navigation: any
+}
+
+const Device = ({navigation, theme}: DeviceProps) => {
+  const {colors} = theme; // stop using paper provider?
   const authContext = useContext(AuthContext);
-  const deviceContext = useContext(DeviceContext);
-
-  const updateDevice = async () => {
-    NativeAppEventEmitter.addListener('onDisconect', (body: string) => {
-      deviceContext.setdevice(JSON.parse(body));
-    });
-    const x = await NativeModules.MetaWearDevice.getState();
-    console.log(x);
-    if (deviceContext.setdevice !== null) {
-      deviceContext.setdevice(JSON.parse(x));
-    }
-    console.log('updating', deviceContext.device);
-  };
-
-  React.useEffect(() => {
-    updateDevice();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const {device, setdevice} = useContext(DeviceContext);
 
   return (
     <View style={styles.container}>
-      <Appbar.Header style={{width: '100%'}}>
-        <Appbar.Content title="Settings" />
-      </Appbar.Header>
       <Drawer.Section title="Device Info" style={{width: '100%'}}>
         <Drawer.Item
           style={{backgroundColor: colors.gray}}
@@ -108,7 +105,7 @@ const Device = ({navigation, theme}: any) => {
           label="Status"
           right={() => (
             <Text>
-              {deviceContext.device?.isConnected ? 'Connected' : 'Disconnected'}
+              {device?.isConnected ? 'Connected' : 'Disconnected'}
             </Text>
           )}
         />
@@ -116,17 +113,17 @@ const Device = ({navigation, theme}: any) => {
           style={{backgroundColor: colors.gray}}
           icon="database"
           label="Mac Address"
-          right={() => <Text>{deviceContext.device?.macAdress}</Text>}
+          right={() => <Text>{device?.macAdress}</Text>}
         />
         <Drawer.Item
           style={{backgroundColor: colors.gray}}
           icon="battery"
           label="Battery"
-          right={() => <Text>{deviceContext.device?.batteryPercent}</Text>}
+          right={() => <Text>{device?.batteryPercent}</Text>}
         />
       </Drawer.Section>
       <Drawer.Section title="Device Options" style={{width: '100%'}}>
-        <Connect colors={colors} deviceContext={deviceContext} />
+        <Connect colors={colors} />
       </Drawer.Section>
       <Drawer.Section title="User" style={{width: '100%'}}>
         <Button
@@ -139,16 +136,6 @@ const Device = ({navigation, theme}: any) => {
             DataStore.clear();
           }}>
           Sign Out
-        </Button>
-        <Button
-          mode="contained"
-          style={{backgroundColor: colors.error, margin: '2%'}}
-          onPress={async () => {
-            const p = await NativeModules.MetaWearDevice.getState();
-            console.log(p);
-            console.log(deviceContext);
-          }}>
-          state
         </Button>
       </Drawer.Section>
     </View>

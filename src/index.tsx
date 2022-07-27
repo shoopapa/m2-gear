@@ -34,7 +34,7 @@ function AppWithAuth() {
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
-              options={{headerShown: false, headerLeft: () => null}}
+              options={{headerShown: false, headerLeft: () => null, gestureEnabled:false}}
             />
           </Stack.Navigator>
         </AuthContext.Provider>

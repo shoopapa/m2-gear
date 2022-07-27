@@ -1,13 +1,14 @@
 import React from 'react';
-type setdevice = (object: any) => void;
+import {MetaWearState} from './metawear'
+export type setdevice = (object: MetaWearState) => void;
 
 export interface InitDeviceContext {
-  device: any;
+  device?: MetaWearState;
   setdevice: setdevice;
 }
 
 export const initDeviceContext: InitDeviceContext = {
-  device: null,
+  device: undefined,
   setdevice: (_) => {
     return;
   },
