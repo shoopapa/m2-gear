@@ -56,7 +56,7 @@ function MainScreen() {
             } else if (route.name === 'SessionScreen') {
               iconName = 'ios-home'
             } else if (route.name === 'Tags') {
-              iconName = 'pricetag '
+              iconName = 'pricetag'
             }
 
             // You can return any component that you like here!
