@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-m2gear-staging-24359-authRole",
+      "UnauthRoleArn": "arn:aws:iam::936390042306:role/amplify-m2gear-staging-24359-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::936390042306:role/amplify-m2gear-staging-24359-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-m2gear-staging-24359-deployment",
+      "UnauthRoleName": "amplify-m2gear-staging-24359-unauthRole",
+      "StackName": "amplify-m2gear-staging-24359",
+      "StackId": "arn:aws:cloudformation:us-east-1:936390042306:stack/amplify-m2gear-staging-24359/a1aa2c10-8bad-11ec-b495-1224d13a2853",
+      "AmplifyAppId": "d3omd6w6fgmxpy"
+    },
+    "categories": {
+      "auth": {
+        "M2Gear": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "AppSyncApiName": "M2Gear",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authM2Gear",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2022-05-16T00:27:42.854Z",
+  "CreateAPIKey": 1
+}

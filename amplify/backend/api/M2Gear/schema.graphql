@@ -1,0 +1,27 @@
+type Session @model @auth(rules: [
+  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+  { allow: owner }
+]) {
+  id: ID!
+  createdAt: String
+  streamingStarted: Float!
+  streamingFreqency: Float!
+  accerationX: [Float!]!
+  accerationY: [Float!]!
+  accerationZ: [Float!]!
+  gyroX: [Float!]!
+  gyroY: [Float!]!
+  gyroZ: [Float!]!
+  tags: [Tag] @manyToMany(relationName: "SessionTags")
+}
+
+type Tag @model @auth(rules: [
+  { allow: groups, groups: ["admin"]},
+  { allow: private, operations: [create, read] },
+]) {
+  id: ID!
+  createdAt: String
+  name: String!
+  value: String!
+  sessoins: [Session] @manyToMany(relationName: "SessionTags")
+}
