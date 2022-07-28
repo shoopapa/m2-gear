@@ -96,13 +96,16 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
   return (
     <View style={globalStyles.container}>
       <LineChart
-        // style={globalStyles.chartContainer}
+        style={globalStyles.chartContainer}
         withShadow={false}
         data={{
           labels:["time"],
           datasets: [{
             data:viewingData,
-            // data:[1,2,3,3],
+            color: (v) => {
+              console.log(v)
+              return colors.primary
+            }
           }]
         }}
         formatYLabel={(v)=> parseFloat(v).toFixed(1)+'g'}
@@ -111,8 +114,8 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
         withHorizontalLines={false}
         withDots={false}
         withInnerLines={false}
-        bezier={true}
         width={Dimensions.get("window").width} // moving to middle cuz i got rid of y labels
+        bezier
         height={220}
         chartConfig={chartConfig}
       />
