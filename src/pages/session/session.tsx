@@ -12,16 +12,6 @@ import { Alert, Modal, Text, StyleSheet} from "react-native";
 
 import { SelectableTag, saveSession } from './save-session';
 
-const chartConfig = {
-  // height: 10,
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientToOpacity: 0,
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  strokeWidth: 2, // optional, default 3
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional,
-};
-
 interface TagProps {
   tag: SelectableTag
   setTag: () => void
@@ -117,7 +107,14 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
         width={Dimensions.get("window").width} // moving to middle cuz i got rid of y labels
         bezier
         height={220}
-        chartConfig={chartConfig}
+        chartConfig={{
+          backgroundGradientFromOpacity: 0,
+          backgroundGradientToOpacity: 0,
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          strokeWidth: 2, // optional, default 3
+          barPercentage: 0.5,
+          useShadowColorFromDataset: false // optional,
+        }}
       />
     <Drawer.Section title="Controls" style={{width: '100%', padding:20}} >
       <View style={{flexDirection:'row', justifyContent:'space-between'}} >
