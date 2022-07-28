@@ -229,7 +229,7 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_gyro_bmi160_set_range(device?.board, MBL_MW_GYRO_BOSCH_RANGE_125dps)
     mbl_mw_gyro_bmi160_set_odr(device?.board, MBL_MW_GYRO_BOSCH_ODR_25Hz)
     mbl_mw_gyro_bmi160_write_config(device?.board)
-    let signalGyro = mbl_mw_gyro_bmi160_get_rotation_data_signal(self.device?.board)!
+    let signalGyro = mbl_mw_gyro_bmi160_get_rotation_data_signal(device?.board)!
     mbl_mw_datasignal_subscribe(signalGyro, b) {(context, obj) in
         let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
         let _self: MetaWearDevice = bPtr(ptr: context!)
