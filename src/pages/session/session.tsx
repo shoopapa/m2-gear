@@ -13,13 +13,13 @@ import { Alert, Modal, Text, StyleSheet} from "react-native";
 import { SelectableTag, saveSession } from './save-session';
 
 const chartConfig = {
-  height: 10,
+  // height: 10,
   backgroundGradientFromOpacity: 0,
   backgroundGradientToOpacity: 0,
   color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   strokeWidth: 2, // optional, default 3
   barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional
+  useShadowColorFromDataset: false // optional,
 };
 
 interface TagProps {
@@ -51,13 +51,14 @@ interface SessionScreenProps {
 const SessionScreen = ({theme}: SessionScreenProps) => {
   const {colors} = theme
   const device = useContext(DeviceContext);
-  const [acc, setacc] = useState<number[][]>([[],[],[]])
-  const [gyro, setgyro] = useState<number[][]>([[],[],[]])
+  const [acc, setacc] = useState<number[][]>([[0],[0],[0]])
+  const [gyro, setgyro] = useState<number[][]>([[0],[0],[0]])
   const [tags, settags] = useState<Tag[]>([])
   const [selectedTags, setselectedTags] = useState<{[key:string]: Boolean}>({})
   const [isStreaming, setisStreaming] = useState(false)
   const [streamingDataExists, setstreamingDataExists] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
+  const [viewingData, setViewingData] = useState<number[]>([])
 
 
   useEffect(() => {
@@ -74,12 +75,15 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
   }
 
   const accEvent = (a:number[]) => {
+    setViewingData(v => {
+      v.length > 100? v.shift() : null
+      return [...v, a[0]]
+    })
     setacc(v => ([
       [...v[0], a[0] ],
       [...v[1], a[1] ],
       [...v[2], a[2] ],
     ]))
-    console.log(acc[0])
   }
 
   const setTag = (Tag: Tag) => {
@@ -92,16 +96,16 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
   return (
     <View style={globalStyles.container}>
       <LineChart
-        style={globalStyles.chartContainer}
+        // style={globalStyles.chartContainer}
         withShadow={false}
         data={{
           labels:["time"],
           datasets: [{
-            data:acc[1].slice(-100),
-            strokeWidth: 0
+            data:viewingData,
+            // data:[1,2,3,3],
           }]
         }}
-        // formatYLabel={()=>''}
+        formatYLabel={(v)=> parseFloat(v).toFixed(1)+'g'}
         formatXLabel={()=>''}
         withVerticalLines={false}
         withHorizontalLines={false}
