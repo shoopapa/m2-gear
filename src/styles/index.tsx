@@ -23,6 +23,7 @@ export const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#19489f',
+    primaryByOpacity: (v: number): string => `rgba(25, 72, 159, 1)`,
     disabledPrimary: '#19489fa6',
     accent: '#6595ed',
     gray: '#f1f3f3',

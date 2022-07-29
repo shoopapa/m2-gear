@@ -41,7 +41,7 @@ const TagRoute = ( {route}:NativeStackScreenProps<RootStackParamList, 'Tag'>) =>
   if (!getTagData || Object.keys(getTagData).length === 0 ){
     return( 
       <View style={globalStyles.container}> 
-      <Text> Loading </Text> 
+        <Text> Loading </Text> 
       </View>
     )
   }
