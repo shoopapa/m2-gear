@@ -92,10 +92,7 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
           labels:["time"],
           datasets: [{
             data:viewingData,
-            color: (v) => {
-              console.log(v)
-              return colors.primary
-            }
+            color: (v) => colors.primary
           }]
         }}
         formatYLabel={(v)=> parseFloat(v).toFixed(1)+'g'}

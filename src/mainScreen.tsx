@@ -67,7 +67,7 @@ function MainScreen() {
         })}
       >
         <Tab.Screen name="SessionScreen" component={SessionScreen} />
-        <Tab.Screen name="Tags" component={TagsScreen} />
+        <Tab.Screen name="Tags" options={{headerShown: false}} component={TagsScreen} />
         <Tab.Screen name="Device" component={Device} />
       </Tab.Navigator>
     </DeviceContext.Provider>
