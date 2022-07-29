@@ -3,12 +3,10 @@ import { DataStore, API } from 'aws-amplify'
 import { useEffect, useState } from 'react'
 import { Tag } from '../../models'
 import { View, Text} from 'react-native'
-import globalStyles, { ThemeType } from '../../styles';
+import globalStyles from '../../styles';
 import { Button } from 'react-native-paper'
-import { createNativeStackNavigator,NativeStackHeaderProps,NativeStackScreenProps } from '@react-navigation/native-stack';
+import { createNativeStackNavigator,NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SessionsForTag, SessionsForTagQuery } from '../../custom-grahql/query'
-import { Session } from '../../API'
-import session from '../session/session'
 
 
 type RootStackParamList = {
@@ -28,6 +26,8 @@ const TagRoute = ( {route}:NativeStackScreenProps<RootStackParamList, 'Tag'>) =>
       const getTagData = res.data.getTag
       if (getTagData) {
         setgetTagData(getTagData)
+      } else {
+        throw new Error('no sessions to show!')
       }
     } catch (e) {
       console.log(e)
@@ -68,15 +68,12 @@ const TagsRoute = ({route, navigation}: TagsRootProp) => {
     <View style={globalStyles.container}>
       {tags.map((t,i) => {
        return (
-        //  <Text key={t.name}>hi</Text>
          <Button onPress={()=> navigation.navigate('Tag', {tag:t})}>{t.name}</Button>
        )
      })}
     </View>
   )
 }
-
-
 
 export const TagsScreen = () => {
   const [tags, settags] = useState<Tag[]>([])
@@ -87,7 +84,6 @@ export const TagsScreen = () => {
       if (t.name in tags) return
       tags[t.name] = t
     })
-    console.log(tags)
     settags( Object.values(tags) )
   }
 
@@ -100,11 +96,9 @@ export const TagsScreen = () => {
   }
 
   return (
-    // <View style={globalStyles.container}>
     <Stack.Navigator initialRouteName="Tags" >
       <Stack.Screen name="Tags" component={TagsRoute} initialParams={{tags}} />
       <Stack.Screen name="Tag" component={TagRoute} />
     </Stack.Navigator>
-    // </View>
   )
 }
