@@ -23,5 +23,5 @@ type Tag @model @auth(rules: [
   createdAt: String
   name: String!
   value: String!
-  sessoins: [Session] @manyToMany(relationName: "SessionTags")
+  sessions: [Session] @manyToMany(relationName: "SessionTags")
 }

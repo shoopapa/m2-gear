@@ -98,7 +98,7 @@ export const getTag = /* GraphQL */ `
       createdAt
       name
       value
-      sessoins {
+      sessions {
         nextToken
         startedAt
       }

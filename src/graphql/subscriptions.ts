@@ -84,7 +84,7 @@ export const onCreateTag = /* GraphQL */ `
       createdAt
       name
       value
-      sessoins {
+      sessions {
         nextToken
         startedAt
       }
@@ -102,7 +102,7 @@ export const onUpdateTag = /* GraphQL */ `
       createdAt
       name
       value
-      sessoins {
+      sessions {
         nextToken
         startedAt
       }
@@ -120,7 +120,7 @@ export const onDeleteTag = /* GraphQL */ `
       createdAt
       name
       value
-      sessoins {
+      sessions {
         nextToken
         startedAt
       }

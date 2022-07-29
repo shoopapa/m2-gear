@@ -131,7 +131,7 @@ export type Tag = {
   createdAt?: string | null,
   name: string,
   value: string,
-  sessoins?: ModelSessionTagsConnection | null,
+  sessions?: ModelSessionTagsConnection | null,
   updatedAt: string,
   _version: number,
   _deleted?: boolean | null,
@@ -384,7 +384,7 @@ export type CreateTagMutation = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,
@@ -408,7 +408,7 @@ export type UpdateTagMutation = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,
@@ -432,7 +432,7 @@ export type DeleteTagMutation = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,
@@ -697,7 +697,7 @@ export type GetTagQuery = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,
@@ -958,7 +958,7 @@ export type OnCreateTagSubscription = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,
@@ -977,7 +977,7 @@ export type OnUpdateTagSubscription = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,
@@ -996,7 +996,7 @@ export type OnDeleteTagSubscription = {
     createdAt?: string | null,
     name: string,
     value: string,
-    sessoins?:  {
+    sessions?:  {
       __typename: "ModelSessionTagsConnection",
       nextToken?: string | null,
       startedAt?: number | null,

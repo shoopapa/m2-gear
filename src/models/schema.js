@@ -175,8 +175,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "sessoins": {
-                    "name": "sessoins",
+                "sessions": {
+                    "name": "sessions",
                     "isArray": true,
                     "type": {
                         "model": "SessionTags"
@@ -318,5 +318,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "032c9338e466ca702c11243836b4d28f"
+    "version": "a864a75b052bb3bd054112960d021334"
 };

@@ -38,7 +38,7 @@ export declare class Tag {
   readonly createdAt?: string | null;
   readonly name: string;
   readonly value: string;
-  readonly sessoins?: (SessionTags | null)[] | null;
+  readonly sessions?: (SessionTags | null)[] | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Tag, TagMetaData>);
   static copyOf(source: Tag, mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void): Tag;
