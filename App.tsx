@@ -2,9 +2,6 @@ import App from './src';
 import {Amplify, AuthModeStrategyType} from 'aws-amplify';
 import awsconfig from './src/aws-exports';
 
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
 
 Amplify.configure({
   ...awsconfig,
