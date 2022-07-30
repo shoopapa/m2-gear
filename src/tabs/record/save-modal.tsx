@@ -4,7 +4,7 @@ import {View, Dimensions } from 'react-native';
 import { LineChart } from "react-native-chart-kit";
 import * as MetaWear from '../../device/ios/metawear'
 
-import globalStyles, { ThemeType } from '../../styles';
+import {globalStyles, ThemeType } from '../../styles';
 import {Button, Drawer,withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
 import { Tag } from '../../models'

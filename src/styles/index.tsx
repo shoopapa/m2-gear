@@ -1,7 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import {DefaultTheme} from 'react-native-paper';
 
-const styles = StyleSheet.create({
+export const globalStyles = StyleSheet.create({
   scrollcontainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -16,15 +16,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
-
 export const theme = {
   ...DefaultTheme,
   roundness: 5,
   colors: {
     ...DefaultTheme.colors,
     primary: '#19489f',
-    primaryByOpacity: (v: number): string => `rgba(25, 72, 159, 1)`,
+    primaryByOpacity: (v: number) =>{
+      return `rgba(25, 72, 159, 1)`
+    },
     disabledPrimary: '#19489fa6',
     accent: '#6595ed',
     gray: '#f1f3f3',

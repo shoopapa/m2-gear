@@ -1,19 +1,13 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useEffect, useState} from 'react';
 import {Auth, DataStore} from 'aws-amplify';
 import {View} from 'react-native';
-import styles, { ThemeType } from '../../styles';
+import { globalStyles, ThemeType } from '../../styles';
 import * as MetaWear from '../../device/ios/metawear'
 import AuthContext from '../../auth/auth-context';
 import {Text, Button, withTheme, Drawer} from 'react-native-paper';
 import DeviceContext, {InitDeviceContext } from '../../device/ios/device-context';
 import {ActivityIndicator} from 'react-native-paper';
 //TODO: create npm package for metawear
-
-// const fn = async (time: number, label) => {
-// 	await new Promise((res) => setTimeout(res, time));
-// 	return label;
-// }
 interface ConnectProps {
   colors: any;
 }
@@ -59,7 +53,7 @@ const Connect = ({colors}: ConnectProps ) => {
       <>
         <Button
           mode="contained"
-          style={{backgroundColor: colors.accent, margin: '2%'}}
+          style={{backgroundColor: colors.primary, margin: '2%'}}
           icon="lightbulb-on"
           onPress={async () => {
             setblinking(true);
@@ -97,7 +91,7 @@ const Device = ({navigation, theme}: DeviceProps) => {
   const {device, setdevice} = useContext(DeviceContext);
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <Drawer.Section title="Device Info" style={{width: '100%'}}>
         <Drawer.Item
           style={{backgroundColor: colors.gray}}
