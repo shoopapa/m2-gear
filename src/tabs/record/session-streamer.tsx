@@ -10,11 +10,10 @@ import { Tag } from '../../models'
 import { saveSession } from './utils/save-session';
 import { SaveModal } from './save-modal';
 import { SessionChart } from '../../components/session-chart/session-chart';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {RecordParamList} from './index'
 
-
-interface SessionScreenProps {
-  theme: ThemeType
-}
+type SessionScreenProps = { theme: ThemeType } & NativeStackScreenProps<RecordParamList,'Record'>
 
 const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
   const {colors} = theme
@@ -59,12 +58,12 @@ const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
   }
 
   return (
-    <View style={globalStyles.container}>
+    <View style={{...globalStyles.container}}>
       <SessionChart
         data={viewingData}
         theme={theme}
       />
-    <Drawer.Section title="Controls" style={{width: '100%', padding:20}} >
+    <Drawer.Section title="Controls" style={{width: '100%', paddingHorizontal:20}} >
       <View style={{flexDirection:'row', justifyContent:'space-between'}} >
         <Button
           mode="contained"
@@ -97,16 +96,14 @@ const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
           {acc[0].length > 0? 'Resume': 'Start'}
         </Button>
       </View>
-      {  !(streamingDataExists && !isStreaming)? null :
         <Button
           mode="contained"
           style={{backgroundColor: colors.success, margin: '2%'}}
-          disabled={acc[0].length == 0}
+          disabled={!(streamingDataExists && !isStreaming)}
           onPress={async () => setModalVisible(true)}
         >
           Save
         </Button>
-      }
     </Drawer.Section>
     <SaveModal
         modalVisible={modalVisible}

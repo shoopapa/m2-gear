@@ -50,7 +50,6 @@ export const SaveModal = ({modalVisible, setModalVisible, theme, onSave}: SaveMo
   useEffect(() => {
     const init = async () => {
       let tags = await DataStore.query(Tag)
-      setModalVisible(true)
       settags( tags )
     }
     init()
