@@ -11,7 +11,7 @@ type RecordProps = NativeStackScreenProps<RecordParamList, 'Record'>
 
 export const Record = (props:RecordProps) => {
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1,}}>
       <SessionStreamer {...props}/>
       <RecentSessions {...props}/>
     </View>

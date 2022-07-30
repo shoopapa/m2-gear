@@ -4,11 +4,11 @@ import { Tag } from '../../models'
 import { Text} from 'react-native'
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import {Record} from './record'
-import { RecentSessions } from './recent-sessions';
+import { SessionPage } from '../../pages/session/session';
 
 export type RecordParamList = {
-  Record: {tags: Tag[]};
-  'Recent Sessions': {tag: Tag};
+  Record: {};
+  Session: {id:string};
 };
 
 const Stack = createNativeStackNavigator<RecordParamList>();
@@ -17,7 +17,7 @@ export const RecordRoot = () => {
   return (
     <Stack.Navigator initialRouteName="Record" >
       <Stack.Screen name="Record" component={Record} />
-      <Stack.Screen name="Recent Sessions" component={RecentSessions}/>
+      <Stack.Screen name="Session" component={SessionPage}/>
     </Stack.Navigator>
   )
 }
