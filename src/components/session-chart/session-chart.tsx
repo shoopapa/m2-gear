@@ -26,7 +26,7 @@ export const SessionChart = ({data, theme}: SessionChartProps) => {
         }]
       }}
       formatYLabel={(v)=> {
-        if (v==='NaN') return 'g'
+        if (v==='NaN') return '0g'
         return parseFloat(v).toFixed(1)+'g' 
         return ''
       }}

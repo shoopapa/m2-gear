@@ -69,8 +69,8 @@ function MainScreen() {
         })}
       >
         <Tab.Screen name="Record" component={RecordRoot} />
-        <Tab.Screen name="Tags" options={{headerShown: false}} component={TagsScreen} />
-        <Tab.Screen name="Device" component={Device} />
+        <Tab.Screen name="Tags"  component={TagsScreen} />
+        <Tab.Screen name="Device" options={{headerShown: true}} component={Device} />
       </Tab.Navigator>
     </DeviceContext.Provider>
   );

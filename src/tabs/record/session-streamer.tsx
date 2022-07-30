@@ -9,7 +9,7 @@ import { Tag } from '../../models'
 
 import { saveSession } from './utils/save-session';
 import { SaveModal } from './save-modal';
-import { SessionChart } from './session-chart';
+import { SessionChart } from '../../components/session-chart/session-chart';
 
 
 interface SessionScreenProps {

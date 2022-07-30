@@ -21,6 +21,7 @@
     "amazon-cognito-identity-js": "^5.2.10",
     "aws-amplify": "^4.3.28",
     "aws-amplify-react-native": "^6.0.5",
+    "epoch-timeago": "^1.1.9",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-chart-kit": "^6.12.0",
