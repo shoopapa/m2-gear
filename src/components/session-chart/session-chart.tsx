@@ -5,9 +5,12 @@ import { LineChart } from "react-native-chart-kit";
 import { ThemeType } from '../../styles';
 
 type SessionChartProps = {
-  data: number[]
+  data: number[][]
   theme:  ThemeType
 }
+
+const lineColors = ['rgba(210,77,90,1)','rgba(156,209,72,1)','rgba(178,143,220,1)']
+
 
 
 export const SessionChart = ({data, theme}: SessionChartProps) => {
@@ -18,17 +21,16 @@ export const SessionChart = ({data, theme}: SessionChartProps) => {
       style={{marginBottom:-40, marginLeft:-20}}
       data={{
         labels:["time"],
-        datasets: [{
-          data: data,
-          color: v => {
-            return colors.primaryByOpacity(v)
+        datasets: data.map((d,i)=>{
+          return {
+            data: d,
+            color:() => lineColors[i]
           }
-        }]
+        })
       }}
       formatYLabel={(v)=> {
         if (v==='NaN') return '0g'
         return parseFloat(v).toFixed(1)+'g' 
-        return ''
       }}
       formatXLabel={()=>''}
       withVerticalLines={false}
