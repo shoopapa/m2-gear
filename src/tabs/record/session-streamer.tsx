@@ -1,29 +1,26 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { DataStore } from 'aws-amplify';
-import {View, Dimensions } from 'react-native';
-import { LineChart } from "react-native-chart-kit";
+import {View} from 'react-native';
 import * as MetaWear from '../../device/ios/metawear'
 
 import globalStyles, { ThemeType } from '../../styles';
 import {Button, Drawer,withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
 import { Tag } from '../../models'
-import { Text} from "react-native";
 
-import { SelectableTag, saveSession } from './save-session';
+import { saveSession } from './utils/save-session';
 import { SaveModal } from './save-modal';
+import { SessionChart } from './session-chart';
 
 
 interface SessionScreenProps {
   theme: ThemeType
 }
 
-const SessionScreen = ({theme}: SessionScreenProps) => {
+const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
   const {colors} = theme
   const device = useContext(DeviceContext);
   const [acc, setacc] = useState<number[][]>([[0],[0],[0]])
   const [gyro, setgyro] = useState<number[][]>([[0],[0],[0]])
-  const [tags, settags] = useState<Tag[]>([])
   const [isStreaming, setisStreaming] = useState(false)
   const [streamingDataExists, setstreamingDataExists] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
@@ -56,42 +53,16 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
   }
 
   
-  const onSave = (selectedTags:{[key:string]: Boolean}) => {
+  const onSave = (tags:Tag[], selectedTags:{[key:string]: Boolean}) => {
     saveSession(acc, gyro, tags.filter(t => t.id in selectedTags), 0, 25)
     setModalVisible(false)
   }
 
   return (
     <View style={globalStyles.container}>
-      <LineChart
-        style={globalStyles.chartContainer}
-        withShadow={false}
-        data={{
-          labels:["time"],
-          datasets: [{
-            data:viewingData,
-            color: v => {
-              return colors.primaryByOpacity(v)
-            }
-          }]
-        }}
-        formatYLabel={(v)=> parseFloat(v).toFixed(1)+'g'}
-        formatXLabel={()=>''}
-        withVerticalLines={false}
-        withHorizontalLines={false}
-        withDots={false}
-        withInnerLines={false}
-        width={Dimensions.get("window").width} // moving to middle cuz i got rid of y labels
-        bezier
-        height={220}
-        chartConfig={{
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientToOpacity: 0,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          strokeWidth: 2, // optional, default 3
-          barPercentage: 0.5,
-          useShadowColorFromDataset: false // optional,
-        }}
+      <SessionChart
+        data={viewingData}
+        theme={theme}
       />
     <Drawer.Section title="Controls" style={{width: '100%', padding:20}} >
       <View style={{flexDirection:'row', justifyContent:'space-between'}} >
@@ -132,7 +103,7 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
           disabled={acc[0].length == 0}
           onPress={async () => setModalVisible(true)}
         >
-            Save
+          Save
         </Button>
       }
     </Drawer.Section>
@@ -147,4 +118,4 @@ const SessionScreen = ({theme}: SessionScreenProps) => {
 };
 
 
-export default withTheme(SessionScreen)
+export const SessionStreamer = withTheme(SessionStreamerWithoutTheme)

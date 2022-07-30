@@ -10,7 +10,7 @@ import DeviceContext from '../../device/ios/device-context';
 import { Tag } from '../../models'
 import { Alert, Modal, Text, StyleSheet} from "react-native";
 
-import { SelectableTag, saveSession } from './save-session';
+import { SelectableTag, saveSession } from './utils/save-session';
 import {styles} from './styles'
 
 type TagProps = {
@@ -39,7 +39,7 @@ type SaveModalProps = {
   modalVisible: boolean
   setModalVisible: (v:boolean)=>void
   theme:  ThemeType
-  onSave: (tags: {[key:string]: Boolean} ) => void
+  onSave: (tags: Tag[], selectedTags: {[key:string]: Boolean} ) => void
 }
 
 export const SaveModal = ({modalVisible, setModalVisible, theme, onSave}: SaveModalProps) => {
@@ -90,7 +90,7 @@ export const SaveModal = ({modalVisible, setModalVisible, theme, onSave}: SaveMo
           <Button
             mode="contained"
             style={{backgroundColor: colors.primary, margin: '5%', width:'40%'}}
-            onPress={() => onSave(selectedTags)}
+            onPress={() => onSave(tags, selectedTags)}
           >
             Save
           </Button>

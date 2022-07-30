@@ -9,10 +9,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  chartContainer: {
-    // paddingTop: 5,
-    // marginLeft: -Dimensions.get('window').width*.1,
-  },
 });
 
 export default styles;
