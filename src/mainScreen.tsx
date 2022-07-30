@@ -13,6 +13,8 @@ import { MetaWearState } from './device/ios/metawear';
 
 import { RecordRoot } from './tabs/record/index'
 import { TagsScreen } from './tabs/tags/tags-screen';
+import { withTheme } from 'react-native-paper';
+import { ThemeType } from './styles';
 
 function SignOutButton({navigation}: any) {
   const context = useContext(AuthContext);
@@ -31,7 +33,8 @@ function SignOutButton({navigation}: any) {
 const Tab = createBottomTabNavigator();
 
 
-function MainScreen() {
+
+function MainScreen({theme}:{theme:ThemeType}) {
   const authContext = useContext(AuthContext);
   const [device, setdevice] = useState<MetaWearState>({
     batteryPercent: '0',
@@ -63,8 +66,7 @@ function MainScreen() {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: theme.colors.primary,
           headerShown:false
         })}
       >
@@ -76,4 +78,4 @@ function MainScreen() {
   );
 }
 
-export default MainScreen;
+export default withTheme(MainScreen)
