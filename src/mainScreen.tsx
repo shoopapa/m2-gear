@@ -57,9 +57,9 @@ function MainScreen({theme}:{theme:ThemeType}) {
             let iconName ="";
             if (route.name === 'Device') {
               iconName = 'ios-list'
-            } else if (route.name === 'Record') {
+            } else if (route.name === 'RecordRoot') {
               iconName = 'camera'
-            } else if (route.name === 'Tags') {
+            } else if (route.name === 'TagsRoot') {
               iconName = 'pricetag'
             }
 
@@ -67,11 +67,11 @@ function MainScreen({theme}:{theme:ThemeType}) {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: theme.colors.primary,
-          headerShown:false
+          headerShown:false,
         })}
       >
-        <Tab.Screen name="Record" component={RecordRoot} />
-        <Tab.Screen name="Tags"  component={TagsScreen} />
+        <Tab.Screen name="RecordRoot" options={{tabBarLabel:'Record'}} component={RecordRoot} />
+        <Tab.Screen name="TagsRoot"  options={{tabBarLabel:'Tags'}} component={TagsScreen} />
         <Tab.Screen name="Device" options={{headerShown: true}} component={Device} />
       </Tab.Navigator>
     </DeviceContext.Provider>
