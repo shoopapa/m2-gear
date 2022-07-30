@@ -15,7 +15,7 @@ export const SessionChart = ({data, theme}: SessionChartProps) => {
   return (
     <LineChart
       withShadow={false}
-      style={{marginBottom:-40}}
+      style={{marginBottom:-40, marginLeft:-20}}
       data={{
         labels:["time"],
         datasets: [{
@@ -25,10 +25,14 @@ export const SessionChart = ({data, theme}: SessionChartProps) => {
           }
         }]
       }}
-      formatYLabel={(v)=> parseFloat(v).toFixed(1)+'g'}
+      formatYLabel={(v)=> {
+        if (v==='NaN') return 'g'
+        return parseFloat(v).toFixed(1)+'g' 
+        return ''
+      }}
       formatXLabel={()=>''}
       withVerticalLines={false}
-      withHorizontalLines={false}
+      // withHorizontalLines={false}
       withDots={false}
       withInnerLines={false}
       width={Dimensions.get("window").width} // moving to middle cuz i got rid of y labels
