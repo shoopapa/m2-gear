@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import {View} from 'react-native';
 import * as MetaWear from '../../device/ios/metawear'
 
-import globalStyles, { ThemeType } from '../../styles';
+import  {globalStyles, ThemeType } from '../../styles';
 import {Button, Drawer,withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
 import { Tag } from '../../models'
@@ -60,7 +60,7 @@ const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
   return (
     <View style={{...globalStyles.container}}>
       <SessionChart
-        data={viewingData}
+        data={[viewingData]}
         theme={theme}
       />
     <Drawer.Section title="Controls" style={{width: '100%', paddingHorizontal:20}} >
