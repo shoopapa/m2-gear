@@ -19,8 +19,8 @@ interface SessionScreenProps {
 const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
   const {colors} = theme
   const device = useContext(DeviceContext);
-  const [acc, setacc] = useState<number[][]>([[0],[0],[0]])
-  const [gyro, setgyro] = useState<number[][]>([[0],[0],[0]])
+  const [acc, setacc] = useState<number[][]>([[],[],[]])
+  const [gyro, setgyro] = useState<number[][]>([[],[],[]])
   const [isStreaming, setisStreaming] = useState(false)
   const [streamingDataExists, setstreamingDataExists] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
@@ -76,6 +76,7 @@ const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
               MetaWear.stopStream();
               setisStreaming(false)
             } else {
+              setViewingData([])
               setacc([[],[],[]])
               setgyro([[],[],[]])
             }
