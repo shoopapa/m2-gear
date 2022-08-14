@@ -4,6 +4,14 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
+type SessionGroupMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type MoveMetaData = {
+  readOnlyFields: 'updatedAt';
+}
+
 type SessionMetaData = {
   readOnlyFields: 'updatedAt';
 }
@@ -16,8 +24,29 @@ type SessionTagsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+export declare class SessionGroup {
+  readonly id: string;
+  readonly move?: Move | null;
+  readonly sessions?: (Session | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly sessionGroupMoveId?: string | null;
+  constructor(init: ModelInit<SessionGroup, SessionGroupMetaData>);
+  static copyOf(source: SessionGroup, mutator: (draft: MutableModel<SessionGroup, SessionGroupMetaData>) => MutableModel<SessionGroup, SessionGroupMetaData> | void): SessionGroup;
+}
+
+export declare class Move {
+  readonly id: string;
+  readonly createdAt?: string | null;
+  readonly type: string;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<Move, MoveMetaData>);
+  static copyOf(source: Move, mutator: (draft: MutableModel<Move, MoveMetaData>) => MutableModel<Move, MoveMetaData> | void): Move;
+}
+
 export declare class Session {
   readonly id: string;
+  readonly isTraining?: boolean | null;
   readonly createdAt?: string | null;
   readonly streamingStarted: number;
   readonly streamingFreqency: number;
@@ -29,6 +58,7 @@ export declare class Session {
   readonly gyroZ: number[];
   readonly tags?: (SessionTags | null)[] | null;
   readonly updatedAt?: string | null;
+  readonly sessionGroupSessionsId?: string | null;
   constructor(init: ModelInit<Session, SessionMetaData>);
   static copyOf(source: Session, mutator: (draft: MutableModel<Session, SessionMetaData>) => MutableModel<Session, SessionMetaData> | void): Session;
 }

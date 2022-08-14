@@ -7,11 +7,11 @@ import {Button, Drawer,withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
 import { Tag } from '../../models'
 
-import { saveSession } from './utils/save-session';
+import { saveSession } from '../../utils/save-session';
 import { SaveModal } from './save-modal';
 import { SessionChart } from '../../components/session-chart/session-chart';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {RecordParamList} from './index'
+import {RecordParamList} from './record-tab'
 
 type SessionScreenProps = { theme: ThemeType } & NativeStackScreenProps<RecordParamList,'Record'>
 
@@ -25,11 +25,9 @@ const SessionStreamerWithoutTheme = ({theme}: SessionScreenProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [viewingData, setViewingData] = useState<number[]>([])
 
-
   useEffect(() => {
     setstreamingDataExists(acc[0].length > 0)
   }, [acc])
-
 
   const gyroEvent = (g:number[]) => {
     setgyro(v => ([

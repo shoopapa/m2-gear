@@ -11,10 +11,12 @@ import Device from './tabs/device/device';
 import DeviceContext from './device/ios/device-context';
 import { MetaWearState } from './device/ios/metawear';
 
-import { RecordRoot } from './tabs/record/index'
+import { RecordRoot } from './tabs/record/record-tab'
 import { TagsScreen } from './tabs/tags/tags-screen';
 import { withTheme } from 'react-native-paper';
 import { ThemeType } from './styles';
+import { Training } from './tabs/training/training';
+import { TrainingTab } from './tabs/training/training-tab';
 
 function SignOutButton({navigation}: any) {
   const context = useContext(AuthContext);
@@ -57,10 +59,12 @@ function MainScreen({theme}:{theme:ThemeType}) {
             let iconName ="";
             if (route.name === 'Device') {
               iconName = 'ios-list'
-            } else if (route.name === 'RecordRoot') {
+            } else if (route.name === 'RecordTab') {
               iconName = 'camera'
             } else if (route.name === 'TagsRoot') {
               iconName = 'pricetag'
+            } else if (route.name === 'AI Training') {
+              iconName = 'analytics-outline'
             }
 
             // You can return any component that you like here!
@@ -70,9 +74,10 @@ function MainScreen({theme}:{theme:ThemeType}) {
           headerShown:false,
         })}
       >
-        <Tab.Screen name="RecordRoot" options={{tabBarLabel:'Record'}} component={RecordRoot} />
+        <Tab.Screen name="RecordTab" options={{tabBarLabel:'Record'}} component={RecordRoot} />
         <Tab.Screen name="TagsRoot"  options={{tabBarLabel:'Tags'}} component={TagsScreen} />
         <Tab.Screen name="Device" options={{headerShown: true}} component={Device} />
+        <Tab.Screen name="AI Training" options={{headerShown: true}} component={TrainingTab} />
       </Tab.Navigator>
     </DeviceContext.Provider>
   );

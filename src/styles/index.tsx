@@ -14,6 +14,11 @@ export const globalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
+  TextInputWrapper: {
+    width: '80%',
+    height: 60,
+    flex: 0,
+  },
 });
 
 export const theme = {

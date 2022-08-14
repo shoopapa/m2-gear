@@ -7,13 +7,15 @@ import { ThemeType } from '../../styles';
 type SessionChartProps = {
   data: number[][]
   theme:  ThemeType
+  disabled?: boolean
 }
 
 const lineColors = ['rgba(210,77,90,1)','rgba(156,209,72,1)','rgba(178,143,220,1)']
+const disabledLineColors = ['rgba(210,77,90,0.5)','rgba(156,209,72,0.5)','rgba(178,143,220,0.5)']
 
 
 
-export const SessionChart = ({data, theme}: SessionChartProps) => {
+export const SessionChart = ({data, theme, disabled}: SessionChartProps) => {
   const {colors}= theme
   return (
     <LineChart
@@ -24,7 +26,7 @@ export const SessionChart = ({data, theme}: SessionChartProps) => {
         datasets: data.map((d,i)=>{
           return {
             data: d,
-            color:() => lineColors[i]
+            color:() => disabled? disabledLineColors[i] : lineColors[i] 
           }
         })
       }}
@@ -39,7 +41,7 @@ export const SessionChart = ({data, theme}: SessionChartProps) => {
       withInnerLines={false}
       width={Dimensions.get("window").width} // moving to middle cuz i got rid of y labels
       bezier
-      height={220}
+      height={240}
       chartConfig={{
         backgroundGradientFromOpacity: 0,
         backgroundGradientToOpacity: 0,

@@ -10,7 +10,7 @@ import DeviceContext from '../../device/ios/device-context';
 import { Tag } from '../../models'
 import { Alert, Modal, Text, StyleSheet} from "react-native";
 
-import { SelectableTag, saveSession } from './utils/save-session';
+import { SelectableTag, saveSession } from '../../utils/save-session';
 import {styles} from './styles'
 
 type TagProps = {

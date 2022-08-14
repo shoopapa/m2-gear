@@ -1,6 +1,6 @@
 
 import { DataStore } from 'aws-amplify';
-import { Session, Tag, SessionTags } from '../../../models';
+import { Session, Tag, SessionTags } from '../models';
 
 export type SelectableTag = Tag & {isSelected?: boolean}
 

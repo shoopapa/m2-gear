@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RecordParamList } from '../../tabs/record';
+import { RecordParamList } from '../../tabs/record/record-tab';
 import { ActivityIndicator, Text, withTheme } from 'react-native-paper';
 import { globalStyles, ThemeType } from '../../styles';
 import { DataStore } from 'aws-amplify';

@@ -1,7 +1,5 @@
 
 import React from 'react'
-import { Tag } from '../../models'
-import { Text} from 'react-native'
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import {Record} from './record'
 import { SessionPage } from '../../pages/session/session';
