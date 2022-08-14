@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RecordParamList } from '../../tabs/record/record-tab';
-import { ActivityIndicator, Text, withTheme } from 'react-native-paper';
+import { ActivityIndicator, Button, Text, withTheme } from 'react-native-paper';
 import { globalStyles, ThemeType } from '../../styles';
 import { DataStore } from 'aws-amplify';
 import { Session } from '../../models';
@@ -20,7 +20,8 @@ const getHighestOfArray = (arr:number[]):number => {
 
 type RecordProps = {theme: ThemeType} & NativeStackScreenProps<RecordParamList, 'Session'>
 
-const SessionWithoutTheme = ({route, navigation, theme}:RecordProps) => {
+export const SessionPage = withTheme(({route, navigation, theme}:RecordProps) => {
+  const {colors} = theme
   const {id}= route.params
   const [session, setsession] = useState<Session | null>(null)
   
@@ -50,7 +51,6 @@ const SessionWithoutTheme = ({route, navigation, theme}:RecordProps) => {
         data={[session.accerationX, session.accerationY, session.accerationZ]}
         theme={theme}
       />
-      
       <ReactTimeAgo date={new Date(session.updatedAt??"")} locale="en-US" component={({children})=>(<Text>Session recorded {children} ago</Text>)}/>
       <Text>
         Session ID: {session.id}
@@ -61,17 +61,22 @@ const SessionWithoutTheme = ({route, navigation, theme}:RecordProps) => {
       <Text>
         Peak X Acceration: {getHighestOfArray(session.accerationX)}g
       </Text>
-     
       <Text>
         Peak Y Acceration: {getHighestOfArray(session.accerationY)}g
       </Text>
-     
       <Text>
         Peak Y Acceration: {getHighestOfArray(session.accerationZ)}g
       </Text>
-     
+      <Button
+        mode='contained'
+        color={colors.error}
+        onPress={()=>{
+          DataStore.delete(session)
+          navigation.goBack()
+        }}
+      >
+        Delete Session
+      </Button>
     </View>
   )
-}
-
-export const SessionPage = withTheme(SessionWithoutTheme)
+})

@@ -75,9 +75,9 @@ function MainScreen({theme}:{theme:ThemeType}) {
         })}
       >
         <Tab.Screen name="RecordTab" options={{tabBarLabel:'Record'}} component={RecordRoot} />
-        <Tab.Screen name="TagsRoot"  options={{tabBarLabel:'Tags'}} component={TagsScreen} />
+        {/* <Tab.Screen name="TagsRoot"  options={{tabBarLabel:'Tags'}} component={TagsScreen} /> */}
+        <Tab.Screen name="AI Training" options={{tabBarLabel: 'AI'}} component={TrainingTab} />
         <Tab.Screen name="Device" options={{headerShown: true}} component={Device} />
-        <Tab.Screen name="AI Training" options={{headerShown: true}} component={TrainingTab} />
       </Tab.Navigator>
     </DeviceContext.Provider>
   );
