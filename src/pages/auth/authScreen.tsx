@@ -1,5 +1,5 @@
-import 'react-native-gesture-handler';
-import React, {useContext} from 'react';
+import "react-native-gesture-handler";
+import React, { useContext } from "react";
 import {
   Greetings,
   Authenticator,
@@ -12,41 +12,49 @@ import {
   ForgotPassword,
   Loading,
   // @ts-ignore
-} from 'aws-amplify-react-native';
+} from "aws-amplify-react-native";
 
-import AuthContext from './auth-context';
-import authTheme from '../styles/auth-theme';
+import { AuthContext } from "./auth-context";
+import authTheme from "../../styles/auth-theme";
+import { withTheme } from "react-native-paper";
+import { AuthParamsList } from "../../index";
+import { StackScreenProps } from "@react-navigation/stack";
+import { ThemeType } from "../../styles";
 
 const signUpConfig = {
-  header: 'Register for an M2 Acount',
+  header: "Register for an M2 Acount",
   hideAllDefaults: true,
-  defaultCountryCode: '1',
+  defaultCountryCode: "1",
   signUpFields: [
     {
-      label: 'Username',
-      key: 'preferred_username',
+      label: "Username",
+      key: "preferred_username",
       required: true,
       displayOrder: 1,
-      type: 'string',
+      type: "string",
     },
     {
-      label: 'Email',
-      key: 'email',
+      label: "Email",
+      key: "email",
       required: true,
       displayOrder: 2,
-      type: 'string',
+      type: "string",
     },
     {
-      label: 'Password',
-      key: 'password',
+      label: "Password",
+      key: "password",
       required: true,
       displayOrder: 3,
-      type: 'password',
+      type: "password",
     },
   ],
 };
 
-function AuthScreen({navigation}: any) {
+export type AuthScreenProps = StackScreenProps<AuthParamsList, "AuthScreen"> & {
+  theme: ThemeType;
+};
+
+export const AuthScreen = withTheme(({ navigation }: AuthScreenProps) => {
   const context = useContext(AuthContext);
   return (
     <Authenticator
@@ -57,10 +65,11 @@ function AuthScreen({navigation}: any) {
       onStateChange={(authState: string, authData: any) => {
         context.setauthState(authState);
         context.setauthData(authData);
-        if (authState === 'signedIn') {
-          navigation.navigate('MainScreen');
+        if (authState === "signedIn") {
+          navigation.navigate("MainScreen", {});
         }
-      }}>
+      }}
+    >
       <Greetings />
       <SignIn />
       <ConfirmSignIn />
@@ -72,6 +81,4 @@ function AuthScreen({navigation}: any) {
       <Loading />
     </Authenticator>
   );
-}
-
-export default AuthScreen;
+});

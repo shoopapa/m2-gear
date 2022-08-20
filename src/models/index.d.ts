@@ -1,28 +1,28 @@
-import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplify/datastore";
-
-
-
-
+import {
+  ModelInit,
+  MutableModel,
+  PersistentModelConstructor,
+} from "@aws-amplify/datastore";
 
 type SessionGroupMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
+  readOnlyFields: "createdAt" | "updatedAt";
+};
 
 type MoveMetaData = {
-  readOnlyFields: 'updatedAt';
-}
+  readOnlyFields: "updatedAt";
+};
 
 type SessionMetaData = {
-  readOnlyFields: 'updatedAt';
-}
+  readOnlyFields: "updatedAt";
+};
 
 type TagMetaData = {
-  readOnlyFields: 'updatedAt';
-}
+  readOnlyFields: "updatedAt";
+};
 
 type SessionTagsMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
+  readOnlyFields: "createdAt" | "updatedAt";
+};
 
 export declare class SessionGroup {
   readonly id: string;
@@ -32,7 +32,12 @@ export declare class SessionGroup {
   readonly updatedAt?: string | null;
   readonly sessionGroupMoveId?: string | null;
   constructor(init: ModelInit<SessionGroup, SessionGroupMetaData>);
-  static copyOf(source: SessionGroup, mutator: (draft: MutableModel<SessionGroup, SessionGroupMetaData>) => MutableModel<SessionGroup, SessionGroupMetaData> | void): SessionGroup;
+  static copyOf(
+    source: SessionGroup,
+    mutator: (
+      draft: MutableModel<SessionGroup, SessionGroupMetaData>
+    ) => MutableModel<SessionGroup, SessionGroupMetaData> | void
+  ): SessionGroup;
 }
 
 export declare class Move {
@@ -41,7 +46,12 @@ export declare class Move {
   readonly type: string;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Move, MoveMetaData>);
-  static copyOf(source: Move, mutator: (draft: MutableModel<Move, MoveMetaData>) => MutableModel<Move, MoveMetaData> | void): Move;
+  static copyOf(
+    source: Move,
+    mutator: (
+      draft: MutableModel<Move, MoveMetaData>
+    ) => MutableModel<Move, MoveMetaData> | void
+  ): Move;
 }
 
 export declare class Session {
@@ -60,7 +70,12 @@ export declare class Session {
   readonly updatedAt?: string | null;
   readonly sessionGroupSessionsId?: string | null;
   constructor(init: ModelInit<Session, SessionMetaData>);
-  static copyOf(source: Session, mutator: (draft: MutableModel<Session, SessionMetaData>) => MutableModel<Session, SessionMetaData> | void): Session;
+  static copyOf(
+    source: Session,
+    mutator: (
+      draft: MutableModel<Session, SessionMetaData>
+    ) => MutableModel<Session, SessionMetaData> | void
+  ): Session;
 }
 
 export declare class Tag {
@@ -71,7 +86,12 @@ export declare class Tag {
   readonly sessions?: (SessionTags | null)[] | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Tag, TagMetaData>);
-  static copyOf(source: Tag, mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void): Tag;
+  static copyOf(
+    source: Tag,
+    mutator: (
+      draft: MutableModel<Tag, TagMetaData>
+    ) => MutableModel<Tag, TagMetaData> | void
+  ): Tag;
 }
 
 export declare class SessionTags {
@@ -81,5 +101,10 @@ export declare class SessionTags {
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<SessionTags, SessionTagsMetaData>);
-  static copyOf(source: SessionTags, mutator: (draft: MutableModel<SessionTags, SessionTagsMetaData>) => MutableModel<SessionTags, SessionTagsMetaData> | void): SessionTags;
+  static copyOf(
+    source: SessionTags,
+    mutator: (
+      draft: MutableModel<SessionTags, SessionTagsMetaData>
+    ) => MutableModel<SessionTags, SessionTagsMetaData> | void
+  ): SessionTags;
 }

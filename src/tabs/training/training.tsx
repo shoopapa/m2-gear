@@ -1,116 +1,129 @@
+import React, { useState, useEffect, useContext } from "react";
+import { Pressable, View } from "react-native";
+import * as MetaWear from "../../device/ios/metawear";
 
+import { globalStyles, ThemeType } from "../../styles";
+import { ActivityIndicator, Text, withTheme } from "react-native-paper";
 
-import React, { useContext, useState, useEffect } from 'react';
-import {Pressable, View} from 'react-native';
-import * as MetaWear from '../../device/ios/metawear'
+import { SessionChart } from "../../components/session-chart/session-chart";
+import { Session } from "../../models";
+import { DataStore, SortDirection } from "aws-amplify";
+import { SessionList } from "../../pages/sessions-list/sessions-list";
+import { TrainingParamList } from "./training-tab";
+import { NoDeviceConnectedModal } from "../../components/no-device-connected-modal/no-device-connected-modal";
+import { SubNavigatorProps } from "../../types/sub-navigator-props";
+import DeviceContext from "../../device/ios/device-context";
 
-import {globalStyles, ThemeType } from '../../styles';
-import { ActivityIndicator, Text, withTheme } from 'react-native-paper';
+type TrainingProps = SubNavigatorProps<
+  TrainingParamList,
+  "Training",
+  "training-tab"
+> & {
+  theme: ThemeType;
+};
 
-import { SessionChart } from '../../components/session-chart/session-chart';
-import { Session } from '../../models';
-import { DataStore, SortDirection } from 'aws-amplify';
-import { SessionList } from '../../pages/sessions-list/sessions-list';
-import { TrainingParamList } from './training-tab';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+export const Training = withTheme(
+  ({ theme, route, navigation }: TrainingProps) => {
+    const { groupid } = route.params;
+    const [viewingData, setViewingData] = useState<number[]>([]);
+    const [acc, setacc] = useState<number[][]>([[], [], []]);
+    const [gyro, setgyro] = useState<number[][]>([[], [], []]);
+    const [sessions, setsessions] = useState<Session[]>([]);
+    const [device] = useContext(DeviceContext);
 
-type TrainingProps = NativeStackScreenProps<TrainingParamList, 'Training'> & {theme: ThemeType}
+    if (groupid === undefined) {
+      return (
+        <View style={globalStyles.container}>
+          <ActivityIndicator animating={true} color={theme.colors.primary} />
+        </View>
+      );
+    }
 
-export const Training = withTheme(({theme, route, navigation}: TrainingProps) => {
-  const {colors} = theme
-  const {groupid} = route.params
-  const [viewingData, setViewingData] = useState<number[]>([])
-  const [acc, setacc] = useState<number[][]>([[],[],[]])
-  const [gyro, setgyro] = useState<number[][]>([[],[],[]])
-  const [sessions, setsessions] = useState<Session[]>([])
-  
-  if (groupid === undefined){
-    return (
-      <View style={globalStyles.container}>    
-        <ActivityIndicator animating={true} color={theme.colors.primary} />
-      </View> 
-    )
-  }
-  
-  const gyroEvent = (g:number[]) => {
-    setgyro(v => ([
-      [...v[0], g[0] ],
-      [...v[1], g[1] ],
-      [...v[2], g[2] ],
-    ]))
-  }
+    const gyroEvent = (g: number[]) => {
+      setgyro((v) => [
+        [...v[0], g[0]],
+        [...v[1], g[1]],
+        [...v[2], g[2]],
+      ]);
+    };
 
-  const accEvent = (a:number[]) => {
-    setViewingData(v => {
-      v.length > 100? v.shift() : null
-      return [...v, a[0]]
-    })
-    setacc(v => ([
-      [...v[0], a[0] ],
-      [...v[1], a[1] ],
-      [...v[2], a[2] ],
-    ]))
-  }
-  
-  useEffect(() => {
-    MetaWear.onAccData(accEvent)
-    MetaWear.onGyroData(gyroEvent)
-    const subscription = DataStore.observeQuery(Session, s=> s.sessionGroupSessionsId('eq', groupid), {
-      sort: s => s.updatedAt(SortDirection.DESCENDING),
+    const accEvent = (a: number[]) => {
+      setViewingData((v) => {
+        v.length > 100 ? v.shift() : null;
+        return [...v, a[0]];
+      });
+      setacc((v) => [
+        [...v[0], a[0]],
+        [...v[1], a[1]],
+        [...v[2], a[2]],
+      ]);
+    };
+
+    useEffect(() => {
+      MetaWear.onAccData(accEvent);
+      MetaWear.onGyroData(gyroEvent);
+      const subscription = DataStore.observeQuery(
+        Session,
+        (s) => s.sessionGroupSessionsId("eq", groupid),
+        {
+          sort: (s) => s.updatedAt(SortDirection.DESCENDING),
+        }
+      ).subscribe((snapshot) => {
+        const { items, isSynced } = snapshot;
+        setsessions(items.slice(0, 10));
+      });
+      return () => subscription.unsubscribe();
+    }, []);
+
+    const onRelease = async () => {
+      if (device.isConnected) {
+        MetaWear.stopStream();
+        const input = new Session({
+          accerationX: acc[0],
+          accerationY: acc[1],
+          accerationZ: acc[2],
+          gyroX: gyro[0],
+          gyroY: gyro[1],
+          gyroZ: gyro[2],
+          streamingStarted: 0,
+          streamingFreqency: 25,
+          sessionGroupSessionsId: groupid,
+        });
+        await DataStore.save(input);
+
+        setacc([[], [], []]);
+        setgyro([[], [], []]);
+        setViewingData([]);
       }
-    ).subscribe(snapshot => {
-      const { items, isSynced } = snapshot
-      setsessions(items.slice(0,10))
-    });
-    return () => subscription.unsubscribe()
-  }, [])
-  
-  const onRelease = async () => {
-    MetaWear.stopStream() 
-    const input = new Session({
-      accerationX:  acc[0],
-      accerationY:  acc[1],
-      accerationZ:  acc[2],
-      gyroX:  gyro[0],
-      gyroY:  gyro[1],
-      gyroZ:  gyro[2],
-      streamingStarted: 0,
-      streamingFreqency: 25,
-      sessionGroupSessionsId: groupid
-    })
-    await DataStore.save(input)
-  
-    setacc([[],[],[]])
-    setgyro([[],[],[]])
-    setViewingData([])
+    };
 
-  }
-  
-  return (
-    <View style={{...globalStyles.container}}>
-      <Text>Press and Hold to Record Move</Text>
-      <Pressable
-        // style={{backgroundColor:'rgba(20, 20, 200,.1)'}}
-        disabled={false}
-        onPressIn={ () => MetaWear.startStream() }
-        onPressOut={onRelease}
-      >
-        <SessionChart
-          data={[viewingData]}
-          theme={theme}
+    return (
+      <View style={{ ...globalStyles.container }}>
+        <NoDeviceConnectedModal
+          devicePage={() => navigation.navigate("device-tab", {})}
         />
-      </Pressable>
-      <View style={{flex:1, width:'100%'}}>
-        <SessionList 
-          sessions={sessions}
-          navigate={(s)=> {
-            navigation.navigate('Session', {id:s.id})
+        <Text>Press and Hold to Record Move</Text>
+        <Pressable
+          // style={{backgroundColor:'rgba(20, 20, 200,.1)'}}
+          disabled={false}
+          onPressIn={() => {
+            if (device.streaming) {
+              MetaWear.startStream();
+            }
           }}
-        />
+          onPressOut={onRelease}
+        >
+          <SessionChart data={[viewingData]} theme={theme} />
+        </Pressable>
+        <View style={{ flex: 1, width: "100%" }}>
+          <SessionList
+            sessions={sessions}
+            navigate={(s) => {
+              navigation.navigate("Session", { id: s.id });
+            }}
+          />
+        </View>
       </View>
-    </View>
-  );
-});
-
-
-
+    );
+  }
+);

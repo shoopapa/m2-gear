@@ -12,7 +12,6 @@
 // import { Predicates } from '@aws-amplify/datastore/lib-esm/predicates';
 // import { SessionGroup } from '../../models';
 
-
 // type CreateGroupProps = NativeStackScreenProps<TrainingParamList, 'CreateGroup'> & {theme: ThemeType}
 
 // export const CreateGroup = withTheme(({theme, navigation}:CreateGroupProps) => {
@@ -31,7 +30,7 @@
 //     }
 //     init()
 //   }, [])
-  
+
 //   const save = async () => {
 //     const sg = new SessionGroup({
 //       move: move
@@ -39,11 +38,11 @@
 //     DataStore.save(sg)
 //     navigation.navigate('Training',{groupid: sg.id})
 //   }
-  
+
 //   return (
 //     <View style={globalStyles.container}>
 //        <View style={globalStyles.TextInputWrapper}>
-//         <TextInput 
+//         <TextInput
 //           label="Name"
 //           value={name}
 //           onChangeText={setName}
@@ -64,6 +63,3 @@
 //     </View>
 //   );
 // });
-
-
-
