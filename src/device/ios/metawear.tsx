@@ -13,6 +13,7 @@ export const DefaultMetaWearState = {
   batteryPercent: "",
   isConnected: false,
   macAdress: "",
+  signalStrength: "",
   isScanning: false,
   streaming: false,
 };
@@ -64,6 +65,7 @@ export const stopStream = async () => {
 };
 
 export const onAccData = async (callback: (body: number[]) => void) => {
+  NativeAppEventEmitter.removeAllListeners('onAccData')
   NativeAppEventEmitter.addListener("onAccData", (body: string) => {
     const acc = JSON.parse(body) as number[];
     callback(acc);
@@ -71,6 +73,7 @@ export const onAccData = async (callback: (body: number[]) => void) => {
 };
 
 export const onGyroData = async (callback: (body: number[]) => void) => {
+  NativeAppEventEmitter.removeAllListeners('onGyroData')
   NativeAppEventEmitter.addListener("onGyroData", (body: string) => {
     const gryo = JSON.parse(body) as number[];
     callback(gryo);
