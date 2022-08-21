@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Pressable, View } from "react-native";
 import * as MetaWear from "../../device/ios/metawear";
 
@@ -13,6 +13,8 @@ import { TrainingParamList } from "./training-tab";
 import { NoDeviceConnectedModal } from "../../components/no-device-connected-modal/no-device-connected-modal";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
 import DeviceContext from "../../device/ios/device-context";
+import Config from "react-native-config";
+import { useDebouncedCallback } from 'use-debounce';
 
 type TrainingProps = SubNavigatorProps<
   TrainingParamList,
@@ -30,7 +32,15 @@ export const Training = withTheme(
     const [gyro, setgyro] = useState<number[][]>([[], [], []]);
     const [sessions, setsessions] = useState<Session[]>([]);
     const [device] = useContext(DeviceContext);
-
+    
+    
+    const updateViewingData = (n:number = 1) => {
+      setViewingData((v) => {
+        v.length > 100 ? v.shift() : null;
+        return [...v, n];
+      })
+    }
+    const debounced = useDebouncedCallback(updateViewingData,parseInt(Config.DEBOUNCE_TIME));
     if (groupid === undefined) {
       return (
         <View style={globalStyles.container}>
@@ -47,11 +57,9 @@ export const Training = withTheme(
       ]);
     };
 
+    
     const accEvent = (a: number[]) => {
-      setViewingData((v) => {
-        v.length > 100 ? v.shift() : null;
-        return [...v, a[0]];
-      });
+      debounced(a[0])
       setacc((v) => [
         [...v[0], a[0]],
         [...v[1], a[1]],
@@ -107,7 +115,7 @@ export const Training = withTheme(
           // style={{backgroundColor:'rgba(20, 20, 200,.1)'}}
           disabled={false}
           onPressIn={() => {
-            if (device.streaming) {
+            if (device.isConnected) {
               MetaWear.startStream();
             }
           }}

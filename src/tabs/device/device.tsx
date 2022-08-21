@@ -9,18 +9,15 @@ import DeviceContext from "../../device/ios/device-context";
 import { ActivityIndicator } from "react-native-paper";
 import { DeviceParamList } from "./device-tab";
 import type { SubNavigatorProps } from "../../types/sub-navigator-props";
-import { useFocusEffect } from "@react-navigation/native";
-import { Session } from "../../models";
 interface ConnectProps {
   colors: any;
 }
 
 const Connect = ({ colors }: ConnectProps) => {
   const [blinking, setblinking] = useState(false);
-  const [isLoading, setisLoading] = useState(false);
-  const [device, setdevice] = useContext(DeviceContext);
+  const [device] = useContext(DeviceContext);
 
-  if (device === undefined || isLoading === true) {
+  if (device === undefined || device.isScanning === true) {
     return <ActivityIndicator animating={true} color={colors.primary} />;
   }
 
@@ -30,12 +27,7 @@ const Connect = ({ colors }: ConnectProps) => {
         mode="contained"
         style={{ backgroundColor: colors.success, margin: "2%" }}
         icon="bluetooth"
-        onPress={async () => {
-          setisLoading(true);
-          const p = await MetaWear.connect();
-          setdevice(p);
-          setisLoading(false);
-        }}
+        onPress={MetaWear.connect}
       >
         Connect
       </Button>
@@ -62,10 +54,7 @@ const Connect = ({ colors }: ConnectProps) => {
           disabled={blinking}
           style={{ backgroundColor: colors.error, margin: "2%" }}
           icon="bluetooth-off"
-          onPress={async () => {
-            const p = await MetaWear.forget();
-            setdevice(p);
-          }}
+          onPress={MetaWear.forget}
         >
           Forget
         </Button>
@@ -83,20 +72,9 @@ type DeviceProps = { theme: ThemeType } & SubNavigatorProps<
 >;
 
 export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
-  const { colors } = theme; // stop using paper provider?
+  const { colors } = theme;
   const authContext = useContext(AuthContext);
-  const [device, setdevice] = useContext(DeviceContext);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const init = async () => {
-        const state = await MetaWear.getState();
-        setdevice(state);
-      };
-      init();
-      return () => {};
-    }, [])
-  );
+  const [device] = useContext(DeviceContext);
 
   return (
     <View style={globalStyles.container}>
@@ -119,7 +97,8 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
           style={{ backgroundColor: colors.gray }}
           icon="battery"
           label="Battery"
-          right={() => <Text>{device?.batteryPercent}</Text>}
+          onPress={MetaWear.updateBattery}
+          right={() => <Text>{device?.batteryPercent}%</Text>}
         />
       </Drawer.Section>
       <Drawer.Section title="Device Options" style={{ width: "100%" }}>

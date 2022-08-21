@@ -1,27 +1,33 @@
+import { Dispatch, SetStateAction } from 'react';
 import { NativeModules, NativeAppEventEmitter } from "react-native";
 
 export interface MetaWearState {
   batteryPercent: string;
   isConnected: boolean;
   macAdress: string;
+  signalStrength: string;
+  isScanning: boolean;
   streaming: boolean;
 }
 export const DefaultMetaWearState = {
   batteryPercent: "",
   isConnected: false,
   macAdress: "",
+  isScanning: false,
   streaming: false,
 };
 
-export const connect = async () => {
-  const p = await NativeModules.MetaWearDevice.connect();
-  const state = JSON.parse(p) as MetaWearState;
-  return state;
+export const connect = () => {
+  NativeModules.MetaWearDevice.connect();
 };
-export const connectToRemembered = async (): Promise<MetaWearState> => {
-  const p = await NativeModules.MetaWearDevice.connectToRemembered();
-  const state = JSON.parse(p) as MetaWearState;
-  return state;
+export const connectToRemembered = () => {
+  NativeModules.MetaWearDevice.connectToRemembered();
+};
+export const updateBattery = () => {
+  NativeModules.MetaWearDevice.updateBattery();
+};
+export const updateSignalStrength = () => {
+  NativeModules.MetaWearDevice.updateSignalStrength();
 };
 
 export const disconnect = async (): Promise<MetaWearState> => {
@@ -40,25 +46,21 @@ export const blinkLED = async () => {
   await NativeModules.MetaWearDevice.blinkLED();
 };
 
-export const onDiscconect = async (
-  callback: (body: MetaWearState) => undefined
+export const onStateUpdate = async (
+  callback: Dispatch<SetStateAction<MetaWearState>>
 ) => {
-  NativeAppEventEmitter.addListener("onDisconect", (body: string) => {
-    const res = JSON.parse(body);
+  NativeAppEventEmitter.addListener("onStateUpdate", (body: string) => {
+    const res = JSON.parse(body) as MetaWearState;
     callback(res);
   });
 };
 
 export const startStream = async () => {
-  const res = await NativeModules.MetaWearDevice.startStream();
-  const state = JSON.parse(res) as MetaWearState;
-  return state;
+  NativeModules.MetaWearDevice.startStream();
 };
 
 export const stopStream = async () => {
-  const res = await NativeModules.MetaWearDevice.stopStream();
-  const state = JSON.parse(res) as MetaWearState;
-  return state;
+  NativeModules.MetaWearDevice.stopStream();
 };
 
 export const onAccData = async (callback: (body: number[]) => void) => {

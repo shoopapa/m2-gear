@@ -44,11 +44,17 @@ export const NoDeviceConnectedModal = withTheme(
           </TouchableWithoutFeedback>
           <View style={styles.modalView}>
             <Title style={{ fontSize: 18, padding: 10 }}>
-              Device Not Connected!
+              Head Gear Not Connected!
             </Title>
-            <Text style={{ fontSize: 15, padding: 10 }}>
-              Go to device settings to connect to a device
-            </Text>
+            {device.isScanning ? (
+                <Text style={{ fontSize: 15, padding: 10 }}>
+                 Connecting
+               </Text>
+            ) : (
+              <Text style={{ fontSize: 15, padding: 10 }}>
+                Go to settings to connect head gear
+              </Text>
+            )}
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <Button
                 mode="contained"

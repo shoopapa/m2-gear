@@ -8,8 +8,6 @@ import { AuthContext } from "./pages/auth/auth-context";
 import { RootScreen } from "./root-screen";
 import { AuthScreen } from "./pages/auth/authScreen";
 import { theme } from "./styles";
-import DeviceContext from "./device/ios/device-context";
-import { MetaWearState } from "./device/ios/metawear";
 
 export type AuthParamsList = {
   AuthScreen: {};
@@ -21,12 +19,6 @@ const Stack = createStackNavigator<AuthParamsList>();
 export const AppWithAuth = () => {
   const [authState, setauthState] = useState<string>("");
   const [authData, setauthData] = useState(null);
-  const [device, setdevice] = useState<MetaWearState>({
-    batteryPercent: "0",
-    isConnected: false,
-    macAdress: "",
-    streaming: false,
-  });
 
   return (
     <PaperProvider theme={theme}>
@@ -39,14 +31,7 @@ export const AppWithAuth = () => {
             setauthData,
           }}
         >
-          <DeviceContext.Provider
-            value={[
-              device,
-              (v: MetaWearState) => {
-                setdevice((d) => ({ ...d, ...v }));
-              },
-            ]}
-          >
+  
             <Stack.Navigator>
               <Stack.Screen
                 name="AuthScreen"
@@ -63,7 +48,6 @@ export const AppWithAuth = () => {
                 }}
               />
             </Stack.Navigator>
-          </DeviceContext.Provider>
         </AuthContext.Provider>
       </NavigationContainer>
     </PaperProvider>

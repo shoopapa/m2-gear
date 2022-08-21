@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import { Auth } from "aws-amplify";
 // @ts-ignore
 import { AmplifyButton } from "aws-amplify-react-native";
@@ -12,12 +12,13 @@ import DeviceContext from "./device/ios/device-context";
 import { MetaWearState } from "./device/ios/metawear";
 
 import { RecordRoot } from "./tabs/record/record-tab";
-import { TagsScreen } from "./tabs/tags/tags-screen";
 import { withTheme } from "react-native-paper";
 import { globalStyles, ThemeType } from "./styles";
 import { TrainingTab } from "./tabs/training/training-tab";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AuthParamsList } from ".";
+import * as Metawear from './device/ios/metawear'
+import { useFocusEffect } from '@react-navigation/native';
 
 type SignOutButtonProps = { onPress: () => void };
 export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
@@ -57,7 +58,15 @@ type MainScreenProps = StackScreenProps<AuthParamsList, "MainScreen"> & {
 export const RootScreen = withTheme(
   ({ theme, navigation }: MainScreenProps) => {
     const authContext = useContext(AuthContext);
-
+    const [device, setdevice] = useState<MetaWearState>(Metawear.DefaultMetaWearState);
+    
+    useFocusEffect(
+      React.useCallback(() => {
+        Metawear.onStateUpdate(setdevice)
+        Metawear.connectToRemembered()
+      },[])
+    );
+    
     if (authContext.authState !== "signedIn") {
       return (
         <SignOutButton onPress={() => navigation.navigate("AuthScreen", {})} />
@@ -65,6 +74,14 @@ export const RootScreen = withTheme(
     }
 
     return (
+      <DeviceContext.Provider
+      value={[
+        device,
+        (v: MetaWearState) => {
+          setdevice((d) => ({ ...d, ...v }));
+        },
+      ]}
+    >
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
@@ -91,6 +108,7 @@ export const RootScreen = withTheme(
           component={Device}
         />
       </Tab.Navigator>
+      </DeviceContext.Provider>
     );
   }
 );
