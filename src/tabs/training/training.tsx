@@ -35,7 +35,7 @@ export const Training = withTheme(
 
     const updateViewingData = (n: number = 1) => {
       setViewingData((v) => {
-        v.length > 100 ? v.shift() : null;
+        v.length > parseInt(Config.PREVIEW_DATA_LENGTH) ? v.shift() : null;
         return [...v, n];
       });
     };
