@@ -47,9 +47,7 @@ export const NoDeviceConnectedModal = withTheme(
               Head Gear Not Connected!
             </Title>
             {device.isScanning ? (
-                <Text style={{ fontSize: 15, padding: 10 }}>
-                 Connecting
-               </Text>
+              <Text style={{ fontSize: 15, padding: 10 }}>Connecting</Text>
             ) : (
               <Text style={{ fontSize: 15, padding: 10 }}>
                 Go to settings to connect head gear

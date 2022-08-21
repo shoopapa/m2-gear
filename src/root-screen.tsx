@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useContext,useState } from "react";
+import React, { useContext, useState } from "react";
 import { Auth } from "aws-amplify";
 // @ts-ignore
 import { AmplifyButton } from "aws-amplify-react-native";
@@ -17,8 +17,8 @@ import { globalStyles, ThemeType } from "./styles";
 import { TrainingTab } from "./tabs/training/training-tab";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AuthParamsList } from ".";
-import * as Metawear from './device/ios/metawear'
-import { useFocusEffect } from '@react-navigation/native';
+import * as Metawear from "./device/ios/metawear";
+import { useFocusEffect } from "@react-navigation/native";
 
 type SignOutButtonProps = { onPress: () => void };
 export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
@@ -58,15 +58,17 @@ type MainScreenProps = StackScreenProps<AuthParamsList, "MainScreen"> & {
 export const RootScreen = withTheme(
   ({ theme, navigation }: MainScreenProps) => {
     const authContext = useContext(AuthContext);
-    const [device, setdevice] = useState<MetaWearState>(Metawear.DefaultMetaWearState);
-    
+    const [device, setdevice] = useState<MetaWearState>(
+      Metawear.DefaultMetaWearState
+    );
+
     useFocusEffect(
       React.useCallback(() => {
-        Metawear.onStateUpdate(setdevice)
-        Metawear.connectToRemembered()
-      },[])
+        Metawear.onStateUpdate(setdevice);
+        Metawear.connectToRemembered();
+      }, [])
     );
-    
+
     if (authContext.authState !== "signedIn") {
       return (
         <SignOutButton onPress={() => navigation.navigate("AuthScreen", {})} />
@@ -75,39 +77,39 @@ export const RootScreen = withTheme(
 
     return (
       <DeviceContext.Provider
-      value={[
-        device,
-        (v: MetaWearState) => {
-          setdevice((d) => ({ ...d, ...v }));
-        },
-      ]}
-    >
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            return tabIcons[route.name](size, color);
+        value={[
+          device,
+          (v: MetaWearState) => {
+            setdevice((d) => ({ ...d, ...v }));
           },
-          tabBarActiveTintColor: theme.colors.primary,
-          headerShown: false,
-          contentStyle: globalStyles.navigatorContent,
-        })}
+        ]}
       >
-        <Tab.Screen
-          name="record-tab"
-          options={{ tabBarLabel: "Record" }}
-          component={RecordRoot}
-        />
-        <Tab.Screen
-          name="training-tab"
-          options={{ tabBarLabel: "AI" }}
-          component={TrainingTab}
-        />
-        <Tab.Screen
-          name="device-tab"
-          options={{ headerShown: true }}
-          component={Device}
-        />
-      </Tab.Navigator>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              return tabIcons[route.name](size, color);
+            },
+            tabBarActiveTintColor: theme.colors.primary,
+            headerShown: false,
+            contentStyle: globalStyles.navigatorContent,
+          })}
+        >
+          <Tab.Screen
+            name="record-tab"
+            options={{ tabBarLabel: "Record" }}
+            component={RecordRoot}
+          />
+          <Tab.Screen
+            name="training-tab"
+            options={{ tabBarLabel: "AI" }}
+            component={TrainingTab}
+          />
+          <Tab.Screen
+            name="device-tab"
+            options={{ headerShown: true }}
+            component={Device}
+          />
+        </Tab.Navigator>
       </DeviceContext.Provider>
     );
   }

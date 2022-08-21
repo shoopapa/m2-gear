@@ -12,7 +12,7 @@ import { SaveModal } from "./save-modal";
 import { SessionChart } from "../../components/session-chart/session-chart";
 import { RecordParamList } from "./record-tab";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
-import { useDebouncedCallback } from 'use-debounce';
+import { useDebouncedCallback } from "use-debounce";
 import Config from "react-native-config";
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
@@ -30,16 +30,18 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   const [streamingDataExists, setstreamingDataExists] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [viewingData, setViewingData] = useState<number[]>([]);
-  
-      
-  const updateViewingData = (n:number = 1) => {
+
+  const updateViewingData = (n: number = 1) => {
     setViewingData((v) => {
       v.length > 100 ? v.shift() : null;
       return [...v, n];
-    })
-  }
-  const debounced = useDebouncedCallback(updateViewingData,parseInt(Config.DEBOUNCE_TIME));
-  
+    });
+  };
+  const debounced = useDebouncedCallback(
+    updateViewingData,
+    parseInt(Config.DEBOUNCE_TIME)
+  );
+
   useEffect(() => {
     setstreamingDataExists(acc[0].length > 0);
   }, [acc]);
@@ -53,7 +55,7 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   };
 
   const accEvent = (a: number[]) => {
-    debounced(a[0])
+    debounced(a[0]);
     setacc((v) => [
       [...v[0], a[0]],
       [...v[1], a[1]],
@@ -132,4 +134,3 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
 };
 
 export const SessionStreamer = withTheme(SessionStreamerWithoutTheme);
-

@@ -31,23 +31,22 @@ export const AppWithAuth = () => {
             setauthData,
           }}
         >
-  
-            <Stack.Navigator>
-              <Stack.Screen
-                name="AuthScreen"
-                component={AuthScreen}
-                options={{ title: "Sign in", headerLeft: () => null }}
-              />
-              <Stack.Screen
-                name="MainScreen"
-                component={RootScreen}
-                options={{
-                  headerShown: false,
-                  headerLeft: () => null,
-                  gestureEnabled: false,
-                }}
-              />
-            </Stack.Navigator>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="AuthScreen"
+              component={AuthScreen}
+              options={{ title: "Sign in", headerLeft: () => null }}
+            />
+            <Stack.Screen
+              name="MainScreen"
+              component={RootScreen}
+              options={{
+                headerShown: false,
+                headerLeft: () => null,
+                gestureEnabled: false,
+              }}
+            />
+          </Stack.Navigator>
         </AuthContext.Provider>
       </NavigationContainer>
     </PaperProvider>

@@ -14,7 +14,7 @@ import { NoDeviceConnectedModal } from "../../components/no-device-connected-mod
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
 import DeviceContext from "../../device/ios/device-context";
 import Config from "react-native-config";
-import { useDebouncedCallback } from 'use-debounce';
+import { useDebouncedCallback } from "use-debounce";
 
 type TrainingProps = SubNavigatorProps<
   TrainingParamList,
@@ -32,15 +32,17 @@ export const Training = withTheme(
     const [gyro, setgyro] = useState<number[][]>([[], [], []]);
     const [sessions, setsessions] = useState<Session[]>([]);
     const [device] = useContext(DeviceContext);
-    
-    
-    const updateViewingData = (n:number = 1) => {
+
+    const updateViewingData = (n: number = 1) => {
       setViewingData((v) => {
         v.length > 100 ? v.shift() : null;
         return [...v, n];
-      })
-    }
-    const debounced = useDebouncedCallback(updateViewingData,parseInt(Config.DEBOUNCE_TIME));
+      });
+    };
+    const debounced = useDebouncedCallback(
+      updateViewingData,
+      parseInt(Config.DEBOUNCE_TIME)
+    );
     if (groupid === undefined) {
       return (
         <View style={globalStyles.container}>
@@ -57,9 +59,8 @@ export const Training = withTheme(
       ]);
     };
 
-    
     const accEvent = (a: number[]) => {
-      debounced(a[0])
+      debounced(a[0]);
       setacc((v) => [
         [...v[0], a[0]],
         [...v[1], a[1]],
