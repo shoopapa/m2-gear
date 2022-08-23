@@ -21,6 +21,9 @@ func bPtr(ptr: UnsafeRawPointer) -> MetaWearDevice {
   return bridge(ptr: ptr)
 }
 
+enum MyError: Error {
+    case runtimeError(String)
+}
 
 struct State : Codable {
   var signalStrength: String = ""
@@ -29,6 +32,8 @@ struct State : Codable {
   var streaming: Bool = false
   var isConnected: Bool = false
   var isScanning: Bool = false
+  var accelerometerFreqency: Int = 50
+  var gryoFreqency: Int = 50
 }
 
 @objc(MetaWearDevice)
@@ -199,14 +204,28 @@ class MetaWearDevice: RCTEventEmitter {
   }
 
 
+
   @objc
   func startStream() -> Void { // add epoch to
     print("starting stream")
-    let b = bObj(obj: self)
-
+    self.state.accelerometerFreqency = 50
+    self.state.gryoFreqency = 50
+    mbl_mw_gyro_bmi160_set_range(device?.board, MBL_MW_GYRO_BOSCH_RANGE_2000dps)
+    var freq = MBL_MW_GYRO_BOSCH_ODR_50Hz
+    do {
+        freq = try decodeGryoFrequency(freq: self.state.gryoFreqency)
+    } catch {
+      print("Did not choose an avilable gryo sampling rate options are (25,50,100,200,400,800,1600,3200), using 50")
+      self.state.gryoFreqency = 50
+    }
+    mbl_mw_gyro_bmi160_set_odr(device?.board, freq)
     mbl_mw_acc_bosch_set_range(device?.board, MBL_MW_ACC_BOSCH_RANGE_16G)
-    mbl_mw_acc_set_odr(device?.board, 25)
+    mbl_mw_acc_set_odr(device?.board, Float(self.state.accelerometerFreqency))
     mbl_mw_acc_bosch_write_acceleration_config(device?.board)
+    mbl_mw_gyro_bmi160_write_config(device?.board)
+    retJson(state: self.state)
+
+    let b = bObj(obj: self)
     let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(device?.board)!
     mbl_mw_datasignal_subscribe(signalAcc, b) {(context, obj) in
         let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
@@ -216,17 +235,13 @@ class MetaWearDevice: RCTEventEmitter {
         let z = Double(acceleration.z)
         _self.event(event: "onAccData", data: [x,y,z] )
     }
-
-    mbl_mw_gyro_bmi160_set_range(device?.board, MBL_MW_GYRO_BOSCH_RANGE_125dps)
-    mbl_mw_gyro_bmi160_set_odr(device?.board, MBL_MW_GYRO_BOSCH_ODR_25Hz)
-    mbl_mw_gyro_bmi160_write_config(device?.board)
     let signalGyro = mbl_mw_gyro_bmi160_get_rotation_data_signal(device?.board)!
     mbl_mw_datasignal_subscribe(signalGyro, b) {(context, obj) in
-        let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
+        let gryo: MblMwCartesianFloat = obj!.pointee.valueAs()
         let _self: MetaWearDevice = bPtr(ptr: context!)
-        let x = Double(acceleration.x)
-        let y = Double(acceleration.y)
-        let z = Double(acceleration.z)
+        let x = Double(gryo.x)
+        let y = Double(gryo.y)
+        let z = Double(gryo.z)
         _self.event(event: "onGyroData", data: [x,y,z] )
     }
 
@@ -343,5 +358,29 @@ class MetaWearDevice: RCTEventEmitter {
     )
     self.state = s
     return s
+  }
+
+  func decodeGryoFrequency(freq:Int) throws -> MblMwGyroBoschOdr  {
+      switch self.state.gryoFreqency {
+      case 25:
+        return MBL_MW_GYRO_BOSCH_ODR_25Hz
+      case 50:
+        return MBL_MW_GYRO_BOSCH_ODR_50Hz
+      case 100:
+        return MBL_MW_GYRO_BOSCH_ODR_100Hz
+      case 200:
+        return MBL_MW_GYRO_BOSCH_ODR_200Hz
+      case 400:
+        return MBL_MW_GYRO_BOSCH_ODR_400Hz
+      case 800:
+        return MBL_MW_GYRO_BOSCH_ODR_800Hz
+      case 1600:
+        return MBL_MW_GYRO_BOSCH_ODR_1600Hz
+      case 3200:
+        return MBL_MW_GYRO_BOSCH_ODR_3200Hz
+      default:
+        throw MyError.runtimeError("Did not choose an avilable gryo sampling rate options are (25,50,100,200,400,800,1600,3200)")
+    }
+   
   }
 }

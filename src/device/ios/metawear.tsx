@@ -8,6 +8,8 @@ export interface MetaWearState {
   signalStrength: string;
   isScanning: boolean;
   streaming: boolean;
+  accelerometerFreqency?: number
+  gryoFreqency?: number
 }
 export const DefaultMetaWearState = {
   batteryPercent: "",
