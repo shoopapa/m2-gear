@@ -36,7 +36,7 @@ class MetaWearDevice: RCTEventEmitter {
   private var state = State()
   var device: MetaWear?
   var streamingCleanup: [OpaquePointer: () -> Void] = [:]
-  
+
 
   @objc
   override func constantsToExport() -> [AnyHashable : Any]! {
@@ -50,13 +50,14 @@ class MetaWearDevice: RCTEventEmitter {
       ]
       return descriptions
   }
-  
+
   @objc open override func supportedEvents() -> [String] {
     return ["onAccData", "onGyroData", "onStateUpdate"]
   }
-  
+
   func retJson(state: State) {
     do {
+      self.state = state
       let jsonData = try JSONEncoder().encode(state)
       let jsonString = String(data: jsonData, encoding: .utf8)!
       self.bridge.eventDispatcher().sendAppEvent(withName: "onStateUpdate", body: jsonString )
@@ -64,7 +65,7 @@ class MetaWearDevice: RCTEventEmitter {
       print(error)
     }
   }
-  
+
   @objc
   func getState(
     _ resolve: @escaping RCTPromiseResolveBlock,
@@ -77,14 +78,14 @@ class MetaWearDevice: RCTEventEmitter {
       resolve(jsonString)
     } catch { print(error) }
   }
-  
+
   @objc
   func connect() -> Void {
     var s = self.state
     s.isScanning = true
     retJson(state: s)
     print("connect")
-    
+
     let c = DispatchWorkItem {
       print("timeouted scan")
       MetaWearScanner.shared.stopScan()
@@ -92,11 +93,12 @@ class MetaWearDevice: RCTEventEmitter {
       self.retJson(state: s)
     }
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6, execute: c )
-    
+
     MetaWearScanner.shared.startScan(allowDuplicates: true) { (device) in
       print("wee found a device!")
       // Hooray! We found a MetaWear board, so stop scanning for more
       if device.rssi > -100 {
+        self.state.signalStrength = String(self.device?.rssi ?? 0)
         c.cancel()
         MetaWearScanner.shared.stopScan()
         device.connectAndSetup().continueWith { t in
@@ -123,12 +125,12 @@ class MetaWearDevice: RCTEventEmitter {
       }
     }
   }
-  
+
   @objc func connectToRemembered() -> Void {
     var s = self.state
     s.isScanning = true
     retJson(state: s)
-    
+
     let c = DispatchWorkItem {
       if self.state.isConnected == false {
         print("timeouted scan")
@@ -137,12 +139,13 @@ class MetaWearDevice: RCTEventEmitter {
         self.retJson(state: s)
       }
     }
-    
+
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5, execute: c )
-    
+
     MetaWearScanner.shared.retrieveSavedMetaWearsAsync().continueOnSuccessWith { array in
       if array.first != nil {
         let savedDevice = array.first
+        self.state.signalStrength = String(savedDevice?.rssi ?? 0)
         savedDevice!.connectAndSetup().continueWith { t in
           c.cancel()
           if t.cancelled || t.error != nil {
@@ -167,22 +170,18 @@ class MetaWearDevice: RCTEventEmitter {
       }
     }
   }
-  
+
   @objc
   func blinkLED(
     _ resolve: @escaping RCTPromiseResolveBlock,
     rejecter reject: @escaping RCTPromiseRejectBlock
   ) -> Void {
     print("blinkLED")
-  
+
     if let device = self.device {
-      var pattern = MblMwLedPattern()
-      mbl_mw_led_load_preset_pattern(&pattern, MBL_MW_LED_PRESET_PULSE)
-      mbl_mw_led_stop_and_clear(device.board)
-      mbl_mw_led_write_pattern(device.board, &pattern, MBL_MW_LED_COLOR_GREEN)
-      mbl_mw_led_play(device.board)
+      device.flashLED(color: .blue, intensity: 1.0, _repeat: 4)
+      mbl_mw_haptic_start_motor(device.board, 100, 500)
       let cancel = DispatchWorkItem {
-        mbl_mw_led_stop(device.board)
         resolve("done")
       }
       DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: cancel )
@@ -199,12 +198,12 @@ class MetaWearDevice: RCTEventEmitter {
     resolve(self.retJson(state: s))
   }
 
-  
+
   @objc
   func startStream() -> Void { // add epoch to
     print("starting stream")
     let b = bObj(obj: self)
-    
+
     mbl_mw_acc_bosch_set_range(device?.board, MBL_MW_ACC_BOSCH_RANGE_16G)
     mbl_mw_acc_set_odr(device?.board, 25)
     mbl_mw_acc_bosch_write_acceleration_config(device?.board)
@@ -217,7 +216,7 @@ class MetaWearDevice: RCTEventEmitter {
         let z = Double(acceleration.z)
         _self.event(event: "onAccData", data: [x,y,z] )
     }
-      
+
     mbl_mw_gyro_bmi160_set_range(device?.board, MBL_MW_GYRO_BOSCH_RANGE_125dps)
     mbl_mw_gyro_bmi160_set_odr(device?.board, MBL_MW_GYRO_BOSCH_ODR_25Hz)
     mbl_mw_gyro_bmi160_write_config(device?.board)
@@ -230,10 +229,10 @@ class MetaWearDevice: RCTEventEmitter {
         let z = Double(acceleration.z)
         _self.event(event: "onGyroData", data: [x,y,z] )
     }
-      
+
     mbl_mw_acc_enable_acceleration_sampling(device?.board)
     mbl_mw_acc_start(device?.board)
-      
+
     mbl_mw_gyro_bmi160_enable_rotation_sampling(device?.board)
     mbl_mw_gyro_bmi160_start(device?.board)
 
@@ -248,7 +247,7 @@ class MetaWearDevice: RCTEventEmitter {
         mbl_mw_gyro_bmi160_disable_rotation_sampling(self.device?.board)
         mbl_mw_datasignal_unsubscribe(signalGyro)
     }
-    
+
     var s = self.state
     s.streaming = true
     self.retJson(state: s)
@@ -260,12 +259,12 @@ class MetaWearDevice: RCTEventEmitter {
       streamingCleanup.removeValue(forKey: signalAcc)?()
       let signalGryo = mbl_mw_gyro_bmi160_get_rotation_data_signal(self.device?.board)!
       streamingCleanup.removeValue(forKey: signalGryo)?()
-    
+
       var s = self.state
       s.streaming = false
       self.retJson(state: s)
   }
-  
+
   @objc
   func forget() -> Void {
     MetaWearScanner.shared.retrieveSavedMetaWearsAsync().continueOnSuccessWith { devices in
@@ -276,7 +275,7 @@ class MetaWearDevice: RCTEventEmitter {
     let s = self.ConnectionFail()
     self.retJson(state: s)
   }
-  
+
   @objc
   func updateBattery() {
     var s = self.state
@@ -291,20 +290,20 @@ class MetaWearDevice: RCTEventEmitter {
       }
     }
   }
-  
-  @objc
-  func updateSignalStrength() {
-    var s = self.state
-    s.signalStrength =  String(self.device?.averageRSSI() ?? 0)
-    print(s.signalStrength)
-    self.retJson(state: s)
-  }
-  
+
+//  @objc
+//  func updateSignalStrength() {
+//    var s = self.state
+//    s.signalStrength =  String(self.device?.rssi ?? 0)
+//    print(s.signalStrength)
+//    self.retJson(state: s)
+//  }
+
   func onDisconect() {
     let s = self.ConnectionFail()
     self.retJson(state: s)
   }
-  
+
   func event(event: String, data: [Double] ) {
     do {
       let jsonData = try JSONEncoder().encode(data)
@@ -313,7 +312,7 @@ class MetaWearDevice: RCTEventEmitter {
     }
     catch { print("error") }
   }
-  
+
   func ConnectionSuccessful(device: MetaWear) -> State {
     print("ConnectionSuccessful")
     device.remember()
@@ -329,7 +328,7 @@ class MetaWearDevice: RCTEventEmitter {
       isScanning: false
     )
     self.state = s
-    
+
     return s
   }
 

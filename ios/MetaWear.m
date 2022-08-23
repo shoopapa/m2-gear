@@ -30,7 +30,7 @@ RCT_EXTERN_METHOD(connectToRemembered)
 
 RCT_EXTERN_METHOD(updateBattery)
 
-RCT_EXTERN_METHOD(updateSignalStrength)
+//RCT_EXTERN_METHOD(updateSignalStrength)
 
 RCT_EXTERN_METHOD(
   blinkLED: (RCTPromiseResolveBlock)resolve
