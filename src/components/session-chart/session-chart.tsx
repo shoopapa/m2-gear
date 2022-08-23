@@ -29,12 +29,15 @@ export const SessionChart = ({ data, theme, disabled }: SessionChartProps) => {
       style={{ marginBottom: -40, marginLeft: -20 }}
       data={{
         labels: ["time"],
-        datasets: data.map((d, i) => {
+        datasets: [
+          ...data.map((d, i) => {
           return {
             data: d,
             color: () => (disabled ? disabledLineColors[i] : lineColors[i]),
           };
-        }),
+         }),
+         {data: [6,-6], color:()=>'rgba(0,0,0,0)'}
+      ],
       }}
       formatYLabel={(v) => {
         if (v === "NaN") return "0g";
