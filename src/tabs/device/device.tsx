@@ -42,11 +42,11 @@ const Connect = ({ colors }: ConnectProps) => {
           style={{ backgroundColor: colors.primary, margin: "2%" }}
           icon="lightbulb-on"
           onPress={async () => {
-            console.log('starting')
+            console.log("starting");
             setblinking(true);
             await MetaWear.blinkLED();
             setblinking(false);
-            console.log('ending')
+            console.log("ending");
           }}
         >
           Blink
@@ -102,13 +102,14 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
           onPress={MetaWear.updateBattery}
           right={() => <Text>{device?.batteryPercent}%</Text>}
         />
-        {(device.signalStrength === "0.0" || device.signalStrength === "" )? null : (
+        {device.signalStrength === "0.0" ||
+        device.signalStrength === "" ? null : (
           <Drawer.Item
-          style={{ backgroundColor: colors.gray }}
-          icon="signal"
-          label="Signal Strength"
-          right={() => <Text>{device.signalStrength}</Text>}
-        />
+            style={{ backgroundColor: colors.gray }}
+            icon="signal"
+            label="Signal Strength"
+            right={() => <Text>{device.signalStrength}</Text>}
+          />
         )}
       </Drawer.Section>
       <Drawer.Section title="Device Options" style={{ width: "100%" }}>
