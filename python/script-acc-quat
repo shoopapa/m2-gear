@@ -1,0 +1,45 @@
+
+import scipy 
+import pandas as pd
+import os
+from pathlib import Path
+import bpy
+from scipy.signal import butter, lfilter, freqz
+
+
+def butter_lowpass(cutoff, fs, order=5):
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff / nyq
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    return b, a
+
+def butter_lowpass_filter(data, cutoff, fs, order=5):
+    b, a = butter_lowpass(cutoff, fs, order=order)
+    y = lfilter(b, a, data)
+    return y
+
+
+order = 6
+fs = 100       
+cutoff = 1
+def pos_from_acc(y):
+    y = butter_lowpass_filter(y, cutoff, fs, order)
+    y = scipy.integrate.cumtrapz(y=y,dx=1/100)
+    return scipy.integrate.cumtrapz(y=y,dx=1/100)
+
+
+#p = os.path.join(__file__, '../acc.csv')
+path = os.path.abspath(os.path.join(os.path.dirname(__file__),'../acc.csv'))
+df = pd.read_csv(path)
+
+xpos = pos_from_acc(df['x-axis (g)'])
+ypos = pos_from_acc(df['y-axis (g)'])
+zpos = pos_from_acc(df['z-axis (g)'])
+
+
+object = bpy.context.active_object
+
+for i in range(0, len(xpos), 4):
+     loc = (xpos[i], ypos[i], zpos[i])
+     object.location = loc
+     object.keyframe_insert(data_path="location", frame=i/4)
