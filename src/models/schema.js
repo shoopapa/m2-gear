@@ -1,109 +1,5 @@
 export const schema = {
     "models": {
-        "SessionGroup": {
-            "name": "SessionGroup",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "move": {
-                    "name": "move",
-                    "isArray": false,
-                    "type": {
-                        "model": "Move"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "sessionGroupMoveId"
-                    }
-                },
-                "sessions": {
-                    "name": "sessions",
-                    "isArray": true,
-                    "type": {
-                        "model": "Session"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "sessionGroupSessionsId"
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "sessionGroupMoveId": {
-                    "name": "sessionGroupMoveId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "SessionGroups",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "admin"
-                                ],
-                                "operations": [
-                                    "read",
-                                    "create",
-                                    "update",
-                                    "delete"
-                                ]
-                            },
-                            {
-                                "provider": "userPools",
-                                "ownerField": "owner",
-                                "allow": "owner",
-                                "identityClaim": "cognito:username",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
         "Move": {
             "name": "Move",
             "fields": {
@@ -183,13 +79,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "isTraining": {
-                    "name": "isTraining",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -197,62 +86,72 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "streamingStarted": {
-                    "name": "streamingStarted",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "streamingFreqency": {
-                    "name": "streamingFreqency",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "accerationX": {
-                    "name": "accerationX",
+                "quaternionTimestamp": {
+                    "name": "quaternionTimestamp",
                     "isArray": true,
                     "type": "Float",
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 },
-                "accerationY": {
-                    "name": "accerationY",
+                "quaternionW": {
+                    "name": "quaternionW",
                     "isArray": true,
                     "type": "Float",
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 },
-                "accerationZ": {
-                    "name": "accerationZ",
+                "quaternionX": {
+                    "name": "quaternionX",
                     "isArray": true,
                     "type": "Float",
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 },
-                "gyroX": {
-                    "name": "gyroX",
+                "quaternionY": {
+                    "name": "quaternionY",
                     "isArray": true,
                     "type": "Float",
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 },
-                "gyroY": {
-                    "name": "gyroY",
+                "quaternionZ": {
+                    "name": "quaternionZ",
                     "isArray": true,
                     "type": "Float",
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 },
-                "gyroZ": {
-                    "name": "gyroZ",
+                "linearAccerationTimestamp": {
+                    "name": "linearAccerationTimestamp",
+                    "isArray": true,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "linearAccerationX": {
+                    "name": "linearAccerationX",
+                    "isArray": true,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "linearAccerationY": {
+                    "name": "linearAccerationY",
+                    "isArray": true,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "linearAccerationZ": {
+                    "name": "linearAccerationZ",
                     "isArray": true,
                     "type": "Float",
                     "isRequired": true,
@@ -280,13 +179,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "sessionGroupSessionsId": {
-                    "name": "sessionGroupSessionsId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -505,5 +397,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "43b1bebdaf1afcfb44eaf087fc17a7a4"
+    "version": "6bd7d36527931dce7cc86b514780d4e0"
 };

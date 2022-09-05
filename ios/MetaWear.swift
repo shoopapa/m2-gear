@@ -323,23 +323,23 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
     mbl_mw_logger_subscribe(self.afuser, b, { (context, dataPtr) in
       let _self:MetaWearDevice = bPtr(ptr: context!)
-      let timestamp = dataPtr!.pointee.timestamp
+      let timestamp = Double(dataPtr!.pointee.timestamp.timeIntervalSince1970)
       let a: MblMwCartesianFloat = dataPtr!.pointee.valueAs()
       let x = Double(a.x)
       let y = Double(a.y)
       let z = Double(a.z)
-      _self.event(event: "onLinearAccerationData", data: [x,y,z] )
+      _self.event(event: "onLinearAccerationData", data: [timestamp, x,y,z] )
       print("a : \(timestamp) \(a)")
     })
     mbl_mw_logger_subscribe( self.qfuser, b, { (context, dataPtr) in
       let _self:MetaWearDevice = bPtr(ptr: context!)
-      let timestamp = dataPtr!.pointee.timestamp
+      let timestamp = Double(dataPtr!.pointee.timestamp.timeIntervalSince1970)
       let q: MblMwQuaternion = dataPtr!.pointee.valueAs()
       let w = Double(q.w)
       let x = Double(q.x)
       let y = Double(q.y)
       let z = Double(q.z)
-      _self.event(event: "onQuaternionData", data: [w,x,y,z] )
+      _self.event(event: "onQuaternionData", data: [timestamp,w,x,y,z] )
       print("q : \(timestamp) \(q)")
     })
     self.handlers.context = b

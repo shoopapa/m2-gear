@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { NativeModules, NativeAppEventEmitter } from "react-native";
+import { LinearAccerationRecord, QuaternionRecord } from '../../types/data-format';
 
 export interface MetaWearState {
   batteryPercent: string;
@@ -91,18 +92,18 @@ export const onGyroData = async (callback: (body: number[]) => void) => {
     callback(gryo);
   });
 };
-export const onLinearAccerationData = async (callback: (body: number[]) => void) => {
+export const onLinearAccerationData = async (callback: (body: LinearAccerationRecord) => void) => {
   NativeAppEventEmitter.removeAllListeners('onLinearAccerationData')
   NativeAppEventEmitter.addListener("onLinearAccerationData", (body: string) => {
-    const acc = JSON.parse(body) as number[];
+    const acc = JSON.parse(body) as LinearAccerationRecord;
     callback(acc);
   });
 };
 
-export const onQuaternionData = async (callback: (body: number[]) => void) => {
+export const onQuaternionData = async (callback: (body: QuaternionRecord) => void) => {
   NativeAppEventEmitter.removeAllListeners('onQuaternionData')
   NativeAppEventEmitter.addListener("onQuaternionData", (body: string) => {
-    const gryo = JSON.parse(body) as number[];
+    const gryo = JSON.parse(body) as QuaternionRecord;
     callback(gryo);
   });
 };

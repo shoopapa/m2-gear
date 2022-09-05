@@ -1,24 +1,24 @@
 import { DataStore } from "aws-amplify";
 import { Session, Tag, SessionTags } from "../models";
+import { linearAccerationType, QuaternionType } from '../types/data-format';
 
 export type SelectableTag = Tag & { isSelected?: boolean };
 
 export const saveSession = async (
-  acc: number[][],
-  gyro: number[][],
+  a: linearAccerationType,
+  q: QuaternionType,
   tags: Tag[],
-  streamingStarted: number,
-  streamingFreqency: number
 ) => {
   const input = new Session({
-    accerationX: acc[0],
-    accerationY: acc[1],
-    accerationZ: acc[2],
-    gyroX: gyro[0],
-    gyroY: gyro[1],
-    gyroZ: gyro[2],
-    streamingStarted,
-    streamingFreqency,
+    linearAccerationTimestamp: a[0],
+    linearAccerationX: a[1],
+    linearAccerationY: a[2],
+    linearAccerationZ: a[3],
+    quaternionTimestamp: q[0],
+    quaternionW: q[1],
+    quaternionX: q[2],
+    quaternionY: q[3],
+    quaternionZ: q[4],
   });
   try {
     //might try converting to datastore, not sure if it benifits me much since this data isn't very editable
