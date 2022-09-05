@@ -102,11 +102,11 @@ export const RootScreen = withTheme(
             options={{ tabBarLabel: "Record" }}
             component={RecordRoot}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="logging-tab"
             options={{ tabBarLabel: "Record" }}
             component={LoggingRoot}
-          />
+          /> */}
           <Tab.Screen
             name="training-tab"
             options={{ tabBarLabel: "AI" }}

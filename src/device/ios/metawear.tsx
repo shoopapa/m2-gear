@@ -9,15 +9,17 @@ export interface MetaWearState {
   signalStrength: string;
   isScanning: boolean;
   streaming: boolean;
+  previewStreaming: boolean
   accelerometerFreqency?: number
   gryoFreqency?: number
   logging: boolean
 }
-export const DefaultMetaWearState = {
+export const DefaultMetaWearState: MetaWearState = {
   batteryPercent: "",
   isConnected: false,
   macAdress: "",
   signalStrength: "",
+  previewStreaming: false,
   isScanning: false,
   streaming: false,
   logging: false,
@@ -69,6 +71,14 @@ export const stopStream = async () => {
   NativeModules.MetaWearDevice.stopStream();
 };
 
+export const startPreviewStream = async () => {
+  NativeModules.MetaWearDevice.startStream();
+};
+
+export const stopPreviewStream = async () => {
+  NativeModules.MetaWearDevice.stopStream();
+};
+
 export const startLog = async () => {
   NativeModules.MetaWearDevice.startLog();
 };
@@ -107,6 +117,15 @@ export const onQuaternionData = async (callback: (body: QuaternionRecord) => voi
     callback(gryo);
   });
 };
+
+export const onPreviewData = async (callback: (body: number) => void) => {
+  NativeAppEventEmitter.removeAllListeners('onPreviewDAta')
+  NativeAppEventEmitter.addListener("onPreviewDAta", (body: string) => {
+    const [mag] = JSON.parse(body) as [number];
+    callback(mag);
+  });
+};
+
 
 export const getState = async () => {
   const body = await NativeModules.MetaWearDevice.getState();

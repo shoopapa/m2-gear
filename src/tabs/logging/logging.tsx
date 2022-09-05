@@ -19,6 +19,7 @@ export const Logging = withTheme((props: LoggingProps) => {
   const { navigation } = props;
   const [quaternion, setquaternion] = useState<QuaternionType>([[], [], [], [], []]);
   const [linearAcceration, setlinearAcceration] = useState<LinearAccerationType>([[], [], [], []]);
+  const [sessions, setsessions] = useState<Session[]>([]);
 
   const quaternionEvent = (q: QuaternionRecord) => {
     setquaternion((v) => ([
@@ -89,7 +90,6 @@ export const Logging = withTheme((props: LoggingProps) => {
       <SessionList
           sessions={sessions}
           navigate={(s) => {
-            navigation.navigate("Session", { id: s.id });
           }}
         />
     </View>

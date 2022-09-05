@@ -30,6 +30,7 @@ struct State : Codable {
   var macAdress: String = ""
   var batteryPercent: String = "0"
   var streaming: Bool = false
+  var previewStreaming: Bool = false
   var logging: Bool = false
   var isConnected: Bool = false
   var isScanning: Bool = false
@@ -61,7 +62,7 @@ class MetaWearDevice: RCTEventEmitter {
   }
 
   @objc open override func supportedEvents() -> [String] {
-    return ["onAccData", "onGyroData", "onStateUpdate", "onLinearAccerationData","onQuaternionData"]
+    return ["onAccData", "onGyroData", "onStateUpdate", "onLinearAccerationData","onQuaternionData","onPreviewData"]
   }
 
   func retJson(state: State) {
@@ -206,6 +207,42 @@ class MetaWearDevice: RCTEventEmitter {
     let s = self.ConnectionFail()
     resolve(self.retJson(state: s))
   }
+  
+  @objc
+  func startPreviewStream() -> Void { // add epoch to
+    print("starting Preview stream")
+    mbl_mw_acc_bosch_set_range(device?.board, MBL_MW_ACC_BOSCH_RANGE_16G)
+    mbl_mw_acc_set_odr(device?.board, Float(self.state.accelerometerFreqency))
+    mbl_mw_acc_bosch_write_acceleration_config(device?.board)
+    self.state.previewStreaming = true
+    retJson(state: self.state)
+
+    let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(device?.board)!
+    mbl_mw_datasignal_subscribe(signalAcc, bObj(obj: self)) {(context, obj) in
+        let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
+        let _self: MetaWearDevice = bPtr(ptr: context!)
+        let v = (pow(Double(acceleration.x),2) + pow(Double(acceleration.x),2) + pow(Double(acceleration.x),2)).squareRoot()
+        _self.event(event: "onPreviewData", data: [v] )
+    }
+    mbl_mw_acc_enable_acceleration_sampling(device?.board)
+    mbl_mw_acc_start(device?.board)
+
+    streamingCleanup[signalAcc] = {
+        mbl_mw_acc_stop(self.device?.board)
+        mbl_mw_acc_disable_acceleration_sampling(self.device?.board)
+        mbl_mw_datasignal_unsubscribe(signalAcc)
+    }
+  }
+  
+  @objc
+  func stopPreviewStream() -> Void {
+      let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(self.device?.board)!
+      streamingCleanup.removeValue(forKey: signalAcc)?()
+
+      self.state.previewStreaming = false
+      self.retJson(state: self.state)
+  }
+  
 
   @objc
   func startStream() -> Void { // add epoch to

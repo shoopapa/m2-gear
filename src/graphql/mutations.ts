@@ -2,96 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createSessionGroup = /* GraphQL */ `
-  mutation CreateSessionGroup(
-    $input: CreateSessionGroupInput!
-    $condition: ModelSessionGroupConditionInput
-  ) {
-    createSessionGroup(input: $input, condition: $condition) {
-      id
-      move {
-        id
-        createdAt
-        type
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      sessions {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      sessionGroupMoveId
-      owner
-    }
-  }
-`;
-export const updateSessionGroup = /* GraphQL */ `
-  mutation UpdateSessionGroup(
-    $input: UpdateSessionGroupInput!
-    $condition: ModelSessionGroupConditionInput
-  ) {
-    updateSessionGroup(input: $input, condition: $condition) {
-      id
-      move {
-        id
-        createdAt
-        type
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      sessions {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      sessionGroupMoveId
-      owner
-    }
-  }
-`;
-export const deleteSessionGroup = /* GraphQL */ `
-  mutation DeleteSessionGroup(
-    $input: DeleteSessionGroupInput!
-    $condition: ModelSessionGroupConditionInput
-  ) {
-    deleteSessionGroup(input: $input, condition: $condition) {
-      id
-      move {
-        id
-        createdAt
-        type
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      sessions {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      sessionGroupMoveId
-      owner
-    }
-  }
-`;
 export const createMove = /* GraphQL */ `
   mutation CreateMove(
     $input: CreateMoveInput!
@@ -147,16 +57,16 @@ export const createSession = /* GraphQL */ `
   ) {
     createSession(input: $input, condition: $condition) {
       id
-      isTraining
       createdAt
-      streamingStarted
-      streamingFreqency
-      accerationX
-      accerationY
-      accerationZ
-      gyroX
-      gyroY
-      gyroZ
+      quaternionTimestamp
+      quaternionW
+      quaternionX
+      quaternionY
+      quaternionZ
+      linearAccerationTimestamp
+      linearAccerationX
+      linearAccerationY
+      linearAccerationZ
       tags {
         nextToken
         startedAt
@@ -165,7 +75,6 @@ export const createSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      sessionGroupSessionsId
       owner
     }
   }
@@ -177,16 +86,16 @@ export const updateSession = /* GraphQL */ `
   ) {
     updateSession(input: $input, condition: $condition) {
       id
-      isTraining
       createdAt
-      streamingStarted
-      streamingFreqency
-      accerationX
-      accerationY
-      accerationZ
-      gyroX
-      gyroY
-      gyroZ
+      quaternionTimestamp
+      quaternionW
+      quaternionX
+      quaternionY
+      quaternionZ
+      linearAccerationTimestamp
+      linearAccerationX
+      linearAccerationY
+      linearAccerationZ
       tags {
         nextToken
         startedAt
@@ -195,7 +104,6 @@ export const updateSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      sessionGroupSessionsId
       owner
     }
   }
@@ -207,16 +115,16 @@ export const deleteSession = /* GraphQL */ `
   ) {
     deleteSession(input: $input, condition: $condition) {
       id
-      isTraining
       createdAt
-      streamingStarted
-      streamingFreqency
-      accerationX
-      accerationY
-      accerationZ
-      gyroX
-      gyroY
-      gyroZ
+      quaternionTimestamp
+      quaternionW
+      quaternionX
+      quaternionY
+      quaternionZ
+      linearAccerationTimestamp
+      linearAccerationX
+      linearAccerationY
+      linearAccerationZ
       tags {
         nextToken
         startedAt
@@ -225,7 +133,6 @@ export const deleteSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      sessionGroupSessionsId
       owner
     }
   }
@@ -304,21 +211,20 @@ export const createSessionTags = /* GraphQL */ `
       tagID
       session {
         id
-        isTraining
         createdAt
-        streamingStarted
-        streamingFreqency
-        accerationX
-        accerationY
-        accerationZ
-        gyroX
-        gyroY
-        gyroZ
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        sessionGroupSessionsId
         owner
       }
       tag {
@@ -351,21 +257,20 @@ export const updateSessionTags = /* GraphQL */ `
       tagID
       session {
         id
-        isTraining
         createdAt
-        streamingStarted
-        streamingFreqency
-        accerationX
-        accerationY
-        accerationZ
-        gyroX
-        gyroY
-        gyroZ
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        sessionGroupSessionsId
         owner
       }
       tag {
@@ -398,21 +303,20 @@ export const deleteSessionTags = /* GraphQL */ `
       tagID
       session {
         id
-        isTraining
         createdAt
-        streamingStarted
-        streamingFreqency
-        accerationX
-        accerationY
-        accerationZ
-        gyroX
-        gyroY
-        gyroZ
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        sessionGroupSessionsId
         owner
       }
       tag {

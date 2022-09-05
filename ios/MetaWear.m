@@ -48,6 +48,10 @@ RCT_EXTERN_METHOD(startStream)
 
 RCT_EXTERN_METHOD(stopStream)
 
+RCT_EXTERN_METHOD(startPreviewStream)
+
+RCT_EXTERN_METHOD(stopPreviewStream)
+
 RCT_EXTERN_METHOD(startLog)
 
 RCT_EXTERN_METHOD(stopLog)

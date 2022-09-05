@@ -2,83 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getSessionGroup = /* GraphQL */ `
-  query GetSessionGroup($id: ID!) {
-    getSessionGroup(id: $id) {
-      id
-      move {
-        id
-        createdAt
-        type
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      sessions {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      sessionGroupMoveId
-      owner
-    }
-  }
-`;
-export const listSessionGroups = /* GraphQL */ `
-  query ListSessionGroups(
-    $filter: ModelSessionGroupFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listSessionGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        sessionGroupMoveId
-        owner
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncSessionGroups = /* GraphQL */ `
-  query SyncSessionGroups(
-    $filter: ModelSessionGroupFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncSessionGroups(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        sessionGroupMoveId
-        owner
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const getMove = /* GraphQL */ `
   query GetMove($id: ID!) {
     getMove(id: $id) {
@@ -144,16 +67,16 @@ export const getSession = /* GraphQL */ `
   query GetSession($id: ID!) {
     getSession(id: $id) {
       id
-      isTraining
       createdAt
-      streamingStarted
-      streamingFreqency
-      accerationX
-      accerationY
-      accerationZ
-      gyroX
-      gyroY
-      gyroZ
+      quaternionTimestamp
+      quaternionW
+      quaternionX
+      quaternionY
+      quaternionZ
+      linearAccerationTimestamp
+      linearAccerationX
+      linearAccerationY
+      linearAccerationZ
       tags {
         nextToken
         startedAt
@@ -162,7 +85,6 @@ export const getSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      sessionGroupSessionsId
       owner
     }
   }
@@ -176,21 +98,20 @@ export const listSessions = /* GraphQL */ `
     listSessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        isTraining
         createdAt
-        streamingStarted
-        streamingFreqency
-        accerationX
-        accerationY
-        accerationZ
-        gyroX
-        gyroY
-        gyroZ
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        sessionGroupSessionsId
         owner
       }
       nextToken
@@ -213,21 +134,20 @@ export const syncSessions = /* GraphQL */ `
     ) {
       items {
         id
-        isTraining
         createdAt
-        streamingStarted
-        streamingFreqency
-        accerationX
-        accerationY
-        accerationZ
-        gyroX
-        gyroY
-        gyroZ
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        sessionGroupSessionsId
         owner
       }
       nextToken
@@ -311,21 +231,20 @@ export const getSessionTags = /* GraphQL */ `
       tagID
       session {
         id
-        isTraining
         createdAt
-        streamingStarted
-        streamingFreqency
-        accerationX
-        accerationY
-        accerationZ
-        gyroX
-        gyroY
-        gyroZ
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        sessionGroupSessionsId
         owner
       }
       tag {

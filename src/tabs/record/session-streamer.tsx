@@ -5,7 +5,7 @@ import * as MetaWear from "../../device/ios/metawear";
 import { globalStyles, ThemeType } from "../../styles";
 import { Button, Drawer, withTheme } from "react-native-paper";
 import DeviceContext from "../../device/ios/device-context";
-import { Tag } from "../../models";
+import { Session, Tag } from "../../models";
 
 import { saveSession } from "../../utils/save-session";
 import { SaveModal } from "./save-modal";
@@ -14,6 +14,7 @@ import { RecordParamList } from "./record-tab";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
 import { useDebouncedCallback } from "use-debounce";
 import Config from "react-native-config";
+import { LinearAccerationType, QuaternionRecord, LinearAccerationRecord, QuaternionType } from '../../types/data-format';
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   RecordParamList,
@@ -24,100 +25,98 @@ type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
 const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   const { colors } = theme;
   const [device] = useContext(DeviceContext);
-  const [acc, setacc] = useState<number[][]>([[], [], []]);
-  const [gyro, setgyro] = useState<number[][]>([[], [], []]);
-  const [isStreaming, setisStreaming] = useState(false);
   const [streamingDataExists, setstreamingDataExists] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [viewingData, setViewingData] = useState<number[]>([]);
 
-  const updateViewingData = (n: number = 1) => {
-    setViewingData((v) => {
-      v.length > parseInt(Config.PREVIEW_DATA_LENGTH) ? v.shift() : null;
-      return [...v, n];
-    });
+  const [linearAcceration, setlinearAcceration] = useState<LinearAccerationType>([[], [], [], []]);
+  const [quaternion, setquaternion] = useState<QuaternionType>([[], [], [], [], []]);
+  const [previewData, setPreviewData] = useState<number[]>([]);
+
+  const quaternionEvent = (q: QuaternionRecord) => {
+    setquaternion((v) => ([
+        [...v[0], q[0]],
+        [...v[1], q[1]],
+        [...v[2], q[2]],
+        [...v[3], q[3]],
+        [...v[4], q[4]],
+      ]
+    ))
   };
-  const debounced = useDebouncedCallback(
-    updateViewingData,
-    parseInt(Config.DEBOUNCE_TIME)
-  );
-
-  useEffect(() => {
-    setstreamingDataExists(acc[0].length > 0);
-  }, [acc]);
-
-  const gyroEvent = (g: number[]) => {
-    setgyro((v) => [
-      [...v[0], g[0]],
-      [...v[1], g[1]],
-      [...v[2], g[2]],
-    ]);
-  };
-
-  const accEvent = (a: number[]) => {
-    debounced(a[0]);
-    setacc((v) => [
+  const linearAccerationEvent = (a: LinearAccerationRecord) => {
+    setlinearAcceration((v) => [
       [...v[0], a[0]],
       [...v[1], a[1]],
       [...v[2], a[2]],
+      [...v[3], a[3]],
     ]);
+  };
+  const PreviewEvent = (n: number = 1) => {
+    setPreviewData((v) => {
+      if ( v.length > parseInt(Config.PREVIEW_DATA_LENGTH) ) {
+        v.shift()
+      }
+      return [...v, n];
+    });
   };
 
   const onSave = (tags: Tag[], selectedTags: { [key: string]: Boolean }) => {
     saveSession(
-      acc,
-      gyro,
+      linearAcceration,
+      quaternion,
       tags.filter((t) => t.id in selectedTags),
-      0,
-      25
     );
     setModalVisible(false);
   };
 
   return (
     <View style={{ ...globalStyles.container }}>
-      <SessionChart data={[viewingData]} theme={theme} />
+      <SessionChart data={[previewData]} theme={theme} />
       <Drawer.Section
         title="Controls"
         style={{ width: "100%", paddingHorizontal: 20 }}
       >
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Button
-            mode="contained"
-            disabled={!streamingDataExists}
-            dark={false}
-            style={{ backgroundColor: colors.gray, margin: "2%" }}
-            onPress={() => {
-              if (isStreaming) {
-                MetaWear.stopStream();
-                setisStreaming(false);
-              } else {
-                setViewingData([]);
-                setacc([[], [], []]);
-                setgyro([[], [], []]);
-              }
-            }}
-          >
-            {isStreaming ? "Stop" : "Reset"}
-          </Button>
-          <Button
-            disabled={!device.isConnected || isStreaming} // not steaming and device connected
-            mode="contained"
-            style={{ backgroundColor: colors.primary, margin: "2%" }}
-            onPress={async () => {
-              MetaWear.onAccData(accEvent);
-              MetaWear.onGyroData(gyroEvent);
-              MetaWear.startStream();
-              setisStreaming(true);
-            }}
-          >
-            {acc[0].length > 0 ? "Resume" : "Start"}
-          </Button>
+          {(!device.previewStreaming && previewData.length === 0) ? (
+            <Button
+              mode="contained"
+              dark={false}
+              style={{ backgroundColor: colors.primary, margin: "2%" }}
+              onPress={() => {
+                MetaWear.onLinearAccerationData(linearAccerationEvent)
+                MetaWear.onQuaternionData(quaternionEvent)
+                MetaWear.onPreviewData(PreviewEvent)
+                MetaWear.startLog()
+                MetaWear.startPreviewStream()
+              }}
+            > start </Button>
+          ) : null}
+          {(!device.previewStreaming && previewData.length > 0) ? (
+            <Button
+              mode="contained"
+              dark={false}
+              style={{ backgroundColor: colors.gray, margin: "2%" }}
+              onPress={() => {
+                setPreviewData([]);
+                setlinearAcceration([[], [], [], []]);
+                setquaternion([[], [], [], [], []]);
+              }}
+            > reset </Button>
+          ): null}
+          {device.previewStreaming ? (
+            <Button
+              mode="contained"
+              dark={false}
+              style={{ backgroundColor: colors.error, margin: "2%" }}
+              onPress={() => {
+                MetaWear.stopPreviewStream();
+              }}
+            > Stop </Button>
+          ): null}
         </View>
         <Button
           mode="contained"
           style={{ backgroundColor: colors.success, margin: "2%" }}
-          disabled={!(streamingDataExists && !isStreaming)}
+          disabled={!(previewData.length > 0 && !device.previewStreaming)}
           onPress={async () => setModalVisible(true)}
         >
           Save
