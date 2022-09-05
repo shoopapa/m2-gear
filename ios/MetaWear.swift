@@ -214,14 +214,15 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_acc_bosch_set_range(device?.board, MBL_MW_ACC_BOSCH_RANGE_16G)
     mbl_mw_acc_set_odr(device?.board, Float(self.state.accelerometerFreqency))
     mbl_mw_acc_bosch_write_acceleration_config(device?.board)
-    self.state.previewStreaming = true
-    retJson(state: self.state)
+    var s = self.state
+    s.previewStreaming = true
+    retJson(state: s)
 
     let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(device?.board)!
     mbl_mw_datasignal_subscribe(signalAcc, bObj(obj: self)) {(context, obj) in
         let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
         let _self: MetaWearDevice = bPtr(ptr: context!)
-        let v = (pow(Double(acceleration.x),2) + pow(Double(acceleration.x),2) + pow(Double(acceleration.x),2)).squareRoot()
+        let v = (pow(Double(acceleration.x),2) + pow(Double(acceleration.y),2) + pow(Double(acceleration.z),2)).squareRoot()
         _self.event(event: "onPreviewData", data: [v] )
     }
     mbl_mw_acc_enable_acceleration_sampling(device?.board)
@@ -236,14 +237,14 @@ class MetaWearDevice: RCTEventEmitter {
   
   @objc
   func stopPreviewStream() -> Void {
-      let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(self.device?.board)!
-      streamingCleanup.removeValue(forKey: signalAcc)?()
+    let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(self.device?.board)!
+    streamingCleanup.removeValue(forKey: signalAcc)?()
 
-      self.state.previewStreaming = false
-      self.retJson(state: self.state)
+    var s = self.state
+    s.previewStreaming = false
+    retJson(state: s)
   }
   
-
   @objc
   func startStream() -> Void { // add epoch to
     print("starting stream")

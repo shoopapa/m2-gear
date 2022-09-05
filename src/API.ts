@@ -2,22 +2,20 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateMoveInput = {
+export type CreateSessionGroupInput = {
   id?: string | null,
-  createdAt?: string | null,
-  type: string,
   _version?: number | null,
+  sessionGroupMoveId?: string | null,
 };
 
-export type ModelMoveConditionInput = {
-  createdAt?: ModelStringInput | null,
-  type?: ModelStringInput | null,
-  and?: Array< ModelMoveConditionInput | null > | null,
-  or?: Array< ModelMoveConditionInput | null > | null,
-  not?: ModelMoveConditionInput | null,
+export type ModelSessionGroupConditionInput = {
+  and?: Array< ModelSessionGroupConditionInput | null > | null,
+  or?: Array< ModelSessionGroupConditionInput | null > | null,
+  not?: ModelSessionGroupConditionInput | null,
+  sessionGroupMoveId?: ModelIDInput | null,
 };
 
-export type ModelStringInput = {
+export type ModelIDInput = {
   ne?: string | null,
   eq?: string | null,
   le?: string | null,
@@ -57,6 +55,20 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type SessionGroup = {
+  __typename: "SessionGroup",
+  id: string,
+  move?: Move | null,
+  sessions?: ModelSessionConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  sessionGroupMoveId?: string | null,
+  owner?: string | null,
+};
+
 export type Move = {
   __typename: "Move",
   id: string,
@@ -68,59 +80,11 @@ export type Move = {
   _lastChangedAt: number,
 };
 
-export type UpdateMoveInput = {
-  id: string,
-  createdAt?: string | null,
-  type?: string | null,
-  _version?: number | null,
-};
-
-export type DeleteMoveInput = {
-  id: string,
-  _version?: number | null,
-};
-
-export type CreateSessionInput = {
-  id?: string | null,
-  createdAt?: string | null,
-  quaternionTimestamp: Array< number >,
-  quaternionW: Array< number >,
-  quaternionX: Array< number >,
-  quaternionY: Array< number >,
-  quaternionZ: Array< number >,
-  linearAccerationTimestamp: Array< number >,
-  linearAccerationX: Array< number >,
-  linearAccerationY: Array< number >,
-  linearAccerationZ: Array< number >,
-  _version?: number | null,
-};
-
-export type ModelSessionConditionInput = {
-  createdAt?: ModelStringInput | null,
-  quaternionTimestamp?: ModelFloatInput | null,
-  quaternionW?: ModelFloatInput | null,
-  quaternionX?: ModelFloatInput | null,
-  quaternionY?: ModelFloatInput | null,
-  quaternionZ?: ModelFloatInput | null,
-  linearAccerationTimestamp?: ModelFloatInput | null,
-  linearAccerationX?: ModelFloatInput | null,
-  linearAccerationY?: ModelFloatInput | null,
-  linearAccerationZ?: ModelFloatInput | null,
-  and?: Array< ModelSessionConditionInput | null > | null,
-  or?: Array< ModelSessionConditionInput | null > | null,
-  not?: ModelSessionConditionInput | null,
-};
-
-export type ModelFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
+export type ModelSessionConnection = {
+  __typename: "ModelSessionConnection",
+  items:  Array<Session | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type Session = {
@@ -141,6 +105,7 @@ export type Session = {
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
+  sessionGroupSessionsId?: string | null,
   owner?: string | null,
 };
 
@@ -179,6 +144,105 @@ export type Tag = {
   _lastChangedAt: number,
 };
 
+export type UpdateSessionGroupInput = {
+  id: string,
+  _version?: number | null,
+  sessionGroupMoveId?: string | null,
+};
+
+export type DeleteSessionGroupInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateMoveInput = {
+  id?: string | null,
+  createdAt?: string | null,
+  type: string,
+  _version?: number | null,
+};
+
+export type ModelMoveConditionInput = {
+  createdAt?: ModelStringInput | null,
+  type?: ModelStringInput | null,
+  and?: Array< ModelMoveConditionInput | null > | null,
+  or?: Array< ModelMoveConditionInput | null > | null,
+  not?: ModelMoveConditionInput | null,
+};
+
+export type ModelStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type UpdateMoveInput = {
+  id: string,
+  createdAt?: string | null,
+  type?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteMoveInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateSessionInput = {
+  id?: string | null,
+  createdAt?: string | null,
+  quaternionTimestamp: Array< number >,
+  quaternionW: Array< number >,
+  quaternionX: Array< number >,
+  quaternionY: Array< number >,
+  quaternionZ: Array< number >,
+  linearAccerationTimestamp: Array< number >,
+  linearAccerationX: Array< number >,
+  linearAccerationY: Array< number >,
+  linearAccerationZ: Array< number >,
+  _version?: number | null,
+  sessionGroupSessionsId?: string | null,
+};
+
+export type ModelSessionConditionInput = {
+  createdAt?: ModelStringInput | null,
+  quaternionTimestamp?: ModelFloatInput | null,
+  quaternionW?: ModelFloatInput | null,
+  quaternionX?: ModelFloatInput | null,
+  quaternionY?: ModelFloatInput | null,
+  quaternionZ?: ModelFloatInput | null,
+  linearAccerationTimestamp?: ModelFloatInput | null,
+  linearAccerationX?: ModelFloatInput | null,
+  linearAccerationY?: ModelFloatInput | null,
+  linearAccerationZ?: ModelFloatInput | null,
+  and?: Array< ModelSessionConditionInput | null > | null,
+  or?: Array< ModelSessionConditionInput | null > | null,
+  not?: ModelSessionConditionInput | null,
+  sessionGroupSessionsId?: ModelIDInput | null,
+};
+
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type UpdateSessionInput = {
   id: string,
   createdAt?: string | null,
@@ -192,6 +256,7 @@ export type UpdateSessionInput = {
   linearAccerationY?: Array< number > | null,
   linearAccerationZ?: Array< number > | null,
   _version?: number | null,
+  sessionGroupSessionsId?: string | null,
 };
 
 export type DeleteSessionInput = {
@@ -244,22 +309,6 @@ export type ModelSessionTagsConditionInput = {
   not?: ModelSessionTagsConditionInput | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type UpdateSessionTagsInput = {
   id: string,
   sessionID?: string | null,
@@ -270,6 +319,21 @@ export type UpdateSessionTagsInput = {
 export type DeleteSessionTagsInput = {
   id: string,
   _version?: number | null,
+};
+
+export type ModelSessionGroupFilterInput = {
+  id?: ModelIDInput | null,
+  and?: Array< ModelSessionGroupFilterInput | null > | null,
+  or?: Array< ModelSessionGroupFilterInput | null > | null,
+  not?: ModelSessionGroupFilterInput | null,
+  sessionGroupMoveId?: ModelIDInput | null,
+};
+
+export type ModelSessionGroupConnection = {
+  __typename: "ModelSessionGroupConnection",
+  items:  Array<SessionGroup | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelMoveFilterInput = {
@@ -303,13 +367,7 @@ export type ModelSessionFilterInput = {
   and?: Array< ModelSessionFilterInput | null > | null,
   or?: Array< ModelSessionFilterInput | null > | null,
   not?: ModelSessionFilterInput | null,
-};
-
-export type ModelSessionConnection = {
-  __typename: "ModelSessionConnection",
-  items:  Array<Session | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
+  sessionGroupSessionsId?: ModelIDInput | null,
 };
 
 export type ModelTagFilterInput = {
@@ -336,6 +394,108 @@ export type ModelSessionTagsFilterInput = {
   and?: Array< ModelSessionTagsFilterInput | null > | null,
   or?: Array< ModelSessionTagsFilterInput | null > | null,
   not?: ModelSessionTagsFilterInput | null,
+};
+
+export type CreateSessionGroupMutationVariables = {
+  input: CreateSessionGroupInput,
+  condition?: ModelSessionGroupConditionInput | null,
+};
+
+export type CreateSessionGroupMutation = {
+  createSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateSessionGroupMutationVariables = {
+  input: UpdateSessionGroupInput,
+  condition?: ModelSessionGroupConditionInput | null,
+};
+
+export type UpdateSessionGroupMutation = {
+  updateSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteSessionGroupMutationVariables = {
+  input: DeleteSessionGroupInput,
+  condition?: ModelSessionGroupConditionInput | null,
+};
+
+export type DeleteSessionGroupMutation = {
+  deleteSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
 };
 
 export type CreateMoveMutationVariables = {
@@ -420,6 +580,7 @@ export type CreateSessionMutation = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -452,6 +613,7 @@ export type UpdateSessionMutation = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -484,6 +646,7 @@ export type DeleteSessionMutation = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -588,6 +751,7 @@ export type CreateSessionTagsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {
@@ -638,6 +802,7 @@ export type UpdateSessionTagsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {
@@ -688,6 +853,7 @@ export type DeleteSessionTagsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {
@@ -707,6 +873,90 @@ export type DeleteSessionTagsMutation = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     owner?: string | null,
+  } | null,
+};
+
+export type GetSessionGroupQueryVariables = {
+  id: string,
+};
+
+export type GetSessionGroupQuery = {
+  getSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListSessionGroupsQueryVariables = {
+  filter?: ModelSessionGroupFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSessionGroupsQuery = {
+  listSessionGroups?:  {
+    __typename: "ModelSessionGroupConnection",
+    items:  Array< {
+      __typename: "SessionGroup",
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      sessionGroupMoveId?: string | null,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncSessionGroupsQueryVariables = {
+  filter?: ModelSessionGroupFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncSessionGroupsQuery = {
+  syncSessionGroups?:  {
+    __typename: "ModelSessionGroupConnection",
+    items:  Array< {
+      __typename: "SessionGroup",
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      sessionGroupMoveId?: string | null,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -803,6 +1053,7 @@ export type GetSessionQuery = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -833,6 +1084,7 @@ export type ListSessionsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
@@ -867,6 +1119,7 @@ export type SyncSessionsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
@@ -975,6 +1228,7 @@ export type GetSessionTagsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {
@@ -1050,6 +1304,105 @@ export type SyncSessionTagsQuery = {
   } | null,
 };
 
+export type OnCreateSessionGroupSubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnCreateSessionGroupSubscription = {
+  onCreateSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateSessionGroupSubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnUpdateSessionGroupSubscription = {
+  onUpdateSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteSessionGroupSubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnDeleteSessionGroupSubscription = {
+  onDeleteSessionGroup?:  {
+    __typename: "SessionGroup",
+    id: string,
+    move?:  {
+      __typename: "Move",
+      id: string,
+      createdAt?: string | null,
+      type: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    sessions?:  {
+      __typename: "ModelSessionConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    sessionGroupMoveId?: string | null,
+    owner?: string | null,
+  } | null,
+};
+
 export type OnCreateMoveSubscription = {
   onCreateMove?:  {
     __typename: "Move",
@@ -1116,6 +1469,7 @@ export type OnCreateSessionSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -1147,6 +1501,7 @@ export type OnUpdateSessionSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -1178,6 +1533,7 @@ export type OnDeleteSessionSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    sessionGroupSessionsId?: string | null,
     owner?: string | null,
   } | null,
 };
@@ -1266,6 +1622,7 @@ export type OnCreateSessionTagsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {
@@ -1315,6 +1672,7 @@ export type OnUpdateSessionTagsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {
@@ -1364,6 +1722,7 @@ export type OnDeleteSessionTagsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      sessionGroupSessionsId?: string | null,
       owner?: string | null,
     },
     tag:  {

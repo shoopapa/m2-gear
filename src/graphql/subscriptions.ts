@@ -2,6 +2,87 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateSessionGroup = /* GraphQL */ `
+  subscription OnCreateSessionGroup($owner: String) {
+    onCreateSessionGroup(owner: $owner) {
+      id
+      move {
+        id
+        createdAt
+        type
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      sessions {
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      sessionGroupMoveId
+      owner
+    }
+  }
+`;
+export const onUpdateSessionGroup = /* GraphQL */ `
+  subscription OnUpdateSessionGroup($owner: String) {
+    onUpdateSessionGroup(owner: $owner) {
+      id
+      move {
+        id
+        createdAt
+        type
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      sessions {
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      sessionGroupMoveId
+      owner
+    }
+  }
+`;
+export const onDeleteSessionGroup = /* GraphQL */ `
+  subscription OnDeleteSessionGroup($owner: String) {
+    onDeleteSessionGroup(owner: $owner) {
+      id
+      move {
+        id
+        createdAt
+        type
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      sessions {
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      sessionGroupMoveId
+      owner
+    }
+  }
+`;
 export const onCreateMove = /* GraphQL */ `
   subscription OnCreateMove {
     onCreateMove {
@@ -63,6 +144,7 @@ export const onCreateSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      sessionGroupSessionsId
       owner
     }
   }
@@ -89,6 +171,7 @@ export const onUpdateSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      sessionGroupSessionsId
       owner
     }
   }
@@ -115,6 +198,7 @@ export const onDeleteSession = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      sessionGroupSessionsId
       owner
     }
   }
@@ -195,6 +279,7 @@ export const onCreateSessionTags = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        sessionGroupSessionsId
         owner
       }
       tag {
@@ -238,6 +323,7 @@ export const onUpdateSessionTags = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        sessionGroupSessionsId
         owner
       }
       tag {
@@ -281,6 +367,7 @@ export const onDeleteSessionTags = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        sessionGroupSessionsId
         owner
       }
       tag {

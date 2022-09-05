@@ -32,6 +32,7 @@ export const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: "#19489f",
+    warningYellow: "#f69220",
     primaryByOpacity: (v: number) => {
       return `rgba(25, 72, 159, 1)`;
     },

@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Move, Session, Tag, SessionTags } = initSchema(schema);
+const { SessionGroup, Move, Session, Tag, SessionTags } = initSchema(schema);
 
 export {
+  SessionGroup,
   Move,
   Session,
   Tag,

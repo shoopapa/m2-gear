@@ -1,3 +1,12 @@
+type SessionGroup @model @auth(rules: [
+  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
+  { allow: owner }
+]) {
+  id: ID!
+  move: Move @hasOne
+  sessions: [Session] @hasMany
+}
+
 type Move @model @auth(rules: [
     { allow: private, operations: [read] },
     { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},

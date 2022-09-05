@@ -53,7 +53,7 @@ export const SessionPage = withTheme(
     return (
       <View style={globalStyles.container}>
         <SessionChart
-          data={[session.accerationX, session.accerationY, session.accerationZ]}
+          data={[session.linearAccerationX, session.linearAccerationY, session.linearAccerationZ]}
           theme={theme}
         />
         <ReactTimeAgo
@@ -64,15 +64,14 @@ export const SessionPage = withTheme(
           )}
         />
         <Text>Session ID: {session.id}</Text>
-        <Text>Streaming Freqency: {session.streamingFreqency}Hz</Text>
         <Text>
-          Peak X Acceration: {getHighestOfArray(session.accerationX)}g
+          Peak X Acceration: {getHighestOfArray(session.linearAccerationX)}g
         </Text>
         <Text>
-          Peak Y Acceration: {getHighestOfArray(session.accerationY)}g
+          Peak Y Acceration: {getHighestOfArray(session.linearAccerationY)}g
         </Text>
         <Text>
-          Peak Y Acceration: {getHighestOfArray(session.accerationZ)}g
+          Peak Y Acceration: {getHighestOfArray(session.linearAccerationZ)}g
         </Text>
         <Button
           mode="contained"

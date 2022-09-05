@@ -72,11 +72,11 @@ export const stopStream = async () => {
 };
 
 export const startPreviewStream = async () => {
-  NativeModules.MetaWearDevice.startStream();
+  NativeModules.MetaWearDevice.startPreviewStream();
 };
 
 export const stopPreviewStream = async () => {
-  NativeModules.MetaWearDevice.stopStream();
+  NativeModules.MetaWearDevice.stopPreviewStream();
 };
 
 export const startLog = async () => {
@@ -119,8 +119,8 @@ export const onQuaternionData = async (callback: (body: QuaternionRecord) => voi
 };
 
 export const onPreviewData = async (callback: (body: number) => void) => {
-  NativeAppEventEmitter.removeAllListeners('onPreviewDAta')
-  NativeAppEventEmitter.addListener("onPreviewDAta", (body: string) => {
+  NativeAppEventEmitter.removeAllListeners('onPreviewData')
+  NativeAppEventEmitter.addListener("onPreviewData", (body: string) => {
     const [mag] = JSON.parse(body) as [number];
     callback(mag);
   });
