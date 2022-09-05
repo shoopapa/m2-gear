@@ -30,6 +30,7 @@ struct State : Codable {
   var macAdress: String = ""
   var batteryPercent: String = "0"
   var streaming: Bool = false
+  var downloadProgress: Double = 0
   var previewStreaming: Bool = false
   var logging: Bool = false
   var isConnected: Bool = false
@@ -126,6 +127,7 @@ class MetaWearDevice: RCTEventEmitter {
                   let s = self.ConnectionFail()
                   self.retJson(state: s) //removed resolve cuz this is the disconnect event
               }
+
               let s = self.ConnectionSuccessful(device: device)
               self.retJson(state: s)
             }
@@ -134,6 +136,11 @@ class MetaWearDevice: RCTEventEmitter {
         }
       }
     }
+  }
+
+  @objc
+  func resetDevice() {
+    self.device?.clearAndReset()
   }
 
   @objc func connectToRemembered() -> Void {
@@ -207,13 +214,10 @@ class MetaWearDevice: RCTEventEmitter {
     let s = self.ConnectionFail()
     resolve(self.retJson(state: s))
   }
-  
+
   @objc
   func startPreviewStream() -> Void { // add epoch to
     print("starting Preview stream")
-    mbl_mw_acc_bosch_set_range(device?.board, MBL_MW_ACC_BOSCH_RANGE_16G)
-    mbl_mw_acc_set_odr(device?.board, Float(self.state.accelerometerFreqency))
-    mbl_mw_acc_bosch_write_acceleration_config(device?.board)
     var s = self.state
     s.previewStreaming = true
     retJson(state: s)
@@ -234,7 +238,7 @@ class MetaWearDevice: RCTEventEmitter {
         mbl_mw_datasignal_unsubscribe(signalAcc)
     }
   }
-  
+
   @objc
   func stopPreviewStream() -> Void {
     let signalAcc = mbl_mw_acc_bosch_get_acceleration_data_signal(self.device?.board)!
@@ -244,7 +248,7 @@ class MetaWearDevice: RCTEventEmitter {
     s.previewStreaming = false
     retJson(state: s)
   }
-  
+
   @objc
   func startStream() -> Void { // add epoch to
     print("starting stream")
@@ -319,12 +323,15 @@ class MetaWearDevice: RCTEventEmitter {
       s.streaming = false
       self.retJson(state: s)
   }
-  
+
   @objc
   func startLog() {
+    print("startLOG")
     let b = bObj(obj: self)
-  
-  
+    var s = self.state
+    s.logging = true
+    retJson(state: s)
+
     let accelRange = MBL_MW_SENSOR_FUSION_ACC_RANGE_16G
     let gyroRange = MBL_MW_SENSOR_FUSION_GYRO_RANGE_2000DPS
     let sensorFusionMode = MBL_MW_SENSOR_FUSION_MODE_IMU_PLUS
@@ -334,6 +341,7 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_sensor_fusion_set_mode(device?.board, sensorFusionMode)
     let qsignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_QUATERNION)!
     mbl_mw_datasignal_log(qsignal, b) { (context, logger) in
+      print("mbl_mw_datasignal_log q")
       let _self:MetaWearDevice = bPtr(ptr: context!)
       _self.qfuser = logger!
       print("Started logger: ", _self.qfuser as Any)
@@ -341,6 +349,7 @@ class MetaWearDevice: RCTEventEmitter {
     let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
     mbl_mw_datasignal_log(asignal, b) { (context, logger) in
       let _self:MetaWearDevice = bPtr(ptr: context!)
+      print("mbl_mw_datasignal_log a")
       _self.afuser = logger!
       print("Started logger: ", _self.afuser as Any)
     }
@@ -350,13 +359,21 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_sensor_fusion_enable_data(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)
     mbl_mw_sensor_fusion_write_config(device?.board)
     mbl_mw_sensor_fusion_start(device?.board)
-    
+
   }
-  
+
   @objc
   func stopLog() {
+    print("StopLog")
+    mbl_mw_sensor_fusion_stop(self.device?.board)
+    mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
+    mbl_mw_logging_clear_entries(device?.board)
+  }
+
+  @objc
+  func downloadLog() {
+    print("downloadLog")
     let b = bObj(obj: self)
-    
     mbl_mw_sensor_fusion_stop(self.device?.board)
     mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
     mbl_mw_logger_subscribe(self.afuser, b, { (context, dataPtr) in
@@ -382,10 +399,10 @@ class MetaWearDevice: RCTEventEmitter {
     })
     self.handlers.context = b
     self.handlers.received_progress_update = { (context, remainingEntries, totalEntries) in
-        if remainingEntries == 0 {
-            print("done \(Date())")
-//            let this: MetaWearDevice = bPtr(ptr: context!)
-        }
+      let _self:MetaWearDevice = bPtr(ptr: context!)
+      var s = _self.state
+      s.downloadProgress = Double(remainingEntries)/Double(totalEntries)
+      _self.retJson(state: s)
     }
     self.handlers.received_unknown_entry = { (context, id, epoch, data, length) in
         print("received_unknown_entry")
@@ -394,13 +411,17 @@ class MetaWearDevice: RCTEventEmitter {
         print("received_unhandled_entry")
     }
     mbl_mw_logging_download(self.device?.board, 0, &self.handlers)
-    print("stopping \(Date())")
+    var s = self.state
+    s.logging = false
+    retJson(state: s)
+
   }
 
   @objc
   func forget() -> Void {
     MetaWearScanner.shared.retrieveSavedMetaWearsAsync().continueOnSuccessWith { devices in
       for device in devices {
+        device.clearAndReset()
         device.forget()
       }
     }
@@ -451,14 +472,13 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_logging_clear_entries(device.board)
     self.device = device
     self.updateBattery()
-    let s = State(
-      signalStrength: String(self.device?.averageRSSI(lastNSeconds: 5) ?? 0),
-      macAdress: String( device.mac! ),
-      batteryPercent: self.state.batteryPercent, //not implemented
-      streaming: false,
-      isConnected: true,
-      isScanning: false
-    )
+    var s = self.state
+    s.signalStrength = String(self.device?.averageRSSI(lastNSeconds: 5) ?? 0)
+    s.macAdress = String( device.mac! )
+    s.batteryPercent = self.state.batteryPercent
+    s.streaming = false
+    s.isConnected = true
+    s.isScanning = false
     self.state = s
 
     return s
@@ -466,13 +486,12 @@ class MetaWearDevice: RCTEventEmitter {
 
   func ConnectionFail() -> State {
     print("ConnectionFail")
-    let s = State(
-      macAdress: "",
-      batteryPercent: "0",
-      streaming: false,
-      isConnected: false,
-      isScanning: false
-    )
+    var s = self.state
+    s.macAdress = ""
+    s.batteryPercent = "0"
+    s.streaming = false
+    s.isConnected = false
+    s.isScanning = false
     self.state = s
     return s
   }
@@ -498,6 +517,6 @@ class MetaWearDevice: RCTEventEmitter {
       default:
         throw MyError.runtimeError("Did not choose an avilable gryo sampling rate options are (25,50,100,200,400,800,1600,3200)")
     }
-   
+
   }
 }

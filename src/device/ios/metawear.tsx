@@ -8,6 +8,7 @@ export interface MetaWearState {
   macAdress: string;
   signalStrength: string;
   isScanning: boolean;
+  downloadProgress: number
   streaming: boolean;
   previewStreaming: boolean
   accelerometerFreqency?: number
@@ -18,6 +19,7 @@ export const DefaultMetaWearState: MetaWearState = {
   batteryPercent: "",
   isConnected: false,
   macAdress: "",
+  downloadProgress: 0,
   signalStrength: "",
   previewStreaming: false,
   isScanning: false,
@@ -53,6 +55,9 @@ export const forget = async (): Promise<MetaWearState> => {
 export const blinkLED = async () => {
   await NativeModules.MetaWearDevice.blinkLED();
 };
+export const resetDevice = async () => {
+  await NativeModules.MetaWearDevice.resetDevice();
+};
 
 export const onStateUpdate = async (
   callback: Dispatch<SetStateAction<MetaWearState>>
@@ -85,6 +90,9 @@ export const startLog = async () => {
 
 export const stopLog = async () => {
   NativeModules.MetaWearDevice.stopLog();
+};
+export const downloadLog = async () => {
+  NativeModules.MetaWearDevice.downloadLog();
 };
 
 export const onAccData = async (callback: (body: number[]) => void) => {

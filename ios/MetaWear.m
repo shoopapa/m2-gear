@@ -56,4 +56,8 @@ RCT_EXTERN_METHOD(startLog)
 
 RCT_EXTERN_METHOD(stopLog)
 
+RCT_EXTERN_METHOD(downloadLog)
+
+RCT_EXTERN_METHOD(resetDevice)
+
 @end

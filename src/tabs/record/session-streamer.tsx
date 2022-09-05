@@ -14,6 +14,8 @@ import { RecordParamList } from "./record-tab";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
 import Config from "react-native-config";
 import { LinearAccerationType, QuaternionRecord, LinearAccerationRecord, QuaternionType } from '../../types/data-format';
+import { DownloadModal } from './download-modal';
+import { onDeleteSession } from '../../graphql/subscriptions';
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   RecordParamList,
@@ -57,13 +59,14 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
     });
   };
 
-  const onSave = (tags: Tag[], selectedTags: { [key: string]: Boolean }) => {
-    saveSession(
-      linearAcceration,
-      quaternion,
-      tags.filter((t) => t.id in selectedTags),
-    );
-    setModalVisible(false);
+  const clearData = (n: number = 1) => {
+    setPreviewData([]);
+    setlinearAcceration([[], [], [], []]);
+    setquaternion([[], [], [], [], []]);
+  };
+
+  const onDownload = () => {
+    MetaWear.downloadLog()
   };
 
   return (
@@ -73,53 +76,37 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
         title="Controls"
         style={{ width: "100%", paddingHorizontal: 20 }}
       >
-        {(!device.previewStreaming && previewData.length === 0) ? (
+        {(previewData.length === 0) ? (
           <Button
             mode="contained"
             style={{ backgroundColor: colors.primary, margin: "2%" }}
             onPress={() => {
+              console.log('starting log')
               MetaWear.onPreviewData(PreviewEvent)
               MetaWear.onLinearAccerationData(linearAccerationEvent)
               MetaWear.onQuaternionData(quaternionEvent)
-              // MetaWear.startLog()
-              MetaWear.startPreviewStream()
+              MetaWear.startLog()
+              // MetaWear.startPreviewStream()
             }}
           > start </Button>
         ) : null}
-        {(!device.previewStreaming && previewData.length > 0) ? (
-          <Button
-            mode="contained"
-            dark={false}
-            style={{ backgroundColor: colors.warningYellow, margin: "2%" }}
-            onPress={() => {
-              setPreviewData([]);
-              setlinearAcceration([[], [], [], []]);
-              setquaternion([[], [], [], [], []]);
-            }}
-          > reset </Button>
-        ): null}
-        {device.previewStreaming ? (
-          <Button
-            mode="contained"
-            style={{ backgroundColor: colors.error, margin: "2%" }}
-            onPress={() => {
-              MetaWear.stopPreviewStream();
-              // MetaWear.stopLog()
-            }}
-          > Stop </Button>
-        ): null}
+        {/* {(previewData.length > 0) ? ( */}
         <Button
           mode="contained"
-          style={{ backgroundColor: colors.success, margin: "2%" }}
-          disabled={!(previewData.length > 0 && !device.previewStreaming)}
-          onPress={async () => setModalVisible(true)}
-        > Save </Button>
+          style={{ backgroundColor: colors.error, margin: "2%" }}
+          onPress={() => {
+            MetaWear.stopPreviewStream();
+            // MetaWear.stopLog()
+            setModalVisible(true)
+          }}
+        > Stop and Download</Button>
+        {/* ): null} */}
       </Drawer.Section>
-      <SaveModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+      <DownloadModal
+        vis={modalVisible}
+        setvis={setModalVisible}
         theme={theme}
-        onSave={onSave}
+        onDownload={onDownload}
       />
     </View>
   );
