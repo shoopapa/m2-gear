@@ -30,6 +30,7 @@ struct State : Codable {
   var macAdress: String = ""
   var batteryPercent: String = "0"
   var streaming: Bool = false
+  var logging: Bool = false
   var isConnected: Bool = false
   var isScanning: Bool = false
   var accelerometerFreqency: Int = 50
@@ -41,6 +42,9 @@ class MetaWearDevice: RCTEventEmitter {
   private var state = State()
   var device: MetaWear?
   var streamingCleanup: [OpaquePointer: () -> Void] = [:]
+  var handlers = MblMwLogDownloadHandler()
+  var qfuser: OpaquePointer!
+  var afuser: OpaquePointer!
 
 
   @objc
@@ -57,7 +61,7 @@ class MetaWearDevice: RCTEventEmitter {
   }
 
   @objc open override func supportedEvents() -> [String] {
-    return ["onAccData", "onGyroData", "onStateUpdate"]
+    return ["onAccData", "onGyroData", "onStateUpdate", "onLinearAccerationData","onQuaternionData"]
   }
 
   func retJson(state: State) {
@@ -203,8 +207,6 @@ class MetaWearDevice: RCTEventEmitter {
     resolve(self.retJson(state: s))
   }
 
-
-
   @objc
   func startStream() -> Void { // add epoch to
     print("starting stream")
@@ -278,6 +280,83 @@ class MetaWearDevice: RCTEventEmitter {
       var s = self.state
       s.streaming = false
       self.retJson(state: s)
+  }
+  
+  @objc
+  func startLog() {
+    let b = bObj(obj: self)
+  
+  
+    let accelRange = MBL_MW_SENSOR_FUSION_ACC_RANGE_16G
+    let gyroRange = MBL_MW_SENSOR_FUSION_GYRO_RANGE_2000DPS
+    let sensorFusionMode = MBL_MW_SENSOR_FUSION_MODE_IMU_PLUS
+    mbl_mw_logging_clear_entries(device?.board)
+    mbl_mw_sensor_fusion_set_acc_range(device?.board, accelRange)
+    mbl_mw_sensor_fusion_set_gyro_range(device?.board, gyroRange)
+    mbl_mw_sensor_fusion_set_mode(device?.board, sensorFusionMode)
+    let qsignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_QUATERNION)!
+    mbl_mw_datasignal_log(qsignal, b) { (context, logger) in
+      let _self:MetaWearDevice = bPtr(ptr: context!)
+      _self.qfuser = logger!
+      print("Started logger: ", _self.qfuser as Any)
+    }
+    let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
+    mbl_mw_datasignal_log(asignal, b) { (context, logger) in
+      let _self:MetaWearDevice = bPtr(ptr: context!)
+      _self.afuser = logger!
+      print("Started logger: ", _self.afuser as Any)
+    }
+    mbl_mw_logging_start(device?.board, 0)
+    mbl_mw_sensor_fusion_clear_enabled_mask(device?.board)
+    mbl_mw_sensor_fusion_enable_data(device?.board, MBL_MW_SENSOR_FUSION_DATA_QUATERNION)
+    mbl_mw_sensor_fusion_enable_data(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)
+    mbl_mw_sensor_fusion_write_config(device?.board)
+    mbl_mw_sensor_fusion_start(device?.board)
+    
+  }
+  
+  @objc
+  func stopLog() {
+    let b = bObj(obj: self)
+    
+    mbl_mw_sensor_fusion_stop(self.device?.board)
+    mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
+    mbl_mw_logger_subscribe(self.afuser, b, { (context, dataPtr) in
+      let _self:MetaWearDevice = bPtr(ptr: context!)
+      let timestamp = dataPtr!.pointee.timestamp
+      let a: MblMwCartesianFloat = dataPtr!.pointee.valueAs()
+      let x = Double(a.x)
+      let y = Double(a.y)
+      let z = Double(a.z)
+      _self.event(event: "onLinearAccerationData", data: [x,y,z] )
+      print("a : \(timestamp) \(a)")
+    })
+    mbl_mw_logger_subscribe( self.qfuser, b, { (context, dataPtr) in
+      let _self:MetaWearDevice = bPtr(ptr: context!)
+      let timestamp = dataPtr!.pointee.timestamp
+      let q: MblMwQuaternion = dataPtr!.pointee.valueAs()
+      let w = Double(q.w)
+      let x = Double(q.x)
+      let y = Double(q.y)
+      let z = Double(q.z)
+      _self.event(event: "onQuaternionData", data: [w,x,y,z] )
+      print("q : \(timestamp) \(q)")
+    })
+    self.handlers.context = b
+    self.handlers.received_progress_update = { (context, remainingEntries, totalEntries) in
+        if remainingEntries == 0 {
+            print("done \(Date())")
+//            let this: MetaWearDevice = bPtr(ptr: context!)
+        }
+    }
+    self.handlers.received_unknown_entry = { (context, id, epoch, data, length) in
+        print("received_unknown_entry")
+    }
+    self.handlers.received_unhandled_entry = { (context, data) in
+        print("received_unhandled_entry")
+    }
+    mbl_mw_logging_download(self.device?.board, 0, &self.handlers)
+    print("stopping \(Date())")
   }
 
   @objc

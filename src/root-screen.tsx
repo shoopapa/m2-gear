@@ -19,6 +19,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { AuthParamsList } from ".";
 import * as Metawear from "./device/ios/metawear";
 import { useFocusEffect } from "@react-navigation/native";
+import { LoggingRoot } from './tabs/logging/logging-tab';
 
 type SignOutButtonProps = { onPress: () => void };
 export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
@@ -37,6 +38,7 @@ export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
 
 export type TabParamList = {
   "record-tab": {};
+  "logging-tab": {};
   "training-tab": {};
   "device-tab": {};
 };
@@ -47,6 +49,7 @@ export const Icon = (icon: string) => {
 };
 export const tabIcons: { [K in keyof TabParamList]: any } = {
   "record-tab": Icon("camera"),
+  "logging-tab": Icon("log-in-outline"),
   "training-tab": Icon("analytics-outline"),
   "device-tab": Icon("ios-list"),
 };
@@ -98,6 +101,11 @@ export const RootScreen = withTheme(
             name="record-tab"
             options={{ tabBarLabel: "Record" }}
             component={RecordRoot}
+          />
+          <Tab.Screen
+            name="logging-tab"
+            options={{ tabBarLabel: "Record" }}
+            component={LoggingRoot}
           />
           <Tab.Screen
             name="training-tab"

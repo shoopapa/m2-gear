@@ -10,6 +10,7 @@ export interface MetaWearState {
   streaming: boolean;
   accelerometerFreqency?: number
   gryoFreqency?: number
+  logging: boolean
 }
 export const DefaultMetaWearState = {
   batteryPercent: "",
@@ -18,6 +19,7 @@ export const DefaultMetaWearState = {
   signalStrength: "",
   isScanning: false,
   streaming: false,
+  logging: false,
 };
 
 export const connect = () => {
@@ -66,6 +68,14 @@ export const stopStream = async () => {
   NativeModules.MetaWearDevice.stopStream();
 };
 
+export const startLog = async () => {
+  NativeModules.MetaWearDevice.startLog();
+};
+
+export const stopLog = async () => {
+  NativeModules.MetaWearDevice.stopLog();
+};
+
 export const onAccData = async (callback: (body: number[]) => void) => {
   NativeAppEventEmitter.removeAllListeners('onAccData')
   NativeAppEventEmitter.addListener("onAccData", (body: string) => {
@@ -77,6 +87,21 @@ export const onAccData = async (callback: (body: number[]) => void) => {
 export const onGyroData = async (callback: (body: number[]) => void) => {
   NativeAppEventEmitter.removeAllListeners('onGyroData')
   NativeAppEventEmitter.addListener("onGyroData", (body: string) => {
+    const gryo = JSON.parse(body) as number[];
+    callback(gryo);
+  });
+};
+export const onLinearAccerationData = async (callback: (body: number[]) => void) => {
+  NativeAppEventEmitter.removeAllListeners('onLinearAccerationData')
+  NativeAppEventEmitter.addListener("onLinearAccerationData", (body: string) => {
+    const acc = JSON.parse(body) as number[];
+    callback(acc);
+  });
+};
+
+export const onQuaternionData = async (callback: (body: number[]) => void) => {
+  NativeAppEventEmitter.removeAllListeners('onQuaternionData')
+  NativeAppEventEmitter.addListener("onQuaternionData", (body: string) => {
     const gryo = JSON.parse(body) as number[];
     callback(gryo);
   });

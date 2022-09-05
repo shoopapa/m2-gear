@@ -3,6 +3,7 @@ import { CompositeScreenProps, ParamListBase } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AuthParamsList } from "../index";
 import { TabParamList } from "../root-screen";
+import { ThemeType } from '../styles';
 
 export type SubNavigatorProps<
   T extends ParamListBase,
@@ -14,4 +15,6 @@ export type SubNavigatorProps<
     BottomTabScreenProps<TabParamList, P>,
     StackScreenProps<AuthParamsList, "MainScreen">
   >
->;
+> & {
+  theme: ThemeType
+};
