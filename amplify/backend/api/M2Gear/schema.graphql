@@ -1,5 +1,5 @@
 type SessionGroup @model @auth(rules: [
-  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
   { allow: owner }
 ]) {
   id: ID!
@@ -9,7 +9,7 @@ type SessionGroup @model @auth(rules: [
 
 type Move @model @auth(rules: [
     { allow: private, operations: [read] },
-    { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
 ]) {
   id: ID!
   createdAt: String
@@ -18,7 +18,7 @@ type Move @model @auth(rules: [
 
 
 type Session @model @auth(rules: [
-  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
   { allow: owner }
 ]) {
   id: ID!
@@ -26,12 +26,13 @@ type Session @model @auth(rules: [
   createdAt: String
   streamingStarted: Float!
   streamingFreqency: Float!
-  accerationX: [Float!]!
-  accerationY: [Float!]!
-  accerationZ: [Float!]!
-  gyroX: [Float!]!
-  gyroY: [Float!]!
-  gyroZ: [Float!]!
+  quaternionW: [Float!]!
+  quaternionX: [Float!]!
+  quaternionY: [Float!]!
+  quaternionZ: [Float!]!
+  linearAccerationX: [Float!]!
+  linearAccerationY: [Float!]!
+  linearAccerationZ: [Float!]!
   tags: [Tag] @manyToMany(relationName: "SessionTags")
 }
 
