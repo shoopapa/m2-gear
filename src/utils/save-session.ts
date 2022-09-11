@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { Session, Tag, SessionTags } from "../models";
+import { Session } from "../models";
 import { LinearAccerationType, QuaternionType } from '../types/data-format';
 
 export type SelectableTag = Tag & { isSelected?: boolean };
@@ -23,16 +23,16 @@ export const saveSession = async (
   console.log(input)
   try {
     //might try converting to datastore, not sure if it benifits me much since this data isn't very editable
-    const newSession = await DataStore.save(input);
+    await DataStore.save(input);
 
-    tags.forEach((tag) => {
-      DataStore.save(
-        new SessionTags({
-          session: newSession,
-          tag,
-        })
-      );
-    });
+    // tags.forEach((tag) => {
+    //   DataStore.save(
+    //     new SessionTags({
+    //       session: newSession,
+    //       tag,
+    //     })
+    //   );
+    // });
   } catch (e) {
     console.warn("failed to save session, please try again");
     console.log(e);

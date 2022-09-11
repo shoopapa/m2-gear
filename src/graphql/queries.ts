@@ -144,7 +144,6 @@ export const getSession = /* GraphQL */ `
   query GetSession($id: ID!) {
     getSession(id: $id) {
       id
-      createdAt
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -154,10 +153,7 @@ export const getSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      tags {
-        nextToken
-        startedAt
-      }
+      createdAt
       updatedAt
       _version
       _deleted
@@ -176,7 +172,6 @@ export const listSessions = /* GraphQL */ `
     listSessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        createdAt
         quaternionTimestamp
         quaternionW
         quaternionX
@@ -186,6 +181,7 @@ export const listSessions = /* GraphQL */ `
         linearAccerationX
         linearAccerationY
         linearAccerationZ
+        createdAt
         updatedAt
         _version
         _deleted
@@ -213,7 +209,6 @@ export const syncSessions = /* GraphQL */ `
     ) {
       items {
         id
-        createdAt
         quaternionTimestamp
         quaternionW
         quaternionX
@@ -223,175 +218,12 @@ export const syncSessions = /* GraphQL */ `
         linearAccerationX
         linearAccerationY
         linearAccerationZ
+        createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
         sessionGroupSessionsId
-        owner
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getTag = /* GraphQL */ `
-  query GetTag($id: ID!) {
-    getTag(id: $id) {
-      id
-      createdAt
-      name
-      value
-      sessions {
-        nextToken
-        startedAt
-      }
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const listTags = /* GraphQL */ `
-  query ListTags(
-    $filter: ModelTagFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        createdAt
-        name
-        value
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncTags = /* GraphQL */ `
-  query SyncTags(
-    $filter: ModelTagFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        createdAt
-        name
-        value
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getSessionTags = /* GraphQL */ `
-  query GetSessionTags($id: ID!) {
-    getSessionTags(id: $id) {
-      id
-      sessionID
-      tagID
-      session {
-        id
-        createdAt
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        sessionGroupSessionsId
-        owner
-      }
-      tag {
-        id
-        createdAt
-        name
-        value
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-  }
-`;
-export const listSessionTags = /* GraphQL */ `
-  query ListSessionTags(
-    $filter: ModelSessionTagsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listSessionTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        sessionID
-        tagID
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncSessionTags = /* GraphQL */ `
-  query SyncSessionTags(
-    $filter: ModelSessionTagsFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncSessionTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        sessionID
-        tagID
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       nextToken

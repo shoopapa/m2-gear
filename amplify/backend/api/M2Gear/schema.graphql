@@ -21,7 +21,6 @@ type Session @model @auth(rules: [
   { allow: owner }
 ]) {
   id: ID!
-  createdAt: String
   quaternionTimestamp:       [Float!]!
   quaternionW:               [Float!]!
   quaternionX:               [Float!]!
@@ -31,16 +30,16 @@ type Session @model @auth(rules: [
   linearAccerationX:         [Float!]! #g
   linearAccerationY:         [Float!]! #g
   linearAccerationZ:         [Float!]! #g
-  tags: [Tag] @manyToMany(relationName: "SessionTags")
+  # tags: [Tag] @manyToMany(relationName: "SessionTags")
 }
 
-type Tag @model @auth(rules: [
-  { allow: groups, groups: ["admin"]},
-  { allow: private, operations: [create, read] },
-]) {
-  id: ID!
-  createdAt: String
-  name: String!
-  value: String!
-  sessions: [Session] @manyToMany(relationName: "SessionTags")
-}
+# type Tag @model @auth(rules: [
+#   { allow: groups, groups: ["admin"]},
+#   { allow: private, operations: [create, read] },
+# ]) {
+#   id: ID!
+#   createdAt: String
+#   name: String!
+#   value: String!
+#   sessions: [Session] @manyToMany(relationName: "SessionTags")
+# }

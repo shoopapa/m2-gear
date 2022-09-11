@@ -147,7 +147,6 @@ export const createSession = /* GraphQL */ `
   ) {
     createSession(input: $input, condition: $condition) {
       id
-      createdAt
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -157,10 +156,7 @@ export const createSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      tags {
-        nextToken
-        startedAt
-      }
+      createdAt
       updatedAt
       _version
       _deleted
@@ -177,7 +173,6 @@ export const updateSession = /* GraphQL */ `
   ) {
     updateSession(input: $input, condition: $condition) {
       id
-      createdAt
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -187,10 +182,7 @@ export const updateSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      tags {
-        nextToken
-        startedAt
-      }
+      createdAt
       updatedAt
       _version
       _deleted
@@ -207,7 +199,6 @@ export const deleteSession = /* GraphQL */ `
   ) {
     deleteSession(input: $input, condition: $condition) {
       id
-      createdAt
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -217,219 +208,12 @@ export const deleteSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      tags {
-        nextToken
-        startedAt
-      }
+      createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
       sessionGroupSessionsId
-      owner
-    }
-  }
-`;
-export const createTag = /* GraphQL */ `
-  mutation CreateTag(
-    $input: CreateTagInput!
-    $condition: ModelTagConditionInput
-  ) {
-    createTag(input: $input, condition: $condition) {
-      id
-      createdAt
-      name
-      value
-      sessions {
-        nextToken
-        startedAt
-      }
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const updateTag = /* GraphQL */ `
-  mutation UpdateTag(
-    $input: UpdateTagInput!
-    $condition: ModelTagConditionInput
-  ) {
-    updateTag(input: $input, condition: $condition) {
-      id
-      createdAt
-      name
-      value
-      sessions {
-        nextToken
-        startedAt
-      }
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const deleteTag = /* GraphQL */ `
-  mutation DeleteTag(
-    $input: DeleteTagInput!
-    $condition: ModelTagConditionInput
-  ) {
-    deleteTag(input: $input, condition: $condition) {
-      id
-      createdAt
-      name
-      value
-      sessions {
-        nextToken
-        startedAt
-      }
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const createSessionTags = /* GraphQL */ `
-  mutation CreateSessionTags(
-    $input: CreateSessionTagsInput!
-    $condition: ModelSessionTagsConditionInput
-  ) {
-    createSessionTags(input: $input, condition: $condition) {
-      id
-      sessionID
-      tagID
-      session {
-        id
-        createdAt
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        sessionGroupSessionsId
-        owner
-      }
-      tag {
-        id
-        createdAt
-        name
-        value
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-  }
-`;
-export const updateSessionTags = /* GraphQL */ `
-  mutation UpdateSessionTags(
-    $input: UpdateSessionTagsInput!
-    $condition: ModelSessionTagsConditionInput
-  ) {
-    updateSessionTags(input: $input, condition: $condition) {
-      id
-      sessionID
-      tagID
-      session {
-        id
-        createdAt
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        sessionGroupSessionsId
-        owner
-      }
-      tag {
-        id
-        createdAt
-        name
-        value
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-  }
-`;
-export const deleteSessionTags = /* GraphQL */ `
-  mutation DeleteSessionTags(
-    $input: DeleteSessionTagsInput!
-    $condition: ModelSessionTagsConditionInput
-  ) {
-    deleteSessionTags(input: $input, condition: $condition) {
-      id
-      sessionID
-      tagID
-      session {
-        id
-        createdAt
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        sessionGroupSessionsId
-        owner
-      }
-      tag {
-        id
-        createdAt
-        name
-        value
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
