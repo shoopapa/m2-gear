@@ -60,7 +60,7 @@ export const resetDevice = async () => {
 };
 
 export const onStateUpdate = async (
-  callback: Dispatch<SetStateAction<MetaWearState>>
+  callback: (body: MetaWearState) => void
 ) => {
   NativeAppEventEmitter.addListener("onStateUpdate", (body: string) => {
     const res = JSON.parse(body) as MetaWearState;

@@ -64,7 +64,9 @@ export const RootScreen = withTheme(
 
     useFocusEffect(
       React.useCallback(() => {
-        Metawear.onStateUpdate(setdevice);
+        Metawear.onStateUpdate((state: MetaWearState) =>{
+          setdevice(v=>({...v, ...state}))
+        });
         Metawear.connectToRemembered();
       }, [])
     );

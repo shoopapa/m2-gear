@@ -32,6 +32,17 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   const [quaternion, setquaternion] = useState<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
 
+  useEffect(()=> {
+    console.log(device.downloadProgress)
+    if (device.downloadProgress) {
+      console.log('data finished downloaded saving now')
+      saveSession(linearAcceration, quaternion).then(()=> {
+        clearData()
+      })
+    }
+  },[device.downloadProgress])
+
+
   const quaternionEvent = (q: QuaternionRecord) => {
     setquaternion((v) => ([
         [...v[0], q[0]],
@@ -66,7 +77,12 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   };
 
   const onDownload = () => {
+    MetaWear.stopPreviewStream();
     MetaWear.downloadLog()
+  };
+  const onDownloadComplete = () => {
+    clearData()
+
   };
 
   return (
@@ -82,25 +98,24 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
             style={{ backgroundColor: colors.primary, margin: "2%" }}
             onPress={() => {
               console.log('starting log')
+              clearData()
               MetaWear.onPreviewData(PreviewEvent)
               MetaWear.onLinearAccerationData(linearAccerationEvent)
               MetaWear.onQuaternionData(quaternionEvent)
               MetaWear.startLog()
-              // MetaWear.startPreviewStream()
+              MetaWear.startPreviewStream()
             }}
           > start </Button>
         ) : null}
-        {/* {(previewData.length > 0) ? ( */}
+        {(previewData.length > 0) ? (
         <Button
           mode="contained"
           style={{ backgroundColor: colors.error, margin: "2%" }}
           onPress={() => {
-            MetaWear.stopPreviewStream();
-            // MetaWear.stopLog()
             setModalVisible(true)
           }}
         > Stop and Download</Button>
-        {/* ): null} */}
+        ): null}
       </Drawer.Section>
       <DownloadModal
         vis={modalVisible}

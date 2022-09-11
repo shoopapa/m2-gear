@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { View , TouchableWithoutFeedback, StyleSheet,} from "react-native";
 
 import {  ThemeType } from "../../styles";
@@ -13,77 +13,6 @@ import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { Title, withTheme } from "react-native-paper";
 
 
-
-// type DownloadModalProps = {
-//   modalVisible: boolean;
-//   setModalVisible: (v: boolean) => void;
-//   theme: ThemeType;
-//   onDownload: () => void;
-//   onDiscard: () => void;
-// };
-
-// export const DownloadModal = ({
-//   modalVisible,
-//   setModalVisible,
-//   theme,
-//   onDownload,
-//   onDiscard,
-// }: DownloadModalProps) => {
-//   const { colors } = theme;
-//   const [device] = useContext(DeviceContext);
-
-//   return (
-//     <Modal
-//       animationType="fade"
-//       transparent={true}
-//       visible={modalVisible}
-//       onRequestClose={() => {
-//         Alert.alert("Modal has been closed.");
-//         setModalVisible(!modalVisible);
-//       }}
-//     >
-//       <View style={styles.centeredView}>
-//         <View style={styles.modalView}>
-//           <View style={{ flexDirection: "column", width: "100%"}}>
-//             {/* <View style={{ flexDirection: "column", width: "100%"}}> */}
-//               <ProgressBar
-//                 progress={.5}
-//                 color={colors.primary}
-//                 />
-//                 <Text>
-//                   Data is still being collected,
-//                 </Text>
-//             {/* </View> */}
-//             {/* <View style={{ flexDirection: "column", width: "100%"}}> */}
-//               <Button
-//                 mode="contained"
-//                 style={{
-//                   backgroundColor: colors.primary,
-//                   width: "90%",
-//                 }}
-//                 onPress={onDownload}
-//               >
-//                 Stop and Download
-//               </Button>
-//               <Button
-//                 mode="contained"
-//                 style={{
-//                   backgroundColor: colors.error,
-//                   width: "90%",
-//                 }}
-//                 onPress={onDiscard}
-//               >
-//                 Discard
-//               </Button>
-//             {/* </View> */}
-//           </View>
-//         </View>
-//       </View>
-//     </Modal>
-//   );
-// };
-
-
 type DownloadModalProps = {
   theme: ThemeType;
   vis: boolean,
@@ -95,9 +24,9 @@ export const DownloadModal = withTheme(
   ({ theme,  vis, setvis, onDownload }: DownloadModalProps) => {
     const { colors } = theme;
     const [device] = useContext(DeviceContext);
-    const isFocused = useIsFocused();
+    // const isFocused = useIsFocused();
 
-    useFocusEffect(React.useCallback(() => setvis(true), []));
+    // useFocusEffect(React.useCallback(() => setvis(true), []));
 
     return (
       <Modal
