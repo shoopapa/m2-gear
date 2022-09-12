@@ -31,6 +31,7 @@ struct State : Codable {
   var batteryPercent: String = "0"
   var streaming: Bool = false
   var downloadProgress: Double = 1
+  var downloading: Bool = false
   var previewStreaming: Bool = false
   var logging: Bool = false
   var isConnected: Bool = false
@@ -381,6 +382,7 @@ class MetaWearDevice: RCTEventEmitter {
     let b = bObj(obj: self)
     var s = self.state
     s.downloadProgress = 0
+    s.downloading = true
     self.retJson(state: s)
     
     mbl_mw_sensor_fusion_stop(self.device?.board)
@@ -412,6 +414,9 @@ class MetaWearDevice: RCTEventEmitter {
       let _self:MetaWearDevice = bPtr(ptr: context!)
       print(remainingEntries, totalEntries)
       var s = _self.state
+      if (remainingEntries == 0) {
+        s.downloading = false
+      }
       s.downloadProgress = 1 - (Double(remainingEntries)/Double(totalEntries))
       _self.retJson(state: s)
     }

@@ -1,14 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { View } from "react-native";
 import * as MetaWear from "../../device/ios/metawear";
 
 import { globalStyles, ThemeType } from "../../styles";
 import { Button, Drawer, withTheme } from "react-native-paper";
 import DeviceContext from "../../device/ios/device-context";
-import { Tag } from "../../models";
 
 import { saveSession } from "../../utils/save-session";
-import { SaveModal } from "./save-modal";
 import { SessionChart } from "../../components/session-chart/session-chart";
 import { RecordParamList } from "./record-tab";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
@@ -26,40 +24,40 @@ type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
 const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   const { colors } = theme;
   const [device] = useContext(DeviceContext);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [linearAcceration, setlinearAcceration] = useState<LinearAccerationType>([[], [], [], []]);
-  const [quaternion, setquaternion] = useState<QuaternionType>([[], [], [], [], []]);
+  const linearAcceration = useRef<LinearAccerationType>([[], [], [], []])
+  const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
 
   useEffect(()=> {
-    console.log(device.downloadProgress)
-    if (device.downloadProgress) {
-      console.log('data finished downloaded saving now')
-      saveSession(linearAcceration, quaternion).then(()=> {
-        clearData()
+    if (device.downloading == false) {
+      saveSession(linearAcceration.current, quaternion.current).then(()=> {
+        console.log('clearing', device)
+        linearAcceration.current = [[], [], [], []]
+        quaternion.current = [[], [], [], [], []]
+        setPreviewData([]);
       })
     }
-  },[device.downloadProgress])
+  },[device.downloading])
 
 
   const quaternionEvent = (q: QuaternionRecord) => {
-    setquaternion((v) => ([
-        [...v[0], q[0]],
-        [...v[1], q[1]],
-        [...v[2], q[2]],
-        [...v[3], q[3]],
-        [...v[4], q[4]],
-      ]
-    ))
+    const v =  quaternion.current
+    quaternion.current = [
+      [...v[0], q[0]],
+      [...v[1], q[1]],
+      [...v[2], q[2]],
+      [...v[3], q[3]],
+      [...v[4], q[4]],
+    ]
   };
   const linearAccerationEvent = (a: LinearAccerationRecord) => {
-    setlinearAcceration((v) => [
+    const v = linearAcceration.current
+    linearAcceration.current = [
       [...v[0], a[0]],
       [...v[1], a[1]],
       [...v[2], a[2]],
       [...v[3], a[3]],
-    ]);
+    ]
   };
   const PreviewEvent = (n: number = 1) => {
     setPreviewData((v) => {
@@ -71,18 +69,14 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   };
 
   const clearData = (n: number = 1) => {
-    setPreviewData([]);
-    setlinearAcceration([[], [], [], []]);
-    setquaternion([[], [], [], [], []]);
+    linearAcceration.current = [[], [], [], []]
+    quaternion.current = [[], [], [], [], []]
+    setPreviewData([0]);
   };
 
   const onDownload = () => {
     MetaWear.stopPreviewStream();
     MetaWear.downloadLog()
-  };
-  const onDownloadComplete = () => {
-    clearData()
-
   };
 
   return (
@@ -107,22 +101,34 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
             }}
           > start </Button>
         ) : null}
-        {(previewData.length > 0) ? (
+        {(previewData.length !== 0 && device.previewStreaming) ? (
         <Button
           mode="contained"
           style={{ backgroundColor: colors.error, margin: "2%" }}
           onPress={() => {
-            setModalVisible(true)
+            MetaWear.stopPreviewStream();
+            MetaWear.stopLog()
           }}
-        > Stop and Download</Button>
+        > Stop </Button>
         ): null}
+        {(previewData.length !== 0 && !device.previewStreaming) ? (<>
+        <Button
+          mode="contained"
+          style={{ backgroundColor: colors.warningYellow, margin: "2%" }}
+          onPress={() => {
+            clearData()
+          }}
+        > reset </Button>
+        <Button
+          mode="contained"
+          style={{ backgroundColor: colors.success, margin: "2%" }}
+          onPress={() => {
+            console.log('starting download', device)
+            MetaWear.downloadLog()
+          }}
+        > download</Button>
+        </>): null}
       </Drawer.Section>
-      <DownloadModal
-        vis={modalVisible}
-        setvis={setModalVisible}
-        theme={theme}
-        onDownload={onDownload}
-      />
     </View>
   );
 };

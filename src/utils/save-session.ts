@@ -2,12 +2,9 @@ import { DataStore } from "aws-amplify";
 import { Session } from "../models";
 import { LinearAccerationType, QuaternionType } from '../types/data-format';
 
-export type SelectableTag = Tag & { isSelected?: boolean };
-
 export const saveSession = async (
   a: LinearAccerationType,
   q: QuaternionType,
-  tags: Tag[] = [],
 ) => {
   const input = new Session({
     linearAccerationTimestamp: a[0],
@@ -20,19 +17,8 @@ export const saveSession = async (
     quaternionY: q[3],
     quaternionZ: q[4],
   });
-  console.log(input)
   try {
-    //might try converting to datastore, not sure if it benifits me much since this data isn't very editable
     await DataStore.save(input);
-
-    // tags.forEach((tag) => {
-    //   DataStore.save(
-    //     new SessionTags({
-    //       session: newSession,
-    //       tag,
-    //     })
-    //   );
-    // });
   } catch (e) {
     console.warn("failed to save session, please try again");
     console.log(e);
