@@ -12,8 +12,6 @@ import { RecordParamList } from "./record-tab";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
 import Config from "react-native-config";
 import { LinearAccerationType, QuaternionRecord, LinearAccerationRecord, QuaternionType } from '../../types/data-format';
-import { DownloadModal } from './download-modal';
-import { onDeleteSession } from '../../graphql/subscriptions';
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   RecordParamList,
@@ -28,38 +26,12 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
 
-  useEffect(()=> {
-    if (device.downloading == false) {
-      saveSession(linearAcceration.current, quaternion.current).then(()=> {
-        console.log('clearing', device)
-        linearAcceration.current = [[], [], [], []]
-        quaternion.current = [[], [], [], [], []]
-        setPreviewData([]);
-      })
-    }
-  },[device.downloading])
+  const onSave = ()=> {
 
+  }
 
-  const quaternionEvent = (q: QuaternionRecord) => {
-    const v =  quaternion.current
-    quaternion.current = [
-      [...v[0], q[0]],
-      [...v[1], q[1]],
-      [...v[2], q[2]],
-      [...v[3], q[3]],
-      [...v[4], q[4]],
-    ]
-  };
-  const linearAccerationEvent = (a: LinearAccerationRecord) => {
-    const v = linearAcceration.current
-    linearAcceration.current = [
-      [...v[0], a[0]],
-      [...v[1], a[1]],
-      [...v[2], a[2]],
-      [...v[3], a[3]],
-    ]
-  };
   const PreviewEvent = (n: number = 1) => {
+    console.log(n)
     setPreviewData((v) => {
       if ( v.length > parseInt(Config.PREVIEW_DATA_LENGTH) ) {
         v.shift()
@@ -69,14 +41,10 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   };
 
   const clearData = (n: number = 1) => {
+    console.log('clear')
     linearAcceration.current = [[], [], [], []]
     quaternion.current = [[], [], [], [], []]
-    setPreviewData([0]);
-  };
-
-  const onDownload = () => {
-    MetaWear.stopPreviewStream();
-    MetaWear.downloadLog()
+    setPreviewData([]);
   };
 
   return (
@@ -94,8 +62,7 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
               console.log('starting log')
               clearData()
               MetaWear.onPreviewData(PreviewEvent)
-              MetaWear.onLinearAccerationData(linearAccerationEvent)
-              MetaWear.onQuaternionData(quaternionEvent)
+              setPreviewData([0])
               MetaWear.startLog()
               MetaWear.startPreviewStream()
             }}
@@ -122,9 +89,11 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
         <Button
           mode="contained"
           style={{ backgroundColor: colors.success, margin: "2%" }}
-          onPress={() => {
+          onPress={async () => {
             console.log('starting download', device)
-            MetaWear.downloadLog()
+            const {linearAcceration, quaternion} = await MetaWear.downloadLog()
+            await saveSession(linearAcceration, quaternion)
+            clearData()
           }}
         > download</Button>
         </>): null}

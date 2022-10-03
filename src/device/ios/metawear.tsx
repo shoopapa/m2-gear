@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { NativeModules, NativeAppEventEmitter } from "react-native";
-import { LinearAccerationRecord, QuaternionRecord } from '../../types/data-format';
+import { LinearAccerationRecord, LinearAccerationType, QuaternionRecord, QuaternionType } from '../../types/data-format';
 
 export interface MetaWearState {
   batteryPercent: string;
@@ -93,8 +93,36 @@ export const startLog = async () => {
 export const stopLog = async () => {
   NativeModules.MetaWearDevice.stopLog();
 };
-export const downloadLog = async () => {
-  NativeModules.MetaWearDevice.downloadLog();
+
+
+export const downloadLog = async (): Promise<{linearAcceration: LinearAccerationType, quaternion: QuaternionType}> => {
+  NativeAppEventEmitter.removeAllListeners('onQuaternionData')
+  NativeAppEventEmitter.removeAllListeners('onLinearAccerationData')
+
+  const quaternion: QuaternionType = [[],[],[],[],[]]
+  const linearAcceration: LinearAccerationType = [[],[],[],[]]
+  NativeAppEventEmitter.addListener("onQuaternionData", (body: string) => {
+    const [t,w,x,y,z] = JSON.parse(body) as QuaternionRecord;
+    quaternion[0].push(t)
+    quaternion[1].push(w)
+    quaternion[2].push(x)
+    quaternion[3].push(y)
+    quaternion[4].push(z)
+  });
+  NativeAppEventEmitter.addListener("onLinearAccerationData", (body: string) => {
+    const [t,x,y,z] = JSON.parse(body) as LinearAccerationRecord;
+    linearAcceration[0].push(t)
+    linearAcceration[1].push(x)
+    linearAcceration[2].push(y)
+    linearAcceration[3].push(z)
+  });
+
+  await NativeModules.MetaWearDevice.downloadLog();
+
+  return {
+    linearAcceration,
+    quaternion,
+  }
 };
 
 export const onAccData = async (callback: (body: number[]) => void) => {
@@ -142,3 +170,10 @@ export const getState = async () => {
   const state = JSON.parse(body) as MetaWearState;
   return state;
 };
+
+export const onDownloadComplete = async (callback: () => void) => {
+  NativeAppEventEmitter.removeAllListeners('onDownloadComplete')
+  NativeAppEventEmitter.addListener("onDownloadComplete", (body: string) => {
+    callback();
+  });
+}

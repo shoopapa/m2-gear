@@ -48,6 +48,7 @@ class MetaWearDevice: RCTEventEmitter {
   var handlers = MblMwLogDownloadHandler()
   var qfuser: OpaquePointer!
   var afuser: OpaquePointer!
+  var resolve: RCTPromiseResolveBlock!
 
 
   @objc
@@ -64,7 +65,7 @@ class MetaWearDevice: RCTEventEmitter {
   }
 
   @objc open override func supportedEvents() -> [String] {
-    return ["onAccData", "onGyroData", "onStateUpdate", "onLinearAccerationData","onQuaternionData","onPreviewData"]
+    return ["onAccData", "onGyroData", "onStateUpdate", "onLinearAccerationData","onQuaternionData","onPreviewData", "onDownloadComplete"]
   }
 
   func retJson(state: State) {
@@ -104,12 +105,12 @@ class MetaWearDevice: RCTEventEmitter {
       let s = self.ConnectionFail()
       self.retJson(state: s)
     }
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6, execute: c )
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 7, execute: c )
 
     MetaWearScanner.shared.startScan(allowDuplicates: true) { (device) in
       print("wee found a device!")
       // Hooray! We found a MetaWear board, so stop scanning for more
-      if device.rssi > -100 {
+      if device.rssi > -50 {
         self.state.signalStrength = String(self.device?.rssi ?? 0)
         c.cancel()
         MetaWearScanner.shared.stopScan()
@@ -158,7 +159,7 @@ class MetaWearDevice: RCTEventEmitter {
       }
     }
 
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5, execute: c )
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 7, execute: c )
 
     MetaWearScanner.shared.retrieveSavedMetaWearsAsync().continueOnSuccessWith { array in
       if array.first != nil {
@@ -216,37 +217,7 @@ class MetaWearDevice: RCTEventEmitter {
     resolve(self.retJson(state: s))
   }
 
-  @objc
-  func startPreviewStream() -> Void { // add epoch to
-    print("starting Preview stream")
-    var s = self.state
-    s.previewStreaming = true
-    retJson(state: s)
 
-    let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
-    mbl_mw_datasignal_subscribe(asignal, bObj(obj: self)) {(context, obj) in
-        let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
-        let _self: MetaWearDevice = bPtr(ptr: context!)
-        let v = (pow(Double(acceleration.x),2) + pow(Double(acceleration.y),2) + pow(Double(acceleration.z),2)).squareRoot()
-        _self.event(event: "onPreviewData", data: [v] )
-    }
-
-    streamingCleanup[asignal] = {
-        mbl_mw_acc_stop(self.device?.board)
-        mbl_mw_acc_disable_acceleration_sampling(self.device?.board)
-        mbl_mw_datasignal_unsubscribe(asignal)
-    }
-  }
-
-  @objc
-  func stopPreviewStream() -> Void {
-    let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
-    streamingCleanup.removeValue(forKey: asignal)?()
-
-    var s = self.state
-    s.previewStreaming = false
-    retJson(state: s)
-  }
 
   @objc
   func startStream() -> Void { // add epoch to
@@ -324,6 +295,39 @@ class MetaWearDevice: RCTEventEmitter {
   }
 
   @objc
+  func startPreviewStream() -> Void { // add epoch to
+    print("starting Preview stream")
+    var s = self.state
+    s.previewStreaming = true
+    retJson(state: s)
+
+
+     let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
+     mbl_mw_datasignal_subscribe(asignal, bObj(obj: self)) {(context, obj) in
+         let acceleration: MblMwCartesianFloat = obj!.pointee.valueAs()
+         let _self: MetaWearDevice = bPtr(ptr: context!)
+         let v = (pow(Double(acceleration.x),2) + pow(Double(acceleration.y),2) + pow(Double(acceleration.z),2)).squareRoot()
+         _self.event(event: "onPreviewData", data: [v] )
+     }
+
+     streamingCleanup[asignal] = {
+         mbl_mw_acc_stop(self.device?.board)
+         mbl_mw_acc_disable_acceleration_sampling(self.device?.board)
+         mbl_mw_datasignal_unsubscribe(asignal)
+     }
+  }
+
+  @objc
+  func stopPreviewStream() -> Void {
+    // let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
+    // streamingCleanup.removeValue(forKey: asignal)?()
+
+    var s = self.state
+    s.previewStreaming = false
+    retJson(state: s)
+  }
+
+  @objc
   func startLog() {
     print("startLOG")
     let b = bObj(obj: self)
@@ -377,14 +381,19 @@ class MetaWearDevice: RCTEventEmitter {
   }
 
   @objc
-  func downloadLog() {
+  func downloadLog(
+    _ resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) -> Void {
+    self.resolve = resolve
     print("downloadLog")
     let b = bObj(obj: self)
     var s = self.state
     s.downloadProgress = 0
     s.downloading = true
     self.retJson(state: s)
-    
+    // resolve("done")
+
     mbl_mw_sensor_fusion_stop(self.device?.board)
     mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
     mbl_mw_logger_subscribe(self.afuser, b, { (context, dataPtr) in
@@ -411,14 +420,10 @@ class MetaWearDevice: RCTEventEmitter {
     self.handlers = MblMwLogDownloadHandler()
     self.handlers.context = b
     self.handlers.received_progress_update = { (context, remainingEntries, totalEntries) in
-      let _self:MetaWearDevice = bPtr(ptr: context!)
-      print(remainingEntries, totalEntries)
-      var s = _self.state
+      let _self: MetaWearDevice = bPtr(ptr: context!)
       if (remainingEntries == 0) {
-        s.downloading = false
+        _self.resolve("done")
       }
-      s.downloadProgress = 1 - (Double(remainingEntries)/Double(totalEntries))
-      _self.retJson(state: s)
     }
     self.handlers.received_unknown_entry = { (context, id, epoch, data, length) in
         print("received_unknown_entry")
@@ -427,9 +432,6 @@ class MetaWearDevice: RCTEventEmitter {
         print("received_unhandled_entry")
     }
     mbl_mw_logging_download(self.device?.board, 0, &self.handlers)
-    var s2 = self.state
-    s2.logging = false
-    retJson(state: s2)
   }
 
   @objc

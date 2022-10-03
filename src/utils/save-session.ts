@@ -6,6 +6,9 @@ export const saveSession = async (
   a: LinearAccerationType,
   q: QuaternionType,
 ) => {
+  if (a[0].length == 0) {
+    return null
+  }
   const input = new Session({
     linearAccerationTimestamp: a[0],
     linearAccerationX: a[1],

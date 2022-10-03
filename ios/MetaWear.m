@@ -56,7 +56,10 @@ RCT_EXTERN_METHOD(startLog)
 
 RCT_EXTERN_METHOD(stopLog)
 
-RCT_EXTERN_METHOD(downloadLog)
+RCT_EXTERN_METHOD(
+  downloadLog: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
 
 RCT_EXTERN_METHOD(resetDevice)
 
