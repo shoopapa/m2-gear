@@ -9,7 +9,6 @@ export interface MetaWearState {
   signalStrength: string;
   isScanning: boolean;
   downloadProgress: number
-  downloading: boolean
   streaming: boolean;
   previewStreaming: boolean
   accelerometerFreqency?: number
@@ -20,7 +19,6 @@ export const DefaultMetaWearState: MetaWearState = {
   batteryPercent: "",
   isConnected: false,
   macAdress: "",
-  downloading: false,
   downloadProgress: 0,
   signalStrength: "",
   previewStreaming: false,

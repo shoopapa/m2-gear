@@ -31,7 +31,6 @@ struct State : Codable {
   var batteryPercent: String = "0"
   var streaming: Bool = false
   var downloadProgress: Double = 1
-  var downloading: Bool = false
   var previewStreaming: Bool = false
   var logging: Bool = false
   var isConnected: Bool = false
@@ -110,7 +109,7 @@ class MetaWearDevice: RCTEventEmitter {
     MetaWearScanner.shared.startScan(allowDuplicates: true) { (device) in
       print("wee found a device!")
       // Hooray! We found a MetaWear board, so stop scanning for more
-      if device.rssi > -50 {
+      if device.rssi > -80 {
         self.state.signalStrength = String(self.device?.rssi ?? 0)
         c.cancel()
         MetaWearScanner.shared.stopScan()
@@ -354,7 +353,6 @@ class MetaWearDevice: RCTEventEmitter {
       _self.qfuser = logger!
       mbl_mw_logger_generate_identifier(logger!)
       print("Started logger: ", _self.qfuser as Any)
-
     }
     let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
     mbl_mw_datasignal_log(asignal, b) { (context, logger) in
@@ -369,15 +367,16 @@ class MetaWearDevice: RCTEventEmitter {
     mbl_mw_sensor_fusion_enable_data(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)
     mbl_mw_sensor_fusion_write_config(device?.board)
     mbl_mw_sensor_fusion_start(device?.board)
-
   }
 
   @objc
   func stopLog() {
     print("StopLog")
+    var s = self.state
+    s.logging = false
+    retJson(state: s)
     mbl_mw_sensor_fusion_stop(self.device?.board)
     mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
-    mbl_mw_logging_clear_entries(device?.board)
   }
 
   @objc
@@ -390,9 +389,7 @@ class MetaWearDevice: RCTEventEmitter {
     let b = bObj(obj: self)
     var s = self.state
     s.downloadProgress = 0
-    s.downloading = true
     self.retJson(state: s)
-    // resolve("done")
 
     mbl_mw_sensor_fusion_stop(self.device?.board)
     mbl_mw_sensor_fusion_clear_enabled_mask(self.device?.board)
@@ -404,7 +401,6 @@ class MetaWearDevice: RCTEventEmitter {
       let y = Double(a.y)
       let z = Double(a.z)
       _self.event(event: "onLinearAccerationData", data: [timestamp, x,y,z] )
-//      print("a : \(timestamp) \(a)")
     })
     mbl_mw_logger_subscribe( self.qfuser, b, { (context, dataPtr) in
       let _self:MetaWearDevice = bPtr(ptr: context!)
@@ -415,13 +411,14 @@ class MetaWearDevice: RCTEventEmitter {
       let y = Double(q.y)
       let z = Double(q.z)
       _self.event(event: "onQuaternionData", data: [timestamp,w,x,y,z] )
-//      print("q : \(timestamp) \(q)")
     })
     self.handlers = MblMwLogDownloadHandler()
     self.handlers.context = b
     self.handlers.received_progress_update = { (context, remainingEntries, totalEntries) in
       let _self: MetaWearDevice = bPtr(ptr: context!)
+      print(remainingEntries,totalEntries)
       if (remainingEntries == 0) {
+        print("resolving")
         _self.resolve("done")
       }
     }
@@ -460,14 +457,6 @@ class MetaWearDevice: RCTEventEmitter {
       }
     }
   }
-
-//  @objc
-//  func updateSignalStrength() {
-//    var s = self.state
-//    s.signalStrength =  String(self.device?.rssi ?? 0)
-//    print(s.signalStrength)
-//    self.retJson(state: s)
-//  }
 
   func onDisconect() {
     let s = self.ConnectionFail()

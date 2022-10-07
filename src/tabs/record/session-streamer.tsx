@@ -11,7 +11,7 @@ import { SessionChart } from "../../components/session-chart/session-chart";
 import { RecordParamList } from "./record-tab";
 import { SubNavigatorProps } from "../../types/sub-navigator-props";
 import Config from "react-native-config";
-import { LinearAccerationType, QuaternionRecord, LinearAccerationRecord, QuaternionType } from '../../types/data-format';
+import { LinearAccerationType, QuaternionType } from '../../types/data-format';
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   RecordParamList,
@@ -26,12 +26,7 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
   const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
 
-  const onSave = ()=> {
-
-  }
-
   const PreviewEvent = (n: number = 1) => {
-    console.log(n)
     setPreviewData((v) => {
       if ( v.length > parseInt(Config.PREVIEW_DATA_LENGTH) ) {
         v.shift()
@@ -62,9 +57,8 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
               console.log('starting log')
               clearData()
               MetaWear.onPreviewData(PreviewEvent)
-              setPreviewData([0])
-              MetaWear.startLog()
               MetaWear.startPreviewStream()
+              MetaWear.startLog()
             }}
           > start </Button>
         ) : null}
@@ -90,7 +84,6 @@ const SessionStreamerWithoutTheme = ({ theme }: SessionScreenProps) => {
           mode="contained"
           style={{ backgroundColor: colors.success, margin: "2%" }}
           onPress={async () => {
-            console.log('starting download', device)
             const {linearAcceration, quaternion} = await MetaWear.downloadLog()
             await saveSession(linearAcceration, quaternion)
             clearData()
