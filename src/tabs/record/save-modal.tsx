@@ -1,16 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DataStore } from "aws-amplify";
-import { View, Dimensions } from "react-native";
-import { LineChart } from "react-native-chart-kit";
-import * as MetaWear from "../../device/ios/metawear";
+import { View } from "react-native";
 
-import { globalStyles, ThemeType } from "../../styles";
-import { Button, Drawer, withTheme } from "react-native-paper";
-import DeviceContext from "../../device/ios/device-context";
+import {  ThemeType } from "../../styles";
+import { Button, Drawer } from "react-native-paper";
 import { Tag } from "../../models";
-import { Alert, Modal, Text, StyleSheet } from "react-native";
+import { Alert, Modal, Text } from "react-native";
 
-import { SelectableTag, saveSession } from "../../utils/save-session";
+import { SelectableTag } from "../../utils/save-session";
 import { styles } from "./styles";
 
 type TagProps = {

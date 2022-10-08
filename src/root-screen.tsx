@@ -46,7 +46,7 @@ export const Icon = (icon: string) => {
   );
 };
 export const tabIcons: { [K in keyof TabParamList]: any } = {
-  "record-tab": Icon("camera"),
+  "record-tab": Icon("log-in-outline"),
   "training-tab": Icon("analytics-outline"),
   "device-tab": Icon("ios-list"),
 };
@@ -64,7 +64,10 @@ export const RootScreen = withTheme(
 
     useFocusEffect(
       React.useCallback(() => {
-        Metawear.onStateUpdate(setdevice);
+        Metawear.onStateUpdate((state: MetaWearState) =>{
+          console.log(state)
+          setdevice(v=>({...v, ...state}))
+        });
         Metawear.connectToRemembered();
       }, [])
     );

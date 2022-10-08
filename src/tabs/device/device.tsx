@@ -42,11 +42,9 @@ const Connect = ({ colors }: ConnectProps) => {
           style={{ backgroundColor: colors.primary, margin: "2%" }}
           icon="lightbulb-on"
           onPress={async () => {
-            console.log("starting");
             setblinking(true);
             await MetaWear.blinkLED();
             setblinking(false);
-            console.log("ending");
           }}
         >
           Blink

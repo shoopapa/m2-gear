@@ -18,9 +18,9 @@ export const TrainingTab = () => {
       initialRouteName="Groups"
       screenOptions={{ contentStyle: { backgroundColor: "#FFFFFF" } }}
     >
-      <Stack.Screen name="Groups" component={ListGroups} />
-      <Stack.Screen name="Training" component={Training} />
-      <Stack.Screen name="Session" component={SessionPage} />
+      <Stack.Screen name="Groups"   component={ListGroups}  />
+      <Stack.Screen name="Training" component={Training}    />
+      <Stack.Screen name="Session"  component={SessionPage} />
     </Stack.Navigator>
   );
 };
