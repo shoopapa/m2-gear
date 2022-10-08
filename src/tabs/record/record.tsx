@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { RecordParamList } from "./record-tab";
 import { View } from "react-native";
-import { SessionStreamer } from "./session-streamer";
+import { SessionLogger } from "./session-logger";
 import { DataStore, Predicates, SortDirection } from "aws-amplify";
 import { Session } from "../../models";
 import { SessionList } from "../../pages/sessions-list/sessions-list";
@@ -37,7 +37,7 @@ export const Record = (props: RecordProps) => {
         devicePage={() => navigation.navigate("device-tab", {})}
       />
       <View style={{ flex: 1 }}>
-        <SessionStreamer {...props} />
+        <SessionLogger {...props} />
         <SessionList
           sessions={sessions}
           navigate={(s) => {
