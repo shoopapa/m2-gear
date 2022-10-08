@@ -12,6 +12,10 @@
 @interface RCT_EXTERN_MODULE(MetaWearDevice, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(supportedEvents)
++ (BOOL)requiresMainQueueSetup
+{
+    return NO;
+}
 
 RCT_EXTERN_METHOD( testEvent:(NSString *)eventName )
 
@@ -20,15 +24,13 @@ RCT_EXTERN_METHOD(
   rejecter: (RCTPromiseRejectBlock)reject
 )
 
-RCT_EXTERN_METHOD(
-  connect: (RCTPromiseResolveBlock)resolve
-  rejecter: (RCTPromiseRejectBlock)reject
-)
+RCT_EXTERN_METHOD(connect)
 
-RCT_EXTERN_METHOD(
-  connectToRemembered: (RCTPromiseResolveBlock)resolve
-  rejecter: (RCTPromiseRejectBlock)reject
-)
+RCT_EXTERN_METHOD(connectToRemembered)
+
+RCT_EXTERN_METHOD(updateBattery)
+
+//RCT_EXTERN_METHOD(updateSignalStrength)
 
 RCT_EXTERN_METHOD(
   blinkLED: (RCTPromiseResolveBlock)resolve
@@ -40,19 +42,25 @@ RCT_EXTERN_METHOD(
   rejecter: (RCTPromiseRejectBlock)reject
 )
 
+RCT_EXTERN_METHOD(forget)
+
+RCT_EXTERN_METHOD(startStream)
+
+RCT_EXTERN_METHOD(stopStream)
+
+RCT_EXTERN_METHOD(startPreviewStream)
+
+RCT_EXTERN_METHOD(stopPreviewStream)
+
+RCT_EXTERN_METHOD(startLog)
+
+RCT_EXTERN_METHOD(stopLog)
+
 RCT_EXTERN_METHOD(
-  forget: (RCTPromiseResolveBlock)resolve
+  downloadLog: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )
 
-RCT_EXTERN_METHOD(
-  startStream: (RCTPromiseResolveBlock)resolve
-  rejecter: (RCTPromiseRejectBlock)reject
-)
-
-RCT_EXTERN_METHOD(
-  stopStream: (RCTPromiseResolveBlock)resolve
-  rejecter: (RCTPromiseRejectBlock)reject
-)
+RCT_EXTERN_METHOD(resetDevice)
 
 @end

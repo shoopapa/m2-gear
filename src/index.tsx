@@ -1,18 +1,23 @@
-import 'react-native-gesture-handler';
-import React, {useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {Provider as PaperProvider} from 'react-native-paper';
+import "react-native-gesture-handler";
+import React, { useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Provider as PaperProvider } from "react-native-paper";
 
-import AuthContext from './auth/auth-context';
-import MainScreen from './mainScreen';
-import AuthScreen from './auth/authScreen';
-import {theme} from './styles';
+import { AuthContext } from "./pages/auth/auth-context";
+import { RootScreen } from "./root-screen";
+import { AuthScreen } from "./pages/auth/authScreen";
+import { theme } from "./styles";
 
-const Stack = createStackNavigator();
+export type AuthParamsList = {
+  AuthScreen: {};
+  MainScreen: {};
+};
 
-function AppWithAuth() {
-  const [authState, setauthState] = useState(null);
+const Stack = createStackNavigator<AuthParamsList>();
+
+export const AppWithAuth = () => {
+  const [authState, setauthState] = useState<string>("");
   const [authData, setauthData] = useState(null);
 
   return (
@@ -24,23 +29,26 @@ function AppWithAuth() {
             authData,
             setauthState,
             setauthData,
-          }}>
+          }}
+        >
           <Stack.Navigator>
             <Stack.Screen
               name="AuthScreen"
               component={AuthScreen}
-              options={{title: 'Sign in', headerLeft: () => null}}
+              options={{ title: "Sign in", headerLeft: () => null }}
             />
             <Stack.Screen
               name="MainScreen"
-              component={MainScreen}
-              options={{headerShown: false, headerLeft: () => null, gestureEnabled:false}}
+              component={RootScreen}
+              options={{
+                headerShown: false,
+                headerLeft: () => null,
+                gestureEnabled: false,
+              }}
             />
           </Stack.Navigator>
         </AuthContext.Provider>
       </NavigationContainer>
     </PaperProvider>
   );
-}
-
-export default AppWithAuth;
+};

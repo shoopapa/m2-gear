@@ -1,5 +1,5 @@
 type SessionGroup @model @auth(rules: [
-  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
   { allow: owner }
 ]) {
   id: ID!
@@ -9,39 +9,37 @@ type SessionGroup @model @auth(rules: [
 
 type Move @model @auth(rules: [
     { allow: private, operations: [read] },
-    { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
 ]) {
   id: ID!
   createdAt: String
   type: String!
 }
 
-
 type Session @model @auth(rules: [
-  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, 
+  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
   { allow: owner }
 ]) {
   id: ID!
-  isTraining: Boolean
-  createdAt: String
-  streamingStarted: Float!
-  streamingFreqency: Float!
-  accerationX: [Float!]!
-  accerationY: [Float!]!
-  accerationZ: [Float!]!
-  gyroX: [Float!]!
-  gyroY: [Float!]!
-  gyroZ: [Float!]!
-  tags: [Tag] @manyToMany(relationName: "SessionTags")
+  quaternionTimestamp:       [Float!]!
+  quaternionW:               [Float!]!
+  quaternionX:               [Float!]!
+  quaternionY:               [Float!]!
+  quaternionZ:               [Float!]!
+  linearAccerationTimestamp: [Float!]! #g
+  linearAccerationX:         [Float!]! #g
+  linearAccerationY:         [Float!]! #g
+  linearAccerationZ:         [Float!]! #g
+  # tags: [Tag] @manyToMany(relationName: "SessionTags")
 }
 
-type Tag @model @auth(rules: [
-  { allow: groups, groups: ["admin"]},
-  { allow: private, operations: [create, read] },
-]) {
-  id: ID!
-  createdAt: String
-  name: String!
-  value: String!
-  sessions: [Session] @manyToMany(relationName: "SessionTags")
-}
+# type Tag @model @auth(rules: [
+#   { allow: groups, groups: ["admin"]},
+#   { allow: private, operations: [create, read] },
+# ]) {
+#   id: ID!
+#   createdAt: String
+#   name: String!
+#   value: String!
+#   sessions: [Session] @manyToMany(relationName: "SessionTags")
+# }

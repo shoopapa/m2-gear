@@ -1,34 +1,29 @@
+import { DataStore } from "aws-amplify";
+import { Session } from "../models";
+import { LinearAccerationType, QuaternionType } from '../types/data-format';
 
-import { DataStore } from 'aws-amplify';
-import { Session, Tag, SessionTags } from '../models';
-
-export type SelectableTag = Tag & {isSelected?: boolean}
-
-export const saveSession = async (acc: number[][], gyro:number[][], tags:Tag[], streamingStarted:number, streamingFreqency:number) => {
-  const input = new Session({
-    accerationX:  acc[0],
-    accerationY:  acc[1],
-    accerationZ:  acc[2],
-    gyroX:  gyro[0],
-    gyroY:  gyro[1],
-    gyroZ:  gyro[2],
-    streamingStarted,
-    streamingFreqency
-  })
-  try { //might try converting to datastore, not sure if it benifits me much since this data isn't very editable
-    const newSession = await DataStore.save(input)
-
-    tags.forEach(tag => {
-      DataStore.save(
-        new SessionTags({
-          session:newSession,
-          tag
-        })
-      )
-    })
-  } catch (e) {
-    console.warn('failed to save session, please try again')
-    console.log(e)
+export const saveSession = async (
+  a: LinearAccerationType,
+  q: QuaternionType,
+) => {
+  if (a[0].length == 0) {
+    return null
   }
-}
-
+  const input = new Session({
+    linearAccerationTimestamp: a[0],
+    linearAccerationX: a[1],
+    linearAccerationY: a[2],
+    linearAccerationZ: a[3],
+    quaternionTimestamp: q[0],
+    quaternionW: q[1],
+    quaternionX: q[2],
+    quaternionY: q[3],
+    quaternionZ: q[4],
+  });
+  try {
+    await DataStore.save(input);
+  } catch (e) {
+    console.warn("failed to save session, please try again");
+    console.log(e);
+  }
+};

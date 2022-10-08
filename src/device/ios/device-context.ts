@@ -1,18 +1,8 @@
-import React from 'react';
-import {MetaWearState} from './metawear'
-export type setdevice = (object: MetaWearState) => void;
+import React from "react";
+import { MetaWearState, DefaultMetaWearState } from "./metawear";
 
-export interface InitDeviceContext {
-  device?: MetaWearState;
-  setdevice: setdevice;
-}
-
-export const initDeviceContext: InitDeviceContext = {
-  device: undefined,
-  setdevice: (_) => {
-    return;
-  },
-};
-const DeviceContext = React.createContext(initDeviceContext);
+const DeviceContext = React.createContext<
+  [MetaWearState, (v: MetaWearState) => void]
+>([DefaultMetaWearState, () => null]);
 
 export default DeviceContext;

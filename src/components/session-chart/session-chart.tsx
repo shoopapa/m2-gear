@@ -1,40 +1,49 @@
-import React from 'react';
-import { Dimensions } from 'react-native';
+import React from "react";
+import { Dimensions } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 
-import { ThemeType } from '../../styles';
+import { ThemeType } from "../../styles";
 
 type SessionChartProps = {
-  data: number[][]
-  theme:  ThemeType
-  disabled?: boolean
-}
+  data: number[][];
+  theme: ThemeType;
+  disabled?: boolean;
+};
 
-const lineColors = ['rgba(210,77,90,1)','rgba(156,209,72,1)','rgba(178,143,220,1)']
-const disabledLineColors = ['rgba(210,77,90,0.5)','rgba(156,209,72,0.5)','rgba(178,143,220,0.5)']
+const lineColors = [
+  "rgba(210,77,90,1)",
+  "rgba(156,209,72,1)",
+  "rgba(178,143,220,1)",
+];
+const disabledLineColors = [
+  "rgba(210,77,90,0.5)",
+  "rgba(156,209,72,0.5)",
+  "rgba(178,143,220,0.5)",
+];
 
-
-
-export const SessionChart = ({data, theme, disabled}: SessionChartProps) => {
-  const {colors}= theme
+export const SessionChart = ({ data, theme, disabled }: SessionChartProps) => {
+  const { colors } = theme;
   return (
     <LineChart
       withShadow={false}
-      style={{marginBottom:-40, marginLeft:-20}}
+      style={{ marginBottom: -40, marginLeft: -20 }}
       data={{
-        labels:["time"],
-        datasets: data.map((d,i)=>{
+        labels: ["time"],
+        datasets: [
+          ...data.map((d, i) => {
           return {
             data: d,
-            color:() => disabled? disabledLineColors[i] : lineColors[i] 
-          }
-        })
+            color: () => (disabled ? disabledLineColors[i] : lineColors[i]),
+          };
+         }),
+         {data: [6,-6], color:()=>'rgba(0,0,0,0)'}
+      ],
       }}
-      formatYLabel={(v)=> {
-        if (v==='NaN') return '0g'
-        return parseFloat(v).toFixed(1)+'g' 
+      formatYLabel={(v) => {
+        if (v === "NaN") return "0g";
+        return parseFloat(v).toFixed(1) + "g";
       }}
-      formatXLabel={()=>''}
+      formatXLabel={() => ""}
       withVerticalLines={false}
       // withHorizontalLines={false}
       withDots={false}
@@ -48,8 +57,8 @@ export const SessionChart = ({data, theme, disabled}: SessionChartProps) => {
         color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional,
+        useShadowColorFromDataset: false, // optional,
       }}
     />
-  )
-}
+  );
+};
