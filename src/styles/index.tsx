@@ -33,8 +33,8 @@ export const theme = {
     ...DefaultTheme.colors,
     primary: '#19489f',
     warningYellow: '#f69220',
-    primaryByOpacity: (v: number) => {
-      return `rgba(25, 72, 159, 1)`;
+    primaryByOpacity: () => {
+      return 'rgba(25, 72, 159, 1)';
     },
     disabledPrimary: '#19489fa6',
     accent: '#6595ed',

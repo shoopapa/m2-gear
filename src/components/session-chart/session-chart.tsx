@@ -21,8 +21,7 @@ const disabledLineColors = [
   'rgba(178,143,220,0.5)',
 ];
 
-export const SessionChart = ({ data, theme, disabled }: SessionChartProps) => {
-  const { colors } = theme;
+export const SessionChart = ({ data, disabled }: SessionChartProps) => {
   return (
     <LineChart
       withShadow={false}

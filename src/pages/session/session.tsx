@@ -33,14 +33,14 @@ export const SessionPage = withTheme(
       const sub = DataStore.observeQuery(Session, (p) =>
         p.id('eq', id),
       ).subscribe((snap) => {
-        const { items, isSynced } = snap;
+        const { items } = snap;
         setsession(items[0]);
       });
 
       return () => {
         sub.unsubscribe();
       };
-    }, []);
+    }, [id]);
 
     if (session === null) {
       return (

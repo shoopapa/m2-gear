@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 
 import { ThemeType } from '../../styles';
 import { Button } from 'react-native-paper';

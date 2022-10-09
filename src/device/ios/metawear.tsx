@@ -170,7 +170,7 @@ export const getState = async () => {
 
 export const onDownloadComplete = async (callback: () => void) => {
   NativeAppEventEmitter.removeAllListeners('onDownloadComplete');
-  NativeAppEventEmitter.addListener('onDownloadComplete', (body: string) => {
+  NativeAppEventEmitter.addListener('onDownloadComplete', () => {
     callback();
   });
 };

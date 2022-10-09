@@ -14,7 +14,7 @@ type SessionListProps = {
 
 export const SessionList = withTheme(
   ({ sessions, theme, navigate }: SessionListProps) => {
-    if (!sessions || sessions.length == 0) {
+    if (!sessions || sessions.length === 0) {
       return (
         <View style={globalStyles.container}>
           <ActivityIndicator animating={true} color={theme.colors.primary} />
@@ -34,7 +34,7 @@ export const SessionList = withTheme(
                   key={s.id}
                   title={s.id}
                   description={t}
-                  left={(props) => (
+                  left={() => (
                     <List.Icon style={{ padding: 0, margin: 0 }} icon="run" />
                   )}
                 />
