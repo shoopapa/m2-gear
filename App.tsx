@@ -1,6 +1,6 @@
-import { AppWithAuth } from "./src";
-import { Amplify, AuthModeStrategyType } from "aws-amplify";
-import awsconfig from "./src/aws-exports";
+import { AppWithAuth } from './src';
+import { Amplify, AuthModeStrategyType } from 'aws-amplify';
+import awsconfig from './src/aws-exports';
 
 Amplify.configure({
   ...awsconfig,
@@ -17,4 +17,5 @@ Amplify.configure({
     authModeStrategyType: AuthModeStrategyType.DEFAULT,
   },
 });
+
 export default AppWithAuth;

@@ -1,13 +1,13 @@
-import "react-native-gesture-handler";
-import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Provider as PaperProvider } from "react-native-paper";
+import 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Provider as PaperProvider } from 'react-native-paper';
 
-import { AuthContext } from "./pages/auth/auth-context";
-import { RootScreen } from "./root-screen";
-import { AuthScreen } from "./pages/auth/authScreen";
-import { theme } from "./styles";
+import { AuthContext } from './pages/auth/auth-context';
+import { RootScreen } from './root-screen';
+import { AuthScreen } from './pages/auth/authScreen';
+import { theme } from './styles';
 
 export type AuthParamsList = {
   AuthScreen: {};
@@ -17,7 +17,7 @@ export type AuthParamsList = {
 const Stack = createStackNavigator<AuthParamsList>();
 
 export const AppWithAuth = () => {
-  const [authState, setauthState] = useState<string>("");
+  const [authState, setauthState] = useState<string>('');
   const [authData, setauthData] = useState(null);
 
   return (
@@ -35,7 +35,7 @@ export const AppWithAuth = () => {
             <Stack.Screen
               name="AuthScreen"
               component={AuthScreen}
-              options={{ title: "Sign in", headerLeft: () => null }}
+              options={{ title: 'Sign in', headerLeft: () => null }}
             />
             <Stack.Screen
               name="MainScreen"

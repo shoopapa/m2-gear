@@ -1,10 +1,10 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
-import { globalStyles, ThemeType } from "../../styles";
+import React from 'react';
+import { ScrollView, View } from 'react-native';
+import { globalStyles, ThemeType } from '../../styles';
 
-import { withTheme, List, ActivityIndicator, Text } from "react-native-paper";
-import { timeAgo } from "../../utils/time-ago";
-import { Session } from "../../models";
+import { withTheme, List, ActivityIndicator } from 'react-native-paper';
+import { timeAgo } from '../../utils/time-ago';
+import { Session } from '../../models';
 
 type SessionListProps = {
   sessions: Session[];
@@ -23,8 +23,8 @@ export const SessionList = withTheme(
     }
 
     return (
-      <ScrollView style={{ height: "1%", backgroundColor: "white" }}>
-        <List.Section title="10 Most Recent Sessions">
+      <List.Section title="10 Most Recent Sessions" style={{ height: '55%' }}>
+        <ScrollView style={{ height: '10%' }}>
           {sessions.map((s) => {
             if (s.createdAt) {
               const t = timeAgo.format(new Date(s.createdAt));
@@ -41,8 +41,8 @@ export const SessionList = withTheme(
               );
             }
           })}
-        </List.Section>
-      </ScrollView>
+        </ScrollView>
+      </List.Section>
     );
-  }
+  },
 );

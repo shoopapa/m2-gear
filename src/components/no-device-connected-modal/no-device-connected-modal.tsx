@@ -1,16 +1,16 @@
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Modal,
   Text,
   TouchableWithoutFeedback,
   StyleSheet,
-} from "react-native";
-import { Button, Title, withTheme } from "react-native-paper";
-import DeviceContext from "../../device/ios/device-context";
-import { ThemeType } from "../../styles";
-import { styles } from "../../tabs/record/styles";
+} from 'react-native';
+import { Button, Title, withTheme } from 'react-native-paper';
+import DeviceContext from '../../device/ios/device-context';
+import { ThemeType } from '../../styles';
+import { styles } from '../../tabs/record/styles';
 
 type NoDeviceConnectedModalProps = {
   devicePage: () => void;
@@ -28,7 +28,7 @@ export const NoDeviceConnectedModal = withTheme(
 
     return (
       <Modal
-        style={{ backgroundColor: "pink" }}
+        style={{ backgroundColor: 'pink' }}
         animationType="fade"
         transparent={true}
         visible={!device.isConnected && isFocused && vis}
@@ -53,13 +53,13 @@ export const NoDeviceConnectedModal = withTheme(
                 Go to settings to connect head gear
               </Text>
             )}
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <Button
                 mode="contained"
                 style={{
                   backgroundColor: colors.primary,
-                  margin: "5%",
-                  width: "80%",
+                  margin: '5%',
+                  width: '80%',
                 }}
                 onPress={() => {
                   devicePage();
@@ -72,21 +72,21 @@ export const NoDeviceConnectedModal = withTheme(
         </View>
       </Modal>
     );
-  }
+  },
 );
 
 const overlayStyles = StyleSheet.create({
   modalContent: {
     flex: 1,
-    justifyContent: "center",
-    margin: "5%",
+    justifyContent: 'center',
+    margin: '5%',
   },
   modalOverlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 });
