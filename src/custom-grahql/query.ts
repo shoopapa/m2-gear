@@ -42,27 +42,27 @@ export type Scalars = {
 };
 
 export type SessionsForTagQueryVariables = Exact<{
-  tag: Scalars["ID"];
+  tag: Scalars['ID'];
 }>;
 
 export type SessionsForTagQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   getTag?: {
-    __typename?: "Tag";
+    __typename?: 'Tag';
     sessions?: {
-      __typename?: "ModelSessionTagsConnection";
+      __typename?: 'ModelSessionTagsConnection';
       items: Array<{
-        __typename?: "SessionTags";
+        __typename?: 'SessionTags';
         session: {
-          __typename?: "Session";
+          __typename?: 'Session';
           id: string;
           streamingStarted: number;
           _lastChangedAt: string;
           tags?: {
-            __typename?: "ModelSessionTagsConnection";
+            __typename?: 'ModelSessionTagsConnection';
             items: Array<{
-              __typename?: "SessionTags";
-              tag: { __typename?: "Tag"; name: string; value: string };
+              __typename?: 'SessionTags';
+              tag: { __typename?: 'Tag'; name: string; value: string };
             } | null>;
           } | null;
         };
