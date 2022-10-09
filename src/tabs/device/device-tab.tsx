@@ -1,10 +1,7 @@
-import React from "react";
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from "@react-navigation/native-stack";
-import { globalStyles } from "../../styles";
-import { Device } from "./device";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { globalStyles } from '../../styles';
+import { Device } from './device';
 
 export type DeviceParamList = {
   Device: {};

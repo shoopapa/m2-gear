@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RecordParamList } from "../../tabs/record/record-tab";
-import { ActivityIndicator, Button, Text, withTheme } from "react-native-paper";
-import { globalStyles, ThemeType } from "../../styles";
-import { DataStore } from "aws-amplify";
-import { Session } from "../../models";
-import { View } from "react-native";
-import { SessionChart } from "../../components/session-chart/session-chart";
-import ReactTimeAgo from "react-time-ago";
+import React, { useEffect, useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RecordParamList } from '../../tabs/record/record-tab';
+import { ActivityIndicator, Button, Text, withTheme } from 'react-native-paper';
+import { globalStyles, ThemeType } from '../../styles';
+import { DataStore } from 'aws-amplify';
+import { Session } from '../../models';
+import { View } from 'react-native';
+import { SessionChart } from '../../components/session-chart/session-chart';
+import ReactTimeAgo from 'react-time-ago';
 
 const getHighestOfArray = (arr: number[]): number => {
   const max = Math.max(...arr);
@@ -20,7 +20,7 @@ const getHighestOfArray = (arr: number[]): number => {
 
 type RecordProps = { theme: ThemeType } & NativeStackScreenProps<
   RecordParamList,
-  "Session"
+  'Session'
 >;
 
 export const SessionPage = withTheme(
@@ -31,16 +31,16 @@ export const SessionPage = withTheme(
 
     useEffect(() => {
       const sub = DataStore.observeQuery(Session, (p) =>
-        p.id("eq", id)
+        p.id('eq', id),
       ).subscribe((snap) => {
-        const { items, isSynced } = snap;
+        const { items } = snap;
         setsession(items[0]);
       });
 
       return () => {
         sub.unsubscribe();
       };
-    }, []);
+    }, [id]);
 
     if (session === null) {
       return (
@@ -53,11 +53,15 @@ export const SessionPage = withTheme(
     return (
       <View style={globalStyles.container}>
         <SessionChart
-          data={[session.linearAccerationX, session.linearAccerationY, session.linearAccerationZ]}
+          data={[
+            session.linearAccerationX,
+            session.linearAccerationY,
+            session.linearAccerationZ,
+          ]}
           theme={theme}
         />
         <ReactTimeAgo
-          date={new Date(session.updatedAt ?? "")}
+          date={new Date(session.updatedAt ?? '')}
           locale="en-US"
           component={({ children }) => (
             <Text>Session recorded {children} ago</Text>
@@ -85,5 +89,5 @@ export const SessionPage = withTheme(
         </Button>
       </View>
     );
-  }
+  },
 );

@@ -1,13 +1,13 @@
-import { DataStore } from "aws-amplify";
-import { Session } from "../models";
+import { DataStore } from 'aws-amplify';
+import { Session } from '../models';
 import { LinearAccerationType, QuaternionType } from '../types/data-format';
 
 export const saveSession = async (
   a: LinearAccerationType,
   q: QuaternionType,
 ) => {
-  if (a[0].length == 0) {
-    return null
+  if (a[0].length === 0) {
+    return null;
   }
   const input = new Session({
     linearAccerationTimestamp: a[0],
@@ -23,7 +23,7 @@ export const saveSession = async (
   try {
     await DataStore.save(input);
   } catch (e) {
-    console.warn("failed to save session, please try again");
+    console.warn('failed to save session, please try again');
     console.log(e);
   }
 };

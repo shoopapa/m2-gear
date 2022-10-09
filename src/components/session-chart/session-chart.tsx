@@ -1,8 +1,8 @@
-import React from "react";
-import { Dimensions } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import React from 'react';
+import { Dimensions } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 
-import { ThemeType } from "../../styles";
+import { ThemeType } from '../../styles';
 
 type SessionChartProps = {
   data: number[][];
@@ -11,47 +11,51 @@ type SessionChartProps = {
 };
 
 const lineColors = [
-  "rgba(210,77,90,1)",
-  "rgba(156,209,72,1)",
-  "rgba(178,143,220,1)",
+  'rgba(210,77,90,1)',
+  'rgba(156,209,72,1)',
+  'rgba(178,143,220,1)',
 ];
 const disabledLineColors = [
-  "rgba(210,77,90,0.5)",
-  "rgba(156,209,72,0.5)",
-  "rgba(178,143,220,0.5)",
+  'rgba(210,77,90,0.5)',
+  'rgba(156,209,72,0.5)',
+  'rgba(178,143,220,0.5)',
 ];
 
-export const SessionChart = ({ data, theme, disabled }: SessionChartProps) => {
-  const { colors } = theme;
+export const SessionChart = ({ data, disabled }: SessionChartProps) => {
   return (
     <LineChart
       withShadow={false}
-      style={{ marginBottom: -40, marginLeft: -20 }}
+      style={{ marginBottom: -40, marginLeft: -20, paddingTop: 20 }}
       data={{
-        labels: ["time"],
+        labels: ['time'],
         datasets: [
           ...data.map((d, i) => {
-          return {
-            data: d,
-            color: () => (disabled ? disabledLineColors[i] : lineColors[i]),
-          };
-         }),
-         {data: [6,-6], color:()=>'rgba(0,0,0,0)'}
-      ],
+            return {
+              data: d,
+              color: () => (disabled ? disabledLineColors[i] : lineColors[i]),
+            };
+          }),
+          { data: [6, -6], color: () => 'rgba(0,0,0,0)' },
+        ],
       }}
       formatYLabel={(v) => {
-        if (v === "NaN") return "0g";
-        return parseFloat(v).toFixed(1) + "g";
+        if (v === 'NaN') {
+          return '0g';
+        }
+        return parseFloat(v).toFixed(1) + 'g';
       }}
-      formatXLabel={() => ""}
+      formatXLabel={() => ''}
       withVerticalLines={false}
       // withHorizontalLines={false}
       withDots={false}
       withInnerLines={false}
-      width={Dimensions.get("window").width} // moving to middle cuz i got rid of y labels
+      width={Dimensions.get('window').width} // moving to middle cuz i got rid of y labels
       bezier
       height={240}
       chartConfig={{
+        propsForBackgroundLines: {
+          strokeDasharray: null,
+        },
         backgroundGradientFromOpacity: 0,
         backgroundGradientToOpacity: 0,
         color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

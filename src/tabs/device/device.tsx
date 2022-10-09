@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Auth, DataStore, Predicates, SortDirection } from "aws-amplify";
-import { View } from "react-native";
-import { globalStyles, ThemeType } from "../../styles";
-import * as MetaWear from "../../device/ios/metawear";
-import { AuthContext } from "../../pages/auth/auth-context";
-import { Text, Button, withTheme, Drawer } from "react-native-paper";
-import DeviceContext from "../../device/ios/device-context";
-import { ActivityIndicator } from "react-native-paper";
-import { DeviceParamList } from "./device-tab";
-import type { SubNavigatorProps } from "../../types/sub-navigator-props";
+import React, { useContext, useState } from 'react';
+import { Auth, DataStore } from 'aws-amplify';
+import { View } from 'react-native';
+import { globalStyles, ThemeType } from '../../styles';
+import * as MetaWear from '../../device/ios/metawear';
+import { AuthContext } from '../../pages/auth/auth-context';
+import { Text, Button, withTheme, Drawer } from 'react-native-paper';
+import DeviceContext from '../../device/ios/device-context';
+import { ActivityIndicator } from 'react-native-paper';
+import { DeviceParamList } from './device-tab';
+import type { SubNavigatorProps } from '../../types/sub-navigator-props';
 interface ConnectProps {
   colors: any;
 }
@@ -25,7 +25,7 @@ const Connect = ({ colors }: ConnectProps) => {
     return (
       <Button
         mode="contained"
-        style={{ backgroundColor: colors.success, margin: "2%" }}
+        style={{ backgroundColor: colors.success, margin: '2%' }}
         icon="bluetooth"
         onPress={MetaWear.connect}
       >
@@ -39,7 +39,7 @@ const Connect = ({ colors }: ConnectProps) => {
       <>
         <Button
           mode="contained"
-          style={{ backgroundColor: colors.primary, margin: "2%" }}
+          style={{ backgroundColor: colors.primary, margin: '2%' }}
           icon="lightbulb-on"
           onPress={async () => {
             setblinking(true);
@@ -52,7 +52,7 @@ const Connect = ({ colors }: ConnectProps) => {
         <Button
           mode="contained"
           disabled={blinking}
-          style={{ backgroundColor: colors.error, margin: "2%" }}
+          style={{ backgroundColor: colors.error, margin: '2%' }}
           icon="bluetooth-off"
           onPress={MetaWear.forget}
         >
@@ -67,8 +67,8 @@ const Connect = ({ colors }: ConnectProps) => {
 
 type DeviceProps = { theme: ThemeType } & SubNavigatorProps<
   DeviceParamList,
-  "Device",
-  "device-tab"
+  'Device',
+  'device-tab'
 >;
 
 export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
@@ -78,13 +78,13 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
 
   return (
     <View style={globalStyles.container}>
-      <Drawer.Section title="Device Info" style={{ width: "100%" }}>
+      <Drawer.Section title="Device Info" style={{ width: '100%' }}>
         <Drawer.Item
           style={{ backgroundColor: colors.gray }}
           icon="bluetooth-connect"
           label="Status"
           right={() => (
-            <Text>{device?.isConnected ? "Connected" : "Disconnected"}</Text>
+            <Text>{device?.isConnected ? 'Connected' : 'Disconnected'}</Text>
           )}
         />
         <Drawer.Item
@@ -100,8 +100,8 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
           onPress={MetaWear.updateBattery}
           right={() => <Text>{device?.batteryPercent}%</Text>}
         />
-        {device.signalStrength === "0.0" ||
-        device.signalStrength === "" ? null : (
+        {device.signalStrength === '0.0' ||
+        device.signalStrength === '' ? null : (
           <Drawer.Item
             style={{ backgroundColor: colors.gray }}
             icon="signal"
@@ -110,17 +110,17 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
           />
         )}
       </Drawer.Section>
-      <Drawer.Section title="Device Options" style={{ width: "100%" }}>
+      <Drawer.Section title="Device Options" style={{ width: '100%' }}>
         <Connect colors={colors} />
       </Drawer.Section>
-      <Drawer.Section title="User" style={{ width: "100%" }}>
+      <Drawer.Section title="User" style={{ width: '100%' }}>
         <Button
           mode="contained"
-          style={{ backgroundColor: colors.error, margin: "2%" }}
+          style={{ backgroundColor: colors.error, margin: '2%' }}
           onPress={async () => {
             await Auth.signOut();
-            authContext.setauthState("signedOut");
-            navigation.navigate("AuthScreen", {});
+            authContext.setauthState('signedOut');
+            navigation.navigate('AuthScreen', {});
             DataStore.clear();
           }}
         >

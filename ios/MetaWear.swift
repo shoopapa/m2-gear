@@ -318,8 +318,8 @@ class MetaWearDevice: RCTEventEmitter {
 
   @objc
   func stopPreviewStream() -> Void {
-    // let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
-    // streamingCleanup.removeValue(forKey: asignal)?()
+     let asignal = mbl_mw_sensor_fusion_get_data_signal(device?.board, MBL_MW_SENSOR_FUSION_DATA_LINEAR_ACC)!
+     streamingCleanup.removeValue(forKey: asignal)?()
 
     var s = self.state
     s.previewStreaming = false
@@ -475,7 +475,6 @@ class MetaWearDevice: RCTEventEmitter {
   func ConnectionSuccessful(device: MetaWear) -> State {
     print("ConnectionSuccessful")
     device.remember()
-    mbl_mw_logging_clear_entries(device.board)
     self.device = device
     self.updateBattery()
     var s = self.state
