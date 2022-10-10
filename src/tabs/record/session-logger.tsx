@@ -61,7 +61,7 @@ const LoggingControls = withTheme(
             style={{
               backgroundColor: colors.primary,
               margin: '2%',
-              width: '100%',
+              width: '100%'
             }}
             onPress={() => {
               clearData();
@@ -70,8 +70,7 @@ const LoggingControls = withTheme(
               MetaWear.startLog();
             }}
           >
-            {' '}
-            start{' '}
+            start
           </Button>
         );
       }
@@ -108,6 +107,7 @@ const LoggingControls = withTheme(
           paddingHorizontal: '5%',
           height: '30%',
           display: 'flex',
+          flexDirection:'column',
           alignItems: 'center',
           justifyContent: 'center',
         }}
