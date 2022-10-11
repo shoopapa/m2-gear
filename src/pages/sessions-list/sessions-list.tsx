@@ -32,7 +32,7 @@ export const SessionList = withTheme(
                 <List.Item
                   onPress={() => navigate(s)}
                   key={s.id}
-                  title={s.id}
+                  title={s.name}
                   description={t}
                   left={() => (
                     <List.Icon style={{ padding: 0, margin: 0 }} icon="run" />

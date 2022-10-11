@@ -147,6 +147,7 @@ export const createSession = /* GraphQL */ `
   ) {
     createSession(input: $input, condition: $condition) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -173,6 +174,7 @@ export const updateSession = /* GraphQL */ `
   ) {
     updateSession(input: $input, condition: $condition) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -199,6 +201,7 @@ export const deleteSession = /* GraphQL */ `
   ) {
     deleteSession(input: $input, condition: $condition) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX

@@ -30,7 +30,6 @@ const LoggingControls = withTheme(
   ({ setPreviewData, previewData, clearData, theme }: LoggingControlsProps) => {
     const { colors } = theme;
     const [device] = useContext(DeviceContext);
-    const [downloading, setdownloading] = useState(false);
     const sample = useRef(0);
     const [downloadModalVis, setdownloadModalVis] = useState(false);
 
@@ -49,9 +48,6 @@ const LoggingControls = withTheme(
     };
 
     const buttons = () => {
-      if (downloading) {
-        return <ActivityIndicator animating={true} color={colors.primary} />;
-      }
 
       if (previewData.length === 0) {
         return (
@@ -78,24 +74,25 @@ const LoggingControls = withTheme(
       return (
         <Button
           mode="contained"
-          style={{ backgroundColor: colors.error, margin: '2%' }}
+          style={{
+            margin: '2%',
+            width: '100%',
+            backgroundColor: colors.error,
+          }}
           onPress={() => {
             MetaWear.stopPreviewStream();
             MetaWear.stopLog();
             setdownloadModalVis(true);
           }}
         >
-          {' '}
-          Stop{' '}
+          Stop
         </Button>
       );
     };
 
-    const onDownload = async () => {
-      setdownloading(true);
+    const onDownload = async (name: string) => {
       const { linearAcceration, quaternion } = await MetaWear.downloadLog();
-      await saveSession(linearAcceration, quaternion);
-      setdownloading(false);
+      await saveSession(linearAcceration, quaternion, name);
       setdownloadModalVis(false);
       clearData();
     };

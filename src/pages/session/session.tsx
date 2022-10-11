@@ -68,6 +68,7 @@ export const SessionPage = withTheme(
           )}
         />
         <Text>Session ID: {session.id}</Text>
+        <Text>Session Name: {session.name}</Text>
         <Text>
           Peak X Acceration: {getHighestOfArray(session.linearAccerationX)}g
         </Text>
