@@ -5,11 +5,13 @@ import { LinearAccerationType, QuaternionType } from '../types/data-format';
 export const saveSession = async (
   a: LinearAccerationType,
   q: QuaternionType,
+  name?: string
 ) => {
   if (a[0].length === 0) {
     return null;
   }
   const input = new Session({
+    name,
     linearAccerationTimestamp: a[0],
     linearAccerationX: a[1],
     linearAccerationY: a[2],

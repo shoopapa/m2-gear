@@ -14,7 +14,6 @@ import { MetaWearState } from './device/ios/metawear';
 import { RecordRoot } from './tabs/record/record-tab';
 import { withTheme } from 'react-native-paper';
 import { globalStyles, ThemeType } from './styles';
-import { TrainingTab } from './tabs/training/training-tab';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AuthParamsList } from '.';
 import * as Metawear from './device/ios/metawear';
@@ -37,7 +36,6 @@ export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
 
 export type TabParamList = {
   'record-tab': {};
-  'training-tab': {};
   'device-tab': {};
 };
 export const Icon = (icon: string) => {
@@ -47,7 +45,6 @@ export const Icon = (icon: string) => {
 };
 export const tabIcons: { [K in keyof TabParamList]: any } = {
   'record-tab': Icon('log-in-outline'),
-  'training-tab': Icon('analytics-outline'),
   'device-tab': Icon('ios-list'),
 };
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -100,11 +97,6 @@ export const RootScreen = withTheme(
             name="record-tab"
             options={{ tabBarLabel: 'Record' }}
             component={RecordRoot}
-          />
-          <Tab.Screen
-            name="training-tab"
-            options={{ tabBarLabel: 'AI' }}
-            component={TrainingTab}
           />
           <Tab.Screen
             name="device-tab"
