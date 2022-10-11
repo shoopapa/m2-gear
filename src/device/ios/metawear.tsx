@@ -45,10 +45,9 @@ export const disconnect = async (): Promise<MetaWearState> => {
   return state;
 };
 
-export const forget = async (): Promise<MetaWearState> => {
-  const res = await NativeModules.MetaWearDevice.forget();
-  const state = JSON.parse(res) as MetaWearState;
-  return state;
+export const forget = async (): Promise<void> => {
+  await NativeModules.MetaWearDevice.forget();
+  return;
 };
 
 export const blinkLED = async () => {
