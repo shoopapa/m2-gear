@@ -144,6 +144,7 @@ export const getSession = /* GraphQL */ `
   query GetSession($id: ID!) {
     getSession(id: $id) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -172,6 +173,7 @@ export const listSessions = /* GraphQL */ `
     listSessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        name
         quaternionTimestamp
         quaternionW
         quaternionX
@@ -209,6 +211,7 @@ export const syncSessions = /* GraphQL */ `
     ) {
       items {
         id
+        name
         quaternionTimestamp
         quaternionW
         quaternionX

@@ -21,6 +21,7 @@ type Session @model @auth(rules: [
   { allow: owner }
 ]) {
   id: ID!
+  name: String
   quaternionTimestamp:       [Float!]!
   quaternionW:               [Float!]!
   quaternionX:               [Float!]!

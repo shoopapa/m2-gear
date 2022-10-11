@@ -126,6 +126,7 @@ export const onCreateSession = /* GraphQL */ `
   subscription OnCreateSession($owner: String) {
     onCreateSession(owner: $owner) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -149,6 +150,7 @@ export const onUpdateSession = /* GraphQL */ `
   subscription OnUpdateSession($owner: String) {
     onUpdateSession(owner: $owner) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX
@@ -172,6 +174,7 @@ export const onDeleteSession = /* GraphQL */ `
   subscription OnDeleteSession($owner: String) {
     onDeleteSession(owner: $owner) {
       id
+      name
       quaternionTimestamp
       quaternionW
       quaternionX
