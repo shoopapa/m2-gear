@@ -9,6 +9,9 @@ import { styles } from './styles';
 import { withTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native-paper';
+import { DataStore } from 'aws-amplify';
+import { Session } from '../../models';
+import { randomName } from '../../utils/random-name';
 
 type DownloadModalProps = {
   vis: boolean;
@@ -20,7 +23,7 @@ type DownloadModalProps = {
 export const DownloadModal = withTheme(
   ({ theme, vis, onDownload, onDelete }: DownloadModalProps) => {
     const { colors } = theme;
-    const [sessionName, setSessionName] = useState('sdafa')
+    const [sessionName, setSessionName] = useState(randomName())
     const [selection, setselection] = useState<{ start: number; end?: number } | undefined>()
     const [downloading, setDownloading] = useState(false)
 
