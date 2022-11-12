@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    backgroundColor:'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
     shadowOffset: {
       width: 10,
       height: 5,
-
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,

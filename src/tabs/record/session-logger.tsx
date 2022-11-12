@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import * as MetaWear from '../../device/ios/metawear';
 
 import { globalStyles, ThemeType } from '../../styles';
-import { ActivityIndicator, Button, withTheme } from 'react-native-paper';
+import { Button, withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
 
 import { saveSession } from '../../utils/save-session';
@@ -48,7 +48,6 @@ const LoggingControls = withTheme(
     };
 
     const buttons = () => {
-
       if (previewData.length === 0) {
         return (
           <Button
@@ -57,7 +56,7 @@ const LoggingControls = withTheme(
             style={{
               backgroundColor: colors.primary,
               margin: '2%',
-              width: '100%'
+              width: '100%',
             }}
             onPress={() => {
               clearData();
@@ -104,7 +103,7 @@ const LoggingControls = withTheme(
           paddingHorizontal: '5%',
           height: '30%',
           display: 'flex',
-          flexDirection:'column',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
         }}

@@ -5,7 +5,7 @@ import { LinearAccerationType, QuaternionType } from '../types/data-format';
 export const saveSession = async (
   a: LinearAccerationType,
   q: QuaternionType,
-  name?: string
+  name?: string,
 ) => {
   if (a[0].length === 0) {
     return null;
