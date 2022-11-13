@@ -26,7 +26,6 @@ export const RecordRoot = withTheme(({theme}: RecordRootProps) => {
         contentStyle: styles.navigatorContent,
         headerStyle: styles.TabHeaderContent,
       }}
-
     >
       <Stack.Screen name="Record" component={Record} />
       <Stack.Screen name="Session" component={SessionPage} />
