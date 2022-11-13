@@ -76,7 +76,7 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
   const { colors } = theme;
   const authContext = useContext(AuthContext);
   const [device] = useContext(DeviceContext);
-  const styles = useContext(StyleContext)
+  const styles = useContext(StyleContext);
 
   return (
     <View style={styles.container}>

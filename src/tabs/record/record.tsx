@@ -31,7 +31,9 @@ export const Record = withTheme((props: RecordProps) => {
   );
 
   return (
-    <View style={{ flex: 1,backgroundColor:theme.colors.defaultBackgroundColor }}>
+    <View
+      style={{ flex: 1, backgroundColor: theme.colors.defaultBackgroundColor }}
+    >
       <NoDeviceConnectedModal
         devicePage={() => navigation.navigate('device-tab', {})}
       />

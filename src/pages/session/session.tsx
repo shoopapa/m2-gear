@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RecordParamList } from '../../tabs/record/record-tab';
 import { ActivityIndicator, Button, Text, withTheme } from 'react-native-paper';
-import {  ThemeType } from '../../styles/theme';
+import { ThemeType } from '../../styles/theme';
 import { DataStore } from 'aws-amplify';
 import { Session } from '../../models';
 import { View } from 'react-native';
@@ -29,7 +29,7 @@ export const SessionPage = withTheme(
     const { colors } = theme;
     const { id } = route.params;
     const [session, setsession] = useState<Session | null>(null);
-    const styles = useContext(StyleContext)
+    const styles = useContext(StyleContext);
 
     useEffect(() => {
       const sub = DataStore.observeQuery(Session, (p) =>

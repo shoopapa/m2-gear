@@ -11,12 +11,11 @@ export type RecordParamList = {
   Session: { id: string };
 };
 
-
 const Stack = createNativeStackNavigator<RecordParamList>();
-export type RecordRootProps = {theme:ThemeType}
+export type RecordRootProps = { theme: ThemeType };
 
-export const RecordRoot = withTheme(({theme}: RecordRootProps) => {
-  const styles = useContext(StyleContext)
+export const RecordRoot = withTheme(({ theme }: RecordRootProps) => {
+  const styles = useContext(StyleContext);
 
   return (
     <Stack.Navigator

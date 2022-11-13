@@ -4,21 +4,20 @@ import { DefaultTheme, DarkTheme } from 'react-native-paper';
 
 export const defaultBackgroundColor = '#FFFFFF';
 
-
 export type ThemeType = typeof DefaultTheme & {
-  roundness: number,
+  roundness: number;
   colors: {
-    text: string,
-    defaultBackgroundColor: string
-    primary: string
-    warningYellow: string
-    primaryByOpacity: () => string
-    disabledPrimary: string,
-    accent: string,
-    gray: string,
-    success: string,
-  },
-}
+    text: string;
+    defaultBackgroundColor: string;
+    primary: string;
+    warningYellow: string;
+    primaryByOpacity: () => string;
+    disabledPrimary: string;
+    accent: string;
+    gray: string;
+    success: string;
+  };
+};
 
 export const darkTheme: ThemeType = {
   ...DarkTheme,
@@ -58,25 +57,21 @@ export const lightTheme: ThemeType = {
   },
 };
 
-
 export const getTheme = (mode: 'light' | 'dark' | undefined | null) => {
-  if( mode === 'dark') {
-    return darkTheme
+  if (mode === 'dark') {
+    return darkTheme;
   }
-  return lightTheme
-}
+  return lightTheme;
+};
 
-
-
-const defaultTheme = 'dark'
+const defaultTheme = 'dark';
 export const useTheme = () => {
-  const [theme, settheme] = useState(getTheme(Appearance.getColorScheme() ?? defaultTheme))
-  Appearance.addChangeListener(({colorScheme})=> {
-    const x = colorScheme ?? defaultTheme
-    settheme(getTheme(x))
-  })
-  return theme
-}
-
-
-
+  const [theme, settheme] = useState(
+    getTheme(Appearance.getColorScheme() ?? defaultTheme),
+  );
+  Appearance.addChangeListener(({ colorScheme }) => {
+    const x = colorScheme ?? defaultTheme;
+    settheme(getTheme(x));
+  });
+  return theme;
+};

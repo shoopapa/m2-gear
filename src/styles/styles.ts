@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Appearance, StyleSheet } from 'react-native';
 import { getTheme, ThemeType } from './theme';
 
-export const getStyles = (theme: ThemeType) =>{
+export const getStyles = (theme: ThemeType) => {
   return StyleSheet.create({
     TabHeaderContent: {
       color: 'white',
@@ -72,20 +72,10 @@ export const getStyles = (theme: ThemeType) =>{
       margin: 15,
       textAlign: 'center',
     },
-  })
-
+  });
 };
 
-const defaultTheme = 'light'
-export const useStyle = () => {
-  const [styles, setstyles] = useState(getStyles(getTheme(Appearance.getColorScheme() ?? defaultTheme)))
-  Appearance.addChangeListener(({colorScheme})=> {
-    const x = colorScheme ?? defaultTheme
-    setstyles(getStyles(getTheme(x)))
-  })
-  useEffect(() => {
-  }, [Appearance.getColorScheme()])
-  return styles
-}
-
-export const StyleContext = React.createContext<ReturnType<typeof getStyles>>(getStyles(getTheme(defaultTheme)))
+const defaultTheme = 'light';
+export const StyleContext = React.createContext<ReturnType<typeof getStyles>>(
+  getStyles(getTheme(defaultTheme)),
+);

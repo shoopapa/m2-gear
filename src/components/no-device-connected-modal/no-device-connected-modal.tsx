@@ -24,7 +24,7 @@ export const NoDeviceConnectedModal = withTheme(
     const isFocused = useIsFocused();
     const [vis, setvis] = useState(true);
 
-    const styles = useContext(StyleContext)
+    const styles = useContext(StyleContext);
 
     useFocusEffect(React.useCallback(() => setvis(true), []));
 

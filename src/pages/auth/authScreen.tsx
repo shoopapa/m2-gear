@@ -54,41 +54,41 @@ export type AuthScreenProps = StackScreenProps<AuthParamsList, 'AuthScreen'> & {
   theme: ThemeType;
 };
 
-export const AuthScreen = withTheme(({ navigation, theme }: AuthScreenProps) => {
-  const authTheme = getAuthTheme(theme)
+export const AuthScreen = withTheme(
+  ({ navigation, theme }: AuthScreenProps) => {
+    const authTheme = getAuthTheme(theme);
 
-  const context = useContext(AuthContext);
-  return (
-    <Authenticator
-      theme={authTheme}
-      signUpConfig={signUpConfig}
-      hideDefault={true}
-      authState={context.authState}
-      onStateChange={(authState: string, authData: any) => {
-        context.setauthState(authState);
-        context.setauthData(authData);
-        if (authState === 'signedIn') {
-          navigation.navigate('MainScreen', {});
-        }
-      }}
-    >
-      <Greetings />
-      <SignIn />
-      <ConfirmSignIn />
-      <RequireNewPassword />
-      <SignUp signUpConfig={signUpConfig} />
-      <ConfirmSignUp />
-      <VerifyContact />
-      <ForgotPassword />
-      <Loading />
-    </Authenticator>
-  );
-});
-
-
+    const context = useContext(AuthContext);
+    return (
+      <Authenticator
+        theme={authTheme}
+        signUpConfig={signUpConfig}
+        hideDefault={true}
+        authState={context.authState}
+        onStateChange={(authState: string, authData: any) => {
+          context.setauthState(authState);
+          context.setauthData(authData);
+          if (authState === 'signedIn') {
+            navigation.navigate('MainScreen', {});
+          }
+        }}
+      >
+        <Greetings />
+        <SignIn />
+        <ConfirmSignIn />
+        <RequireNewPassword />
+        <SignUp signUpConfig={signUpConfig} />
+        <ConfirmSignUp />
+        <VerifyContact />
+        <ForgotPassword />
+        <Loading />
+      </Authenticator>
+    );
+  },
+);
 
 // Theme
-const getAuthTheme = (theme: ThemeType) =>  {
+const getAuthTheme = (theme: ThemeType) => {
   const deepSquidInk = '#152939';
   const textInputColor = '#000000';
   const linkUnderlayColor = '#FFF';
@@ -236,5 +236,5 @@ const getAuthTheme = (theme: ThemeType) =>  {
       textAlign: 'center',
       padding: 20,
     },
-  }
-}
+  };
+};

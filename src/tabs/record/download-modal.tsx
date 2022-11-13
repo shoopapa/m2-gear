@@ -5,7 +5,7 @@ import { ThemeType } from '../../styles/theme';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { Modal, Text } from 'react-native';
 
-import { StyleContext  } from '../../styles/styles';
+import { StyleContext } from '../../styles/styles';
 import { withTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native-paper';
@@ -26,7 +26,7 @@ export const DownloadModal = withTheme(
       { start: number; end?: number } | undefined
     >();
     const [downloading, setDownloading] = useState(false);
-    const styles = useContext(StyleContext)
+    const styles = useContext(StyleContext);
 
     return (
       <Modal
@@ -38,7 +38,7 @@ export const DownloadModal = withTheme(
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles!==undefined? styles.centeredView: null}
+          style={styles !== undefined ? styles.centeredView : null}
         >
           <View
             style={{

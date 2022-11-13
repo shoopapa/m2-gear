@@ -107,7 +107,7 @@ const LoggingControls = withTheme(
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: theme.colors.defaultBackgroundColor
+          backgroundColor: theme.colors.defaultBackgroundColor,
         }}
       >
         {buttons()}
@@ -129,7 +129,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
   const linearAcceration = useRef<LinearAccerationType>([[], [], [], []]);
   const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
-  const styles = useContext(StyleContext)
+  const styles = useContext(StyleContext);
 
   const clearData = () => {
     linearAcceration.current = [[], [], [], []];

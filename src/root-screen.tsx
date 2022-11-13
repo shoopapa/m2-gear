@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import DeviceContext from './device/ios/device-context';
 import { MetaWearState } from './device/ios/metawear';
-import { getStyles, StyleContext, useStyle } from './styles/styles'
+import { getStyles, StyleContext } from './styles/styles';
 import { RecordRoot } from './tabs/record/record-tab';
 import { withTheme } from 'react-native-paper';
 import { getTheme, ThemeType } from './styles/theme';
@@ -53,74 +53,73 @@ const Tab = createBottomTabNavigator<TabParamList>();
 type MainScreenProps = StackScreenProps<AuthParamsList, 'MainScreen'> & {
   theme: ThemeType;
 };
-export const RootScreen = withTheme(({ theme, navigation }: MainScreenProps) => {
-  const authContext = useContext(AuthContext);
-  const [device, setdevice] = useState<MetaWearState>(
-    Metawear.DefaultMetaWearState
-  );
-  const [styles, setStyles] = useState(getStyles(getTheme('light')))
-
-  useFocusEffect(
-    React.useCallback(() => {
-      Metawear.onStateUpdate((state: MetaWearState) => {
-        setdevice((v) => ({ ...v, ...state }));
-      });
-      Metawear.connectToRemembered();
-    }, []),
-  );
-
-  useEffect(() => {
-    Appearance.addChangeListener(({colorScheme})=>{
-      setStyles(getStyles(getTheme(colorScheme)))
-    })
-  }, [])
-
-
-  if (authContext.authState !== 'signedIn') {
-    return (
-      <SignOutButton onPress={() => navigation.navigate('AuthScreen', {})} />
+export const RootScreen = withTheme(
+  ({ theme, navigation }: MainScreenProps) => {
+    const authContext = useContext(AuthContext);
+    const [device, setdevice] = useState<MetaWearState>(
+      Metawear.DefaultMetaWearState,
     );
-  }
+    const [styles, setStyles] = useState(getStyles(getTheme('light')));
 
+    useFocusEffect(
+      React.useCallback(() => {
+        Metawear.onStateUpdate((state: MetaWearState) => {
+          setdevice((v) => ({ ...v, ...state }));
+        });
+        Metawear.connectToRemembered();
+      }, []),
+    );
 
-  return (
-    <DeviceContext.Provider
-      value={[
-        device,
-        (v: MetaWearState) => {
-          setdevice((d) => ({ ...d, ...v }));
-        },
-      ]}
-    >
-    <StyleContext.Provider
-      value={styles}
-    >
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarInactiveTintColor:theme.colors.text,
-          tabBarIcon: ({ color, size }) => {
-            return tabIcons[route.name](size,color);
+    useEffect(() => {
+      Appearance.addChangeListener(({ colorScheme }) => {
+        setStyles(getStyles(getTheme(colorScheme)));
+      });
+    }, []);
+
+    if (authContext.authState !== 'signedIn') {
+      return (
+        <SignOutButton onPress={() => navigation.navigate('AuthScreen', {})} />
+      );
+    }
+
+    return (
+      <DeviceContext.Provider
+        value={[
+          device,
+          (v: MetaWearState) => {
+            setdevice((d) => ({ ...d, ...v }));
           },
-          headerStyle: styles.TabHeaderContent,
-          tabBarActiveTintColor: theme.colors.primary,
-          tabBarStyle: {backgroundColor: theme.colors.defaultBackgroundColor},
-          headerShown: false,
-          contentStyle: styles.navigatorContent,
-        })}
+        ]}
       >
-        <Tab.Screen
-          name="record-tab"
-          options={{ tabBarLabel: 'Record' }}
-          component={RecordRoot}
-        />
-        <Tab.Screen
-          name="device-tab"
-          options={{tabBarLabel: 'Settings'  }}
-          component={DeviceRoot}
-        />
-      </Tab.Navigator>
-    </StyleContext.Provider>
-    </DeviceContext.Provider>
-  );
+        <StyleContext.Provider value={styles}>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarInactiveTintColor: theme.colors.text,
+              tabBarIcon: ({ color, size }) => {
+                return tabIcons[route.name](size, color);
+              },
+              headerStyle: styles.TabHeaderContent,
+              tabBarActiveTintColor: theme.colors.primary,
+              tabBarStyle: {
+                backgroundColor: theme.colors.defaultBackgroundColor,
+              },
+              headerShown: false,
+              contentStyle: styles.navigatorContent,
+            })}
+          >
+            <Tab.Screen
+              name="record-tab"
+              options={{ tabBarLabel: 'Record' }}
+              component={RecordRoot}
+            />
+            <Tab.Screen
+              name="device-tab"
+              options={{ tabBarLabel: 'Settings' }}
+              component={DeviceRoot}
+            />
+          </Tab.Navigator>
+        </StyleContext.Provider>
+      </DeviceContext.Provider>
+    );
   },
 );

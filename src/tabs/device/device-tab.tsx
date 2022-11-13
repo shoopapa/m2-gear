@@ -11,13 +11,12 @@ export type DeviceParamList = {
 
 const Stack = createNativeStackNavigator<DeviceParamList>();
 
-export const DeviceRoot = withTheme(({theme}: {theme:ThemeType}) => {
-  const styles = useContext(StyleContext)
+export const DeviceRoot = withTheme(({ theme }: { theme: ThemeType }) => {
+  const styles = useContext(StyleContext);
 
   return (
     <Stack.Navigator
       initialRouteName="Device"
-
       screenOptions={{
         headerTintColor: theme.colors.text,
         contentStyle: styles.navigatorContent,

@@ -13,10 +13,9 @@ type SessionListProps = {
   navigate: (s: Session) => void;
 };
 
-export const SessionList = withTheme(({
-    sessions, theme, navigate
-  }: SessionListProps) => {
-    const styles = useContext(StyleContext)
+export const SessionList = withTheme(
+  ({ sessions, theme, navigate }: SessionListProps) => {
+    const styles = useContext(StyleContext);
 
     if (!sessions || sessions.length === 0) {
       return (
@@ -25,7 +24,6 @@ export const SessionList = withTheme(({
         </View>
       );
     }
-
 
     return (
       <List.Section title="10 Most Recent Sessions" style={{ height: '55%' }}>
