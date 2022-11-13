@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Auth, DataStore } from 'aws-amplify';
 import { View } from 'react-native';
-import { globalStyles, ThemeType } from '../../styles';
+import { ThemeType } from '../../styles/theme';
 import * as MetaWear from '../../device/ios/metawear';
 import { AuthContext } from '../../pages/auth/auth-context';
 import { Text, Button, withTheme, Drawer } from 'react-native-paper';
@@ -9,6 +9,7 @@ import DeviceContext from '../../device/ios/device-context';
 import { ActivityIndicator } from 'react-native-paper';
 import { DeviceParamList } from './device-tab';
 import type { SubNavigatorProps } from '../../types/sub-navigator-props';
+import { StyleContext } from '../../styles/styles';
 interface ConnectProps {
   colors: any;
 }
@@ -75,12 +76,13 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
   const { colors } = theme;
   const authContext = useContext(AuthContext);
   const [device] = useContext(DeviceContext);
+  const styles = useContext(StyleContext)
 
   return (
-    <View style={globalStyles.container}>
+    <View style={styles.container}>
       <Drawer.Section title="Device Info" style={{ width: '100%' }}>
         <Drawer.Item
-          style={{ backgroundColor: colors.gray }}
+          style={{ backgroundColor: theme.colors.gray }}
           icon="bluetooth-connect"
           label="Status"
           right={() => (
@@ -88,27 +90,18 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
           )}
         />
         <Drawer.Item
-          style={{ backgroundColor: colors.gray }}
+          style={{ backgroundColor: theme.colors.gray }}
           icon="database"
           label="Mac Address"
           right={() => <Text>{device?.macAdress}</Text>}
         />
         <Drawer.Item
-          style={{ backgroundColor: colors.gray }}
+          style={{ backgroundColor: theme.colors.gray }}
           icon="battery"
           label="Battery"
           onPress={MetaWear.updateBattery}
           right={() => <Text>{device?.batteryPercent}%</Text>}
         />
-        {device.signalStrength === '0.0' ||
-        device.signalStrength === '' ? null : (
-          <Drawer.Item
-            style={{ backgroundColor: colors.gray }}
-            icon="signal"
-            label="Signal Strength"
-            right={() => <Text>{device.signalStrength}</Text>}
-          />
-        )}
       </Drawer.Section>
       <Drawer.Section title="Device Options" style={{ width: '100%' }}>
         <Connect colors={colors} />

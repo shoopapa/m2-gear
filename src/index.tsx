@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -7,7 +7,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { AuthContext } from './pages/auth/auth-context';
 import { RootScreen } from './root-screen';
 import { AuthScreen } from './pages/auth/authScreen';
-import { theme } from './styles';
+import { getTheme, useTheme } from './styles/theme';
+import { Appearance } from 'react-native';
+import { useColorScheme } from 'react-native';
 
 export type AuthParamsList = {
   AuthScreen: {};
@@ -19,6 +21,7 @@ const Stack = createStackNavigator<AuthParamsList>();
 export const AppWithAuth = () => {
   const [authState, setauthState] = useState<string>('');
   const [authData, setauthData] = useState(null);
+  const theme = useTheme()
 
   return (
     <PaperProvider theme={theme}>

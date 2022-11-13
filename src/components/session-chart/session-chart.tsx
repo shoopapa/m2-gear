@@ -1,8 +1,9 @@
 import React from 'react';
 import { Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import { withTheme } from 'react-native-paper';
 
-import { ThemeType } from '../../styles';
+import { ThemeType } from '../../styles/theme';
 
 type SessionChartProps = {
   data: number[][];
@@ -21,11 +22,11 @@ const disabledLineColors = [
   'rgba(178,143,220,0.5)',
 ];
 
-export const SessionChart = ({ data, disabled }: SessionChartProps) => {
+export const SessionChart =  withTheme(({ data, disabled, theme }: SessionChartProps) => {
   return (
     <LineChart
       withShadow={false}
-      style={{ marginBottom: -40, marginLeft: -20, paddingTop: 20 }}
+      style={{ marginBottom: -40, marginLeft: -20, paddingTop: 20,  backgroundColor: theme.colors.defaultBackgroundColor }}
       data={{
         labels: ['time'],
         datasets: [
@@ -65,4 +66,4 @@ export const SessionChart = ({ data, disabled }: SessionChartProps) => {
       }}
     />
   );
-};
+});

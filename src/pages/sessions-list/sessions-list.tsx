@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, View } from 'react-native';
-import { globalStyles, ThemeType } from '../../styles';
+import { ThemeType } from '../../styles/theme';
 
 import { withTheme, List, ActivityIndicator } from 'react-native-paper';
 import { timeAgo } from '../../utils/time-ago';
 import { Session } from '../../models';
+import { StyleContext } from '../../styles/styles';
 
 type SessionListProps = {
   sessions: Session[];
@@ -12,15 +13,19 @@ type SessionListProps = {
   navigate: (s: Session) => void;
 };
 
-export const SessionList = withTheme(
-  ({ sessions, theme, navigate }: SessionListProps) => {
+export const SessionList = withTheme(({
+    sessions, theme, navigate
+  }: SessionListProps) => {
+    const styles = useContext(StyleContext)
+
     if (!sessions || sessions.length === 0) {
       return (
-        <View style={globalStyles.container}>
+        <View style={styles.container}>
           <ActivityIndicator animating={true} color={theme.colors.primary} />
         </View>
       );
     }
+
 
     return (
       <List.Section title="10 Most Recent Sessions" style={{ height: '55%' }}>

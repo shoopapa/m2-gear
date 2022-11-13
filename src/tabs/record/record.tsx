@@ -9,11 +9,12 @@ import { NoDeviceConnectedModal } from '../../components/no-device-connected-mod
 
 import type { SubNavigatorProps } from '../../types/sub-navigator-props';
 import { useFocusEffect } from '@react-navigation/native';
+import { withTheme } from 'react-native-paper';
 
 type RecordProps = SubNavigatorProps<RecordParamList, 'Record', 'record-tab'>;
 
-export const Record = (props: RecordProps) => {
-  const { navigation } = props;
+export const Record = withTheme((props: RecordProps) => {
+  const { navigation, theme } = props;
 
   const [sessions, setsessions] = useState<Session[]>([]);
 
@@ -30,7 +31,7 @@ export const Record = (props: RecordProps) => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1,backgroundColor:theme.colors.defaultBackgroundColor }}>
       <NoDeviceConnectedModal
         devicePage={() => navigation.navigate('device-tab', {})}
       />
@@ -45,4 +46,4 @@ export const Record = (props: RecordProps) => {
       </View>
     </View>
   );
-};
+});

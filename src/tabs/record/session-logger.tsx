@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef } from 'react';
 import { View } from 'react-native';
 import * as MetaWear from '../../device/ios/metawear';
 
-import { globalStyles, ThemeType } from '../../styles';
+import { ThemeType } from '../../styles/theme';
 import { Button, withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
 
@@ -13,6 +13,7 @@ import { SubNavigatorProps } from '../../types/sub-navigator-props';
 import Config from 'react-native-config';
 import { LinearAccerationType, QuaternionType } from '../../types/data-format';
 import { DownloadModal } from './download-modal';
+import { StyleContext } from '../../styles/styles';
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   RecordParamList,
@@ -106,6 +107,7 @@ const LoggingControls = withTheme(
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: theme.colors.defaultBackgroundColor
         }}
       >
         {buttons()}
@@ -127,6 +129,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
   const linearAcceration = useRef<LinearAccerationType>([[], [], [], []]);
   const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
+  const styles = useContext(StyleContext)
 
   const clearData = () => {
     linearAcceration.current = [[], [], [], []];
@@ -135,7 +138,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
   };
 
   return (
-    <View style={{ ...globalStyles.container }}>
+    <View style={styles.container}>
       <SessionChart data={[previewData]} theme={theme} />
       <LoggingControls
         previewData={previewData}
