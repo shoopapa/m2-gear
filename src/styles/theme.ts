@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Appearance, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { Appearance } from 'react-native';
 import { DefaultTheme, DarkTheme } from 'react-native-paper';
 
 export const defaultBackgroundColor = '#FFFFFF';

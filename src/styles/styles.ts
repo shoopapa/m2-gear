@@ -1,6 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-import { Appearance, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { getTheme, ThemeType } from './theme';
 
 export const getStyles = (theme: ThemeType) => {
