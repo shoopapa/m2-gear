@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import DeviceContext from './device/device-context';
-import { MetaWearState } from './device/ios/metawear-ios';
+import { MetaWearState, DefaultMetaWearState } from './device/types';
 import { getStyles, StyleContext } from './styles/styles';
 import { RecordRoot } from './tabs/record/record-tab';
 import { withTheme } from 'react-native-paper';
@@ -57,7 +57,7 @@ export const RootScreen = withTheme(
   ({ theme, navigation }: MainScreenProps) => {
     const authContext = useContext(AuthContext);
     const [device, setdevice] = useState<MetaWearState>(
-      Metawear.DefaultMetaWearState,
+      DefaultMetaWearState,
     );
     const [styles, setStyles] = useState(getStyles(getTheme('light')));
 
