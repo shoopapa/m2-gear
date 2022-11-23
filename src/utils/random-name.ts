@@ -578,8 +578,8 @@ let right = [
   'yonath',
 ];
 
-let randnum = (n:number) => Math.floor(Math.random() * (n + 1));
+let randnum = (n: number) => Math.floor(Math.random() * (n + 1));
 
 export const randomName = (sep = '_') => {
   return left[randnum(left.length)] + sep + right[randnum(right.length)];
-}
+};

@@ -7,7 +7,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { AuthContext } from './pages/auth/auth-context';
 import { RootScreen } from './root-screen';
 import { AuthScreen } from './pages/auth/authScreen';
-import { theme } from './styles';
+import { useTheme } from './styles/theme';
 
 export type AuthParamsList = {
   AuthScreen: {};
@@ -19,6 +19,7 @@ const Stack = createStackNavigator<AuthParamsList>();
 export const AppWithAuth = () => {
   const [authState, setauthState] = useState<string>('');
   const [authData, setauthData] = useState(null);
+  const theme = useTheme();
 
   return (
     <PaperProvider theme={theme}>
