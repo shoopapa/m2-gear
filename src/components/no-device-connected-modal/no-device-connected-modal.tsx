@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Button, Title, withTheme } from 'react-native-paper';
-import DeviceContext from '../../device/ios/device-context';
+import DeviceContext from '../../device/device-context';
 import { StyleContext } from '../../styles/styles';
 import { ThemeType } from '../../styles/theme';
 

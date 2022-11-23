@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetaWearState, DefaultMetaWearState } from './metawear';
+import { MetaWearState, DefaultMetaWearState } from './ios/metawear-ios';
 
 const DeviceContext = React.createContext<
   [MetaWearState,(v: MetaWearState) => void]

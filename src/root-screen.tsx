@@ -7,15 +7,15 @@ import { AuthContext } from './pages/auth/auth-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import DeviceContext from './device/ios/device-context';
-import { MetaWearState } from './device/ios/metawear';
+import DeviceContext from './device/device-context';
+import { MetaWearState } from './device/ios/metawear-ios';
 import { getStyles, StyleContext } from './styles/styles';
 import { RecordRoot } from './tabs/record/record-tab';
 import { withTheme } from 'react-native-paper';
 import { getTheme, ThemeType } from './styles/theme';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AuthParamsList } from '.';
-import * as Metawear from './device/ios/metawear';
+import * as Metawear from './device/ios/metawear-ios';
 import { useFocusEffect } from '@react-navigation/native';
 import { DeviceRoot } from './tabs/device/device-tab';
 import { Appearance } from 'react-native';

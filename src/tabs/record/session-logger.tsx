@@ -1,10 +1,10 @@
 import React, { useContext, useState, useRef } from 'react';
 import { View } from 'react-native';
-import * as MetaWear from '../../device/ios/metawear';
+import * as MetaWear from '../../device/ios/metawear-ios';
 
 import { ThemeType } from '../../styles/theme';
 import { Button, withTheme } from 'react-native-paper';
-import DeviceContext from '../../device/ios/device-context';
+import DeviceContext from '../../device/device-context';
 
 import { saveSession } from '../../utils/save-session';
 import { SessionChart } from '../../components/session-chart/session-chart';
