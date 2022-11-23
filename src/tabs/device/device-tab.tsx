@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { globalStyles } from '../../styles';
 import { Device } from './device';
+import { StyleContext } from '../../styles/styles';
+import { ThemeType } from '../../styles/theme';
+import { withTheme } from 'react-native-paper';
 
 export type DeviceParamList = {
   Device: {};
@@ -9,13 +11,19 @@ export type DeviceParamList = {
 
 const Stack = createNativeStackNavigator<DeviceParamList>();
 
-export const RecordRoot = () => {
+export const DeviceRoot = withTheme(({ theme }: { theme: ThemeType }) => {
+  const styles = useContext(StyleContext);
+
   return (
     <Stack.Navigator
       initialRouteName="Device"
-      screenOptions={{ contentStyle: globalStyles.navigatorContent }}
+      screenOptions={{
+        headerTintColor: theme.colors.text,
+        contentStyle: styles.navigatorContent,
+        headerStyle: styles.TabHeaderContent,
+      }}
     >
       <Stack.Screen name="Device" component={Device} />
     </Stack.Navigator>
   );
-};
+});

@@ -1,31 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View,Keyboard, KeyboardAvoidingView, Platform, InteractionManager, NativeSyntheticEvent, TextInputSelectionChangeEventData } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, KeyboardAvoidingView, Platform } from 'react-native';
 
-import { ThemeType } from '../../styles';
+import { ThemeType } from '../../styles/theme';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { Modal, Text } from 'react-native';
 
-import { styles } from './styles';
+import { StyleContext } from '../../styles/styles';
 import { withTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native-paper';
-import { DataStore } from 'aws-amplify';
-import { Session } from '../../models';
 import { randomName } from '../../utils/random-name';
 
 type DownloadModalProps = {
   vis: boolean;
   setvis: (v: boolean) => void;
-  onDownload: (name:string) => Promise<void>;
+  onDownload: (name: string) => Promise<void>;
   onDelete: () => void;
 } & { theme: ThemeType };
 
 export const DownloadModal = withTheme(
   ({ theme, vis, onDownload, onDelete }: DownloadModalProps) => {
     const { colors } = theme;
-    const [sessionName, setSessionName] = useState(randomName())
-    const [selection, setselection] = useState<{ start: number; end?: number } | undefined>()
-    const [downloading, setDownloading] = useState(false)
+    const [sessionName, setSessionName] = useState(randomName());
+    const [selection, setselection] = useState<
+      { start: number; end?: number } | undefined
+    >();
+    const [downloading, setDownloading] = useState(false);
+    const styles = useContext(StyleContext);
 
     return (
       <Modal
@@ -36,41 +37,67 @@ export const DownloadModal = withTheme(
         collapsable
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{...styles.centeredView}}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles !== undefined ? styles.centeredView : null}
         >
-          <View style={{ ...styles.modalView, padding: '5%', height:300, justifyContent:'space-evenly' }}>
+          <View
+            style={{
+              // ...styles?.modalView,
+              padding: '5%',
+              height: 300,
+              justifyContent: 'space-evenly',
+            }}
+          >
             <Ionicons
               name={'warning-outline'}
               size={50}
               color={colors.warningYellow}
             />
-            <Text style={{ fontSize: 15, padding: 5, textAlign: 'center', paddingVertical:5}}>
-              Do not disconnect Smart Gear until down load has completed. This could take several minutes.
+            <Text
+              style={{
+                fontSize: 15,
+                padding: 5,
+                textAlign: 'center',
+                paddingVertical: 5,
+              }}
+            >
+              Do not disconnect Smart Gear until down load has completed. This
+              could take several minutes.
             </Text>
 
-            {
-              downloading? (<>
-                <ActivityIndicator color={colors.primary}/>
-              </>) : (<>
+            {downloading ? (
+              <>
+                <ActivityIndicator color={colors.primary} />
+              </>
+            ) : (
+              <>
                 <View
-                  style={{height:40, margin:10, marginBottom:20, width:'100%'}}
+                  style={{
+                    height: 40,
+                    margin: 10,
+                    marginBottom: 20,
+                    width: '100%',
+                  }}
                 >
                   <TextInput
-                    onTextInput={()=>{setselection(undefined)}}
+                    onTextInput={() => {
+                      setselection(undefined);
+                    }}
                     selection={selection}
-                    onFocus={()=>{
+                    onFocus={() => {
                       setselection({
                         start: 0,
-                        end: sessionName.length
-                      })
+                        end: sessionName.length,
+                      });
                     }}
                     multiline={false}
                     dense
                     label={'Session Name'}
                     mode="outlined"
                     value={sessionName}
-                    onChangeText={(sessionName) => { setSessionName(sessionName) }}
+                    onChangeText={(name) => {
+                      setSessionName(name);
+                    }}
                   />
                 </View>
 
@@ -87,28 +114,27 @@ export const DownloadModal = withTheme(
                     style={{
                       backgroundColor: colors.error,
                     }}
-
                     onPress={onDelete}
                   >
                     Delete
                   </Button>
                   <Button
                     mode="contained"
-                    disabled={sessionName===""}
+                    disabled={sessionName === ''}
                     style={{
                       backgroundColor: colors.primary,
                     }}
-                    onPress={async ()=>{
-                      setDownloading(true)
-                      await onDownload(sessionName)
-                      setDownloading(false)
+                    onPress={async () => {
+                      setDownloading(true);
+                      await onDownload(sessionName);
+                      setDownloading(false);
                     }}
                   >
                     Start Download
                   </Button>
                 </View>
-              </>)
-            }
+              </>
+            )}
           </View>
         </KeyboardAvoidingView>
       </Modal>

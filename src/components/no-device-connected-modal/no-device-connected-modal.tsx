@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { Button, Title, withTheme } from 'react-native-paper';
 import DeviceContext from '../../device/ios/device-context';
-import { ThemeType } from '../../styles';
-import { styles } from '../../tabs/record/styles';
+import { StyleContext } from '../../styles/styles';
+import { ThemeType } from '../../styles/theme';
 
 type NoDeviceConnectedModalProps = {
   devicePage: () => void;
@@ -23,6 +23,8 @@ export const NoDeviceConnectedModal = withTheme(
     const [device] = useContext(DeviceContext);
     const isFocused = useIsFocused();
     const [vis, setvis] = useState(true);
+
+    const styles = useContext(StyleContext);
 
     useFocusEffect(React.useCallback(() => setvis(true), []));
 
