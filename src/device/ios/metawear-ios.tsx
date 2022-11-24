@@ -2,47 +2,33 @@ import { NativeModules, NativeAppEventEmitter } from 'react-native';
 import { LinearAccerationRecord, LinearAccerationType, QuaternionRecord, QuaternionType } from '../../types/data-format';
 import { MetaWearState } from '../types';
 
-
+//connecting
 export const connect = () => {
   NativeModules.MetaWearDevice.connect();
 };
 export const connectToRemembered = () => {
   NativeModules.MetaWearDevice.connectToRemembered();
 };
-export const updateBattery = () => {
-  NativeModules.MetaWearDevice.updateBattery();
-};
-export const updateSignalStrength = () => {
-  NativeModules.MetaWearDevice.updateSignalStrength();
-};
-
 export const disconnect = async (): Promise<MetaWearState> => {
   const res = await NativeModules.MetaWearDevice.disconnect();
   const state = JSON.parse(res) as MetaWearState;
   return state;
 };
-
 export const forget = async (): Promise<void> => {
   await NativeModules.MetaWearDevice.forget();
   return;
 };
 
+//info
+export const updateBattery = () => {
+  NativeModules.MetaWearDevice.updateBattery();
+};
 export const blinkLED = async () => {
   await NativeModules.MetaWearDevice.blinkLED();
 };
-export const resetDevice = async () => {
-  await NativeModules.MetaWearDevice.resetDevice();
-};
 
-export const onStateUpdate = async (
-  callback: (body: MetaWearState) => void
-) => {
-  NativeAppEventEmitter.addListener('onStateUpdate', (body: string) => {
-    const res = JSON.parse(body) as MetaWearState;
-    callback(res);
-  });
-};
 
+//data controll
 export const startStream = async () => {
   NativeModules.MetaWearDevice.startStream();
 };
@@ -66,7 +52,6 @@ export const startLog = async () => {
 export const stopLog = async () => {
   NativeModules.MetaWearDevice.stopLog();
 };
-
 
 export const downloadLog = async (): Promise<{linearAcceration: LinearAccerationType, quaternion: QuaternionType}> => {
   NativeAppEventEmitter.removeAllListeners('onQuaternionData');
@@ -98,6 +83,8 @@ export const downloadLog = async (): Promise<{linearAcceration: LinearAcceration
   };
 };
 
+
+//events
 export const onAccData = async (callback: (body: number[]) => void) => {
   NativeAppEventEmitter.removeAllListeners('onAccData');
   NativeAppEventEmitter.addListener('onAccData', (body: string) => {
@@ -105,7 +92,6 @@ export const onAccData = async (callback: (body: number[]) => void) => {
     callback(acc);
   });
 };
-
 export const onGyroData = async (callback: (body: number[]) => void) => {
   NativeAppEventEmitter.removeAllListeners('onGyroData');
   NativeAppEventEmitter.addListener('onGyroData', (body: string) => {
@@ -120,7 +106,6 @@ export const onLinearAccerationData = async (callback: (body: LinearAccerationRe
     callback(acc);
   });
 };
-
 export const onQuaternionData = async (callback: (body: QuaternionRecord) => void) => {
   NativeAppEventEmitter.removeAllListeners('onQuaternionData');
   NativeAppEventEmitter.addListener('onQuaternionData', (body: string) => {
@@ -128,7 +113,6 @@ export const onQuaternionData = async (callback: (body: QuaternionRecord) => voi
     callback(gryo);
   });
 };
-
 export const onPreviewData = async (callback: (body: number) => void) => {
   NativeAppEventEmitter.removeAllListeners('onPreviewData');
   NativeAppEventEmitter.addListener('onPreviewData', (body: string) => {
@@ -136,17 +120,11 @@ export const onPreviewData = async (callback: (body: number) => void) => {
     callback(mag);
   });
 };
-
-
-export const getState = async () => {
-  const body = await NativeModules.MetaWearDevice.getState();
-  const state = JSON.parse(body) as MetaWearState;
-  return state;
-};
-
-export const onDownloadComplete = async (callback: () => void) => {
-  NativeAppEventEmitter.removeAllListeners('onDownloadComplete');
-  NativeAppEventEmitter.addListener('onDownloadComplete', () => {
-    callback();
+export const onStateUpdate = async (
+  callback: (body: MetaWearState) => void
+) => {
+  NativeAppEventEmitter.addListener('onStateUpdate', (body: string) => {
+    const res = JSON.parse(body) as MetaWearState;
+    callback(res);
   });
 };

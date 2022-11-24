@@ -19,11 +19,6 @@ RCT_EXTERN_METHOD(supportedEvents)
 
 RCT_EXTERN_METHOD( testEvent:(NSString *)eventName )
 
-RCT_EXTERN_METHOD(
-  getState: (RCTPromiseResolveBlock)resolve
-  rejecter: (RCTPromiseRejectBlock)reject
-)
-
 RCT_EXTERN_METHOD(connect)
 
 RCT_EXTERN_METHOD(connectToRemembered)

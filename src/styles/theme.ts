@@ -64,10 +64,12 @@ export const getTheme = (mode: 'light' | 'dark' | undefined | null) => {
   return lightTheme;
 };
 
-const defaultTheme = 'dark';
+const defaultTheme = 'light';
 export const useTheme = () => {
+  const scheme = Appearance.getColorScheme() ?? defaultTheme //this won't work in dev mode
+  console.log('scheme', scheme)
   const [theme, settheme] = useState(
-    getTheme(Appearance.getColorScheme() ?? defaultTheme),
+    getTheme(scheme),
   );
   Appearance.addChangeListener(({ colorScheme }) => {
     const x = colorScheme ?? defaultTheme;

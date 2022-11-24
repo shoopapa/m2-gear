@@ -19,6 +19,7 @@ import * as Metawear from './device/ios/metawear-ios';
 import { useFocusEffect } from '@react-navigation/native';
 import { DeviceRoot } from './tabs/device/device-tab';
 import { Appearance } from 'react-native';
+import { mockMetaWear } from './device/mock/metawear-mock';
 
 type SignOutButtonProps = { onPress: () => void };
 export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
@@ -53,6 +54,9 @@ const Tab = createBottomTabNavigator<TabParamList>();
 type MainScreenProps = StackScreenProps<AuthParamsList, 'MainScreen'> & {
   theme: ThemeType;
 };
+
+mockMetaWear()
+
 export const RootScreen = withTheme(
   ({ theme, navigation }: MainScreenProps) => {
     const authContext = useContext(AuthContext);
@@ -60,6 +64,12 @@ export const RootScreen = withTheme(
       DefaultMetaWearState,
     );
     const [styles, setStyles] = useState(getStyles(getTheme('light')));
+
+    useEffect(() => {
+      Appearance.addChangeListener(({ colorScheme }) => {
+        setStyles(getStyles(getTheme(colorScheme)));
+      });
+    }, []);
 
     useFocusEffect(
       React.useCallback(() => {
@@ -70,11 +80,6 @@ export const RootScreen = withTheme(
       }, []),
     );
 
-    useEffect(() => {
-      Appearance.addChangeListener(({ colorScheme }) => {
-        setStyles(getStyles(getTheme(colorScheme)));
-      });
-    }, []);
 
     if (authContext.authState !== 'signedIn') {
       return (
