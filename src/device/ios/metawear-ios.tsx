@@ -1,65 +1,67 @@
-import { NativeModules, NativeAppEventEmitter } from 'react-native';
+import { NativeModules } from 'react-native';
 import { LinearAccerationRecord, LinearAccerationType, QuaternionRecord, QuaternionType } from '../../types/data-format';
 import { MetaWearState } from '../types';
 
+
 //connecting
 export const connect = () => {
-  NativeModules.MetaWearDevice.connect();
+  global.MW.connect();
 };
+
 export const connectToRemembered = () => {
-  NativeModules.MetaWearDevice.connectToRemembered();
+  global.MW.connectToRemembered();
 };
-export const disconnect = async (): Promise<MetaWearState> => {
-  const res = await NativeModules.MetaWearDevice.disconnect();
-  const state = JSON.parse(res) as MetaWearState;
-  return state;
+
+export const disconnect = async (): Promise<void> => {
+  await global.MW.disconnect();
 };
+
 export const forget = async (): Promise<void> => {
-  await NativeModules.MetaWearDevice.forget();
+  await global.MW.forget();
   return;
 };
 
 //info
 export const updateBattery = () => {
-  NativeModules.MetaWearDevice.updateBattery();
+  global.MW.updateBattery();
 };
 export const blinkLED = async () => {
-  await NativeModules.MetaWearDevice.blinkLED();
+  await global.MW.blinkLED();
 };
 
 
 //data controll
 export const startStream = async () => {
-  NativeModules.MetaWearDevice.startStream();
+  global.MW.startStream();
 };
 
 export const stopStream = async () => {
-  NativeModules.MetaWearDevice.stopStream();
+  global.MW.stopStream();
 };
 
 export const startPreviewStream = async () => {
-  NativeModules.MetaWearDevice.startPreviewStream();
+  global.MW.startPreviewStream();
 };
 
 export const stopPreviewStream = async () => {
-  NativeModules.MetaWearDevice.stopPreviewStream();
+  global.MW.stopPreviewStream();
 };
 
 export const startLog = async () => {
-  NativeModules.MetaWearDevice.startLog();
+  global.MW.startLog();
 };
 
 export const stopLog = async () => {
-  NativeModules.MetaWearDevice.stopLog();
+  global.MW.stopLog();
 };
 
 export const downloadLog = async (): Promise<{linearAcceration: LinearAccerationType, quaternion: QuaternionType}> => {
-  NativeAppEventEmitter.removeAllListeners('onQuaternionData');
-  NativeAppEventEmitter.removeAllListeners('onLinearAccerationData');
+  global.MW.removeAllListeners('onQuaternionData');
+  global.MW.removeAllListeners('onLinearAccerationData');
 
   const quaternion: QuaternionType = [[],[],[],[],[]];
   const linearAcceration: LinearAccerationType = [[],[],[],[]];
-  NativeAppEventEmitter.addListener('onQuaternionData', (body: string) => {
+  global.MW.addListener('onQuaternionData', (body: string) => {
     const [t,w,x,y,z] = JSON.parse(body) as QuaternionRecord;
     quaternion[0].push(t);
     quaternion[1].push(w);
@@ -67,7 +69,7 @@ export const downloadLog = async (): Promise<{linearAcceration: LinearAcceration
     quaternion[3].push(y);
     quaternion[4].push(z);
   });
-  NativeAppEventEmitter.addListener('onLinearAccerationData', (body: string) => {
+  global.MW.addListener('onLinearAccerationData', (body: string) => {
     const [t,x,y,z] = JSON.parse(body) as LinearAccerationRecord;
     linearAcceration[0].push(t);
     linearAcceration[1].push(x);
@@ -75,7 +77,7 @@ export const downloadLog = async (): Promise<{linearAcceration: LinearAcceration
     linearAcceration[3].push(z);
   });
 
-  await NativeModules.MetaWearDevice.downloadLog();
+  await global.MW.downloadLog();
 
   return {
     linearAcceration,
@@ -83,39 +85,38 @@ export const downloadLog = async (): Promise<{linearAcceration: LinearAcceration
   };
 };
 
-
 //events
 export const onAccData = async (callback: (body: number[]) => void) => {
-  NativeAppEventEmitter.removeAllListeners('onAccData');
-  NativeAppEventEmitter.addListener('onAccData', (body: string) => {
+  global.MW.removeAllListeners('onAccData');
+  global.MW.addListener('onAccData', (body: string) => {
     const acc = JSON.parse(body) as number[];
     callback(acc);
   });
 };
 export const onGyroData = async (callback: (body: number[]) => void) => {
-  NativeAppEventEmitter.removeAllListeners('onGyroData');
-  NativeAppEventEmitter.addListener('onGyroData', (body: string) => {
+  global.MW.removeAllListeners('onGyroData');
+  global.MW.addListener('onGyroData', (body: string) => {
     const gryo = JSON.parse(body) as number[];
     callback(gryo);
   });
 };
 export const onLinearAccerationData = async (callback: (body: LinearAccerationRecord) => void) => {
-  NativeAppEventEmitter.removeAllListeners('onLinearAccerationData');
-  NativeAppEventEmitter.addListener('onLinearAccerationData', (body: string) => {
+  global.MW.removeAllListeners('onLinearAccerationData');
+  global.MW.addListener('onLinearAccerationData', (body: string) => {
     const acc = JSON.parse(body) as LinearAccerationRecord;
     callback(acc);
   });
 };
 export const onQuaternionData = async (callback: (body: QuaternionRecord) => void) => {
-  NativeAppEventEmitter.removeAllListeners('onQuaternionData');
-  NativeAppEventEmitter.addListener('onQuaternionData', (body: string) => {
+  global.MW.removeAllListeners('onQuaternionData');
+  global.MW.addListener('onQuaternionData', (body: string) => {
     const gryo = JSON.parse(body) as QuaternionRecord;
     callback(gryo);
   });
 };
 export const onPreviewData = async (callback: (body: number) => void) => {
-  NativeAppEventEmitter.removeAllListeners('onPreviewData');
-  NativeAppEventEmitter.addListener('onPreviewData', (body: string) => {
+  global.MW.removeAllListeners('onPreviewData');
+  global.MW.addListener('onPreviewData', (body: string) => {
     const [mag] = JSON.parse(body) as [number];
     callback(mag);
   });
@@ -123,7 +124,7 @@ export const onPreviewData = async (callback: (body: number) => void) => {
 export const onStateUpdate = async (
   callback: (body: MetaWearState) => void
 ) => {
-  NativeAppEventEmitter.addListener('onStateUpdate', (body: string) => {
+  global.MW.addListener('onStateUpdate', (body: string) => {
     const res = JSON.parse(body) as MetaWearState;
     callback(res);
   });

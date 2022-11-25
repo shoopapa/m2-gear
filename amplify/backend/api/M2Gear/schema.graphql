@@ -1,46 +1,27 @@
-type SessionGroup @model @auth(rules: [
-  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
-  { allow: owner }
-]) {
+type SessionGroup @model @auth(rules: [{allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: owner}, {allow: public, operations: [read]}]) {
   id: ID!
   move: Move @hasOne
-  sessions: [Session] @hasMany
+  sessions: [Session] @hasMany(indexName: "bySessionGroup", fields: ["id"])
 }
 
-type Move @model @auth(rules: [
-    { allow: private, operations: [read] },
-    { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
-]) {
+type Move @model @auth(rules: [{allow: private, operations: [read]}, {allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: public, operations: [read]}]) {
   id: ID!
   createdAt: String
   type: String!
 }
 
-type Session @model @auth(rules: [
-  { allow: groups, groups: ["admin"], operations: [read, create, update, delete]},
-  { allow: owner }
-]) {
+type Session @model @auth(rules: [{allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: owner}, {allow: public, operations: [read]}]) {
   id: ID!
   name: String
-  quaternionTimestamp:       [Float!]!
-  quaternionW:               [Float!]!
-  quaternionX:               [Float!]!
-  quaternionY:               [Float!]!
-  quaternionZ:               [Float!]!
-  linearAccerationTimestamp: [Float!]! #g
-  linearAccerationX:         [Float!]! #g
-  linearAccerationY:         [Float!]! #g
-  linearAccerationZ:         [Float!]! #g
-  # tags: [Tag] @manyToMany(relationName: "SessionTags")
+  quaternionTimestamp: [Float!]!
+  quaternionW: [Float!]!
+  quaternionX: [Float!]!
+  quaternionY: [Float!]!
+  quaternionZ: [Float!]!
+  linearAccerationTimestamp: [Float!]!
+  linearAccerationX: [Float!]!
+  linearAccerationY: [Float!]!
+  linearAccerationZ: [Float!]!
+  sessiongroupID: ID! @index(name: "bySessionGroup")
 }
-
-# type Tag @model @auth(rules: [
-#   { allow: groups, groups: ["admin"]},
-#   { allow: private, operations: [create, read] },
-# ]) {
-#   id: ID!
-#   createdAt: String
-#   name: String!
-#   value: String!
-#   sessions: [Session] @manyToMany(relationName: "SessionTags")
-# }
+ 

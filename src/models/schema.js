@@ -35,7 +35,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "sessionGroupSessionsId"
+                        "associatedWith": "sessiongroupID"
                     }
                 },
                 "createdAt": {
@@ -96,6 +96,12 @@ export const schema = {
                                     "create",
                                     "update",
                                     "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
                                     "read"
                                 ]
                             }
@@ -166,6 +172,12 @@ export const schema = {
                                     "create",
                                     "update",
                                     "delete"
+                                ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
                                 ]
                             }
                         ]
@@ -262,6 +274,13 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": false
                 },
+                "sessiongroupID": {
+                    "name": "sessiongroupID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -277,13 +296,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "sessionGroupSessionsId": {
-                    "name": "sessionGroupSessionsId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -292,6 +304,15 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "bySessionGroup",
+                        "fields": [
+                            "sessiongroupID"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -322,6 +343,12 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
                             }
                         ]
                     }
@@ -331,5 +358,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "500ce18ecf18eac739718c8bb18219f5"
+    "version": "36b956060dd7c6cf724c3adc2dee7ce3"
 };

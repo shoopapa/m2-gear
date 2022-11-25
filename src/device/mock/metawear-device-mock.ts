@@ -1,5 +1,4 @@
 import { defaults } from 'lodash'
-import { EmitterSubscription, EventEmitter, EventSubscription, EventSubscriptionVendor } from 'react-native'
 import { DefaultMetaWearState, MetaWearState } from '../types'
 
 type FakeDevice = {
@@ -28,10 +27,11 @@ export class MetawearMock {
     delete this.listeners[listener]
   }
 
-  addListener = (listener: string, callback: (body: any)=> void, context?: any ): [] => {
-    console.log('adding listener',listener)
+  addListener = (listener: string, callback: (body: string)=> void) => {
+    if (this.listeners[listener] === undefined) {
+      this.listeners[listener] = []
+    }
     this.listeners[listener].push(callback)
-    return []
   }
 
   connect = () => {
@@ -109,6 +109,10 @@ export class MetawearMock {
   }
 
 
+  //data
+  startStream = () => {}// not mock because not in use, adding for typedefs
+  stopStream = () => {} // not mock because not in use, adding for typedefs
+
   startPreviewStream = () => {
     this.previewStreaming = true;
 
@@ -116,7 +120,7 @@ export class MetawearMock {
       while (this.previewStreaming) {
         await wait(10)
         this.listeners['onPreviewData']?.forEach(c=>{
-          c(JSON.stringify(this.state))
+          c(JSON.stringify([Math.random()]))
         })
       }
     })()
@@ -128,7 +132,7 @@ export class MetawearMock {
 
   startLog = () => {
     this.state.logging = true
-    this.listeners['onStateUpdate']?.forEach(c=>{
+    this.listeners.onStateUpdate.forEach(c=>{
       c(JSON.stringify(this.state))
     })
   }
@@ -145,7 +149,7 @@ export class MetawearMock {
       while (this.linearAccerationStreaming) {
         await wait(10)
         this.listeners['onLinearAccerationData']?.forEach(c=>{
-          c(JSON.stringify(this.state))
+          c(JSON.stringify([Math.random(),Math.random(),Math.random(),Math.random()]))
         })
       }
     })();
@@ -153,7 +157,7 @@ export class MetawearMock {
       while (this.quaternionStreaming) {
         await wait(10)
         this.listeners['onQuaternionData']?.forEach(c=>{
-          c(JSON.stringify(this.state))
+          c(JSON.stringify([Math.random(),Math.random(),Math.random(),Math.random(),Math.random()]))
         })
       }
     })();
@@ -161,7 +165,6 @@ export class MetawearMock {
     this.linearAccerationStreaming = false
     this.quaternionStreaming = false
   }
-
 
   ConnectionSuccessful = (device: FakeDevice):MetaWearState => {
     const state: MetaWearState = defaults({

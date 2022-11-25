@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import { SessionChart } from '../../components/session-chart/session-chart';
 import ReactTimeAgo from 'react-time-ago';
 import { StyleContext } from '../../styles/styles';
+import { timeAgo } from '../../utils/time-ago';
 
 const getHighestOfArray = (arr: number[]): number => {
   const max = Math.max(...arr);
@@ -62,13 +63,8 @@ export const SessionPage = withTheme(
           ]}
           theme={theme}
         />
-        <ReactTimeAgo
-          date={new Date(session.updatedAt ?? '')}
-          locale="en-US"
-          component={({ children }) => (
-            <Text>Session recorded {children} ago</Text>
-          )}
-        />
+
+        <Text>Recorded: {session.createdAt? timeAgo.format(new Date(session.createdAt)): ''}</Text>
         <Text>Session ID: {session.id}</Text>
         <Text>Session Name: {session.name}</Text>
         <Text>

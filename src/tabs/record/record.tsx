@@ -41,8 +41,8 @@ export const Record = withTheme((props: RecordProps) => {
         <SessionLogger {...props} />
         <SessionList
           sessions={sessions}
-          navigate={(s) => {
-            navigation.navigate('Session', { id: s.id });
+          navigate={(id) => {
+            navigation.navigate('Session', { id });
           }}
         />
       </View>

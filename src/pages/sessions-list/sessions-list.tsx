@@ -10,7 +10,7 @@ import { StyleContext } from '../../styles/styles';
 type SessionListProps = {
   sessions: Session[];
   theme: ThemeType;
-  navigate: (s: Session) => void;
+  navigate: (id: string) => void;
 };
 
 export const SessionList = withTheme(
@@ -29,20 +29,21 @@ export const SessionList = withTheme(
       <List.Section title="10 Most Recent Sessions" style={{ height: '55%' }}>
         <ScrollView style={{ height: '10%' }}>
           {sessions.map((s) => {
+            let t = 'No Create at'
             if (s.createdAt) {
-              const t = timeAgo.format(new Date(s.createdAt));
-              return (
-                <List.Item
-                  onPress={() => navigate(s)}
-                  key={s.id}
-                  title={s.name}
-                  description={t}
-                  left={() => (
-                    <List.Icon style={{ padding: 0, margin: 0 }} icon="run" />
-                  )}
-                />
-              );
+              t = timeAgo.format(new Date(s.createdAt));
             }
+            return (
+              <List.Item
+                onPress={() => navigate(s.id)}
+                key={s.id}
+                title={s.name}
+                description={t}
+                left={() => (
+                  <List.Icon style={{ padding: 0, margin: 0 }} icon="run" />
+                )}
+              />
+            );
           })}
         </ScrollView>
       </List.Section>

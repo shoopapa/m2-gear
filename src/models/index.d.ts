@@ -44,9 +44,9 @@ export declare class Session {
   readonly linearAccerationX: number[];
   readonly linearAccerationY: number[];
   readonly linearAccerationZ: number[];
+  readonly sessiongroupID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly sessionGroupSessionsId?: string | null;
   constructor(init: ModelInit<Session, SessionMetaData>);
   static copyOf(source: Session, mutator: (draft: MutableModel<Session, SessionMetaData>) => MutableModel<Session, SessionMetaData> | void): Session;
 }
