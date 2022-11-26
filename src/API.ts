@@ -14,6 +14,7 @@ export type CreateSessionInput = {
   linearAccerationX: Array< number >,
   linearAccerationY: Array< number >,
   linearAccerationZ: Array< number >,
+  _version?: number | null,
 };
 
 export type ModelSessionConditionInput = {
@@ -99,6 +100,9 @@ export type Session = {
   linearAccerationZ: Array< number >,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   owner?: string | null,
 };
 
@@ -114,10 +118,12 @@ export type UpdateSessionInput = {
   linearAccerationX?: Array< number > | null,
   linearAccerationY?: Array< number > | null,
   linearAccerationZ?: Array< number > | null,
+  _version?: number | null,
 };
 
 export type DeleteSessionInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type ModelSessionFilterInput = {
@@ -157,6 +163,7 @@ export type ModelSessionConnection = {
   __typename: "ModelSessionConnection",
   items:  Array<Session | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelSubscriptionSessionFilterInput = {
@@ -238,6 +245,9 @@ export type CreateSessionMutation = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -263,6 +273,9 @@ export type UpdateSessionMutation = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -288,6 +301,9 @@ export type DeleteSessionMutation = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -312,6 +328,9 @@ export type GetSessionQuery = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -340,9 +359,48 @@ export type ListSessionsQuery = {
       linearAccerationZ: Array< number >,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncSessionsQueryVariables = {
+  filter?: ModelSessionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncSessionsQuery = {
+  syncSessions?:  {
+    __typename: "ModelSessionConnection",
+    items:  Array< {
+      __typename: "Session",
+      id: string,
+      name?: string | null,
+      quaternionTimestamp: Array< number >,
+      quaternionW: Array< number >,
+      quaternionX: Array< number >,
+      quaternionY: Array< number >,
+      quaternionZ: Array< number >,
+      linearAccerationTimestamp: Array< number >,
+      linearAccerationX: Array< number >,
+      linearAccerationY: Array< number >,
+      linearAccerationZ: Array< number >,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -367,6 +425,9 @@ export type OnCreateSessionSubscription = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -392,6 +453,9 @@ export type OnUpdateSessionSubscription = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -417,6 +481,9 @@ export type OnDeleteSessionSubscription = {
     linearAccerationZ: Array< number >,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };

@@ -18,6 +18,9 @@ export const getSession = /* GraphQL */ `
       linearAccerationZ
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -43,9 +46,50 @@ export const listSessions = /* GraphQL */ `
         linearAccerationZ
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncSessions = /* GraphQL */ `
+  query SyncSessions(
+    $filter: ModelSessionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncSessions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;

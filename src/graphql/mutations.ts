@@ -21,6 +21,9 @@ export const createSession = /* GraphQL */ `
       linearAccerationZ
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -44,6 +47,9 @@ export const updateSession = /* GraphQL */ `
       linearAccerationZ
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -67,6 +73,9 @@ export const deleteSession = /* GraphQL */ `
       linearAccerationZ
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
