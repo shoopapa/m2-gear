@@ -1,4 +1,4 @@
-type Session @model @auth(rules: [{allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: owner}, {allow: public, operations: [read]}]) {
+type Session @model @auth(rules: [{allow: owner}]) {
   id: ID!
   name: String
   quaternionTimestamp: [Float!]!
@@ -12,3 +12,5 @@ type Session @model @auth(rules: [{allow: groups, groups: ["admin"], operations:
   linearAccerationZ: [Float!]!
   sessiongroupID: ID! @index(name: "bySessionGroup")
 }
+
+

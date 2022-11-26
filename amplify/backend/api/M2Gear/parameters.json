@@ -1,5 +1,5 @@
 {
-  "AppSyncApiName": "M2Gear",
+  "AppSyncApiName": "m2gear",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
@@ -7,7 +7,5 @@
       "authM2Gear",
       "Outputs.UserPoolId"
     ]
-  },
-  "AuthModeLastUpdated": "2022-11-10T23:09:10.238Z",
-  "CreateAPIKey": 1
+  }
 }
