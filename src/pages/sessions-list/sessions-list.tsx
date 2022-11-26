@@ -17,7 +17,7 @@ export const SessionList = withTheme(
   ({ sessions, theme, navigate }: SessionListProps) => {
     const styles = useContext(StyleContext);
 
-    if (!sessions || sessions.length === 0) {
+    if (!sessions) {
       return (
         <View style={styles.container}>
           <ActivityIndicator animating={true} color={theme.colors.primary} />

@@ -70,18 +70,11 @@ export const RootScreen = withTheme(
       Appearance.addChangeListener(({ colorScheme }) => {
         setStyles(getStyles(getTheme(colorScheme)));
       });
-
-      (async () => {
-        console.log('x')
-        await DataStore.clear()
-        await DataStore.start()
-        const x = await DataStore.query(Session, 'c52916e9-009c-434a-ba88-66cac2097f6e::jdavis')
-        console.log(x)
-      });
     }, []);
 
     useFocusEffect(
       React.useCallback(() => {
+        DataStore.start()
         Metawear.onStateUpdate((state: MetaWearState) => {
           setdevice((v) => ({ ...v, ...state }));
         });

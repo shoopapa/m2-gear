@@ -7,7 +7,6 @@ import { DataStore } from 'aws-amplify';
 import { Session } from '../../models';
 import { View } from 'react-native';
 import { SessionChart } from '../../components/session-chart/session-chart';
-import ReactTimeAgo from 'react-time-ago';
 import { StyleContext } from '../../styles/styles';
 import { timeAgo } from '../../utils/time-ago';
 
@@ -34,7 +33,7 @@ export const SessionPage = withTheme(
 
     useEffect(() => {
       const sub = DataStore.observeQuery(Session, (p) =>
-        p.id('eq', id),
+        p.id.eq(id)
       ).subscribe((snap) => {
         const { items } = snap;
         setsession(items[0]);

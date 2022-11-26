@@ -10,7 +10,6 @@ type Session @model @auth(rules: [{allow: owner}]) {
   linearAccerationX: [Float!]!
   linearAccerationY: [Float!]!
   linearAccerationZ: [Float!]!
-  sessiongroupID: ID! @index(name: "bySessionGroup")
 }
 
 

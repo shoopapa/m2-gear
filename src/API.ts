@@ -14,7 +14,6 @@ export type CreateSessionInput = {
   linearAccerationX: Array< number >,
   linearAccerationY: Array< number >,
   linearAccerationZ: Array< number >,
-  sessiongroupID: string,
 };
 
 export type ModelSessionConditionInput = {
@@ -28,7 +27,6 @@ export type ModelSessionConditionInput = {
   linearAccerationX?: ModelFloatInput | null,
   linearAccerationY?: ModelFloatInput | null,
   linearAccerationZ?: ModelFloatInput | null,
-  sessiongroupID?: ModelIDInput | null,
   and?: Array< ModelSessionConditionInput | null > | null,
   or?: Array< ModelSessionConditionInput | null > | null,
   not?: ModelSessionConditionInput | null,
@@ -86,22 +84,6 @@ export type ModelFloatInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type Session = {
   __typename: "Session",
   id: string,
@@ -115,7 +97,6 @@ export type Session = {
   linearAccerationX: Array< number >,
   linearAccerationY: Array< number >,
   linearAccerationZ: Array< number >,
-  sessiongroupID: string,
   createdAt: string,
   updatedAt: string,
   owner?: string | null,
@@ -133,7 +114,6 @@ export type UpdateSessionInput = {
   linearAccerationX?: Array< number > | null,
   linearAccerationY?: Array< number > | null,
   linearAccerationZ?: Array< number > | null,
-  sessiongroupID?: string | null,
 };
 
 export type DeleteSessionInput = {
@@ -152,10 +132,25 @@ export type ModelSessionFilterInput = {
   linearAccerationX?: ModelFloatInput | null,
   linearAccerationY?: ModelFloatInput | null,
   linearAccerationZ?: ModelFloatInput | null,
-  sessiongroupID?: ModelIDInput | null,
   and?: Array< ModelSessionFilterInput | null > | null,
   or?: Array< ModelSessionFilterInput | null > | null,
   not?: ModelSessionFilterInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
 };
 
 export type ModelSessionConnection = {
@@ -176,7 +171,6 @@ export type ModelSubscriptionSessionFilterInput = {
   linearAccerationX?: ModelSubscriptionFloatInput | null,
   linearAccerationY?: ModelSubscriptionFloatInput | null,
   linearAccerationZ?: ModelSubscriptionFloatInput | null,
-  sessiongroupID?: ModelSubscriptionIDInput | null,
   and?: Array< ModelSubscriptionSessionFilterInput | null > | null,
   or?: Array< ModelSubscriptionSessionFilterInput | null > | null,
 };
@@ -242,7 +236,6 @@ export type CreateSessionMutation = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -268,7 +261,6 @@ export type UpdateSessionMutation = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -294,7 +286,6 @@ export type DeleteSessionMutation = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -319,7 +310,6 @@ export type GetSessionQuery = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -348,7 +338,6 @@ export type ListSessionsQuery = {
       linearAccerationX: Array< number >,
       linearAccerationY: Array< number >,
       linearAccerationZ: Array< number >,
-      sessiongroupID: string,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -376,7 +365,6 @@ export type OnCreateSessionSubscription = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -402,7 +390,6 @@ export type OnUpdateSessionSubscription = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -428,7 +415,6 @@ export type OnDeleteSessionSubscription = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
-    sessiongroupID: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,

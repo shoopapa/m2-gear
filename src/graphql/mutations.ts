@@ -19,7 +19,6 @@ export const createSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      sessiongroupID
       createdAt
       updatedAt
       owner
@@ -43,7 +42,6 @@ export const updateSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      sessiongroupID
       createdAt
       updatedAt
       owner
@@ -67,7 +65,6 @@ export const deleteSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
-      sessiongroupID
       createdAt
       updatedAt
       owner
