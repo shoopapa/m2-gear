@@ -20,6 +20,15 @@ export const Record = withTheme((props: RecordProps) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      console.log('hi');
+      // (async () => {
+      //   console.log('x')
+      //   await DataStore.clear()
+      //   await DataStore.start()
+      //   const x = await DataStore.query(Session)
+      //   console.log(x)
+      // })();
+
       const subscription = DataStore.observeQuery(Session, Predicates.ALL, {
         sort: (s) => s.updatedAt(SortDirection.DESCENDING),
       }).subscribe((snapshot) => {
@@ -27,6 +36,8 @@ export const Record = withTheme((props: RecordProps) => {
         setsessions(items.slice(0, 10));
       });
       return () => subscription.unsubscribe();
+
+
     }, []),
   );
 

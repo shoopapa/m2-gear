@@ -1,15 +1,3 @@
-type SessionGroup @model @auth(rules: [{allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: owner}, {allow: public, operations: [read]}]) {
-  id: ID!
-  move: Move @hasOne
-  sessions: [Session] @hasMany(indexName: "bySessionGroup", fields: ["id"])
-}
-
-type Move @model @auth(rules: [{allow: private, operations: [read]}, {allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: public, operations: [read]}]) {
-  id: ID!
-  createdAt: String
-  type: String!
-}
-
 type Session @model @auth(rules: [{allow: groups, groups: ["admin"], operations: [read, create, update, delete]}, {allow: owner}, {allow: public, operations: [read]}]) {
   id: ID!
   name: String
@@ -24,4 +12,3 @@ type Session @model @auth(rules: [{allow: groups, groups: ["admin"], operations:
   linearAccerationZ: [Float!]!
   sessiongroupID: ID! @index(name: "bySessionGroup")
 }
- 

@@ -104,7 +104,7 @@ export class MetawearMock {
   }
 
   blinkLED = async () => {
-    wait(1000)
+    await wait(1000)
     return 'done'
   }
 

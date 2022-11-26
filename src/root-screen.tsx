@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useContext, useEffect, useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { Auth, DataStore } from 'aws-amplify';
 // @ts-ignore
 import { AmplifyButton } from 'aws-amplify-react-native';
 import { AuthContext } from './pages/auth/auth-context';
@@ -20,6 +20,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { DeviceRoot } from './tabs/device/device-tab';
 import { Appearance } from 'react-native';
 import { mockMetaWear } from './device/mock/metawear-mock';
+import { Session } from './models';
 
 type SignOutButtonProps = { onPress: () => void };
 export const SignOutButton = ({ onPress }: SignOutButtonProps) => {
@@ -68,6 +69,14 @@ export const RootScreen = withTheme(
     useEffect(() => {
       Appearance.addChangeListener(({ colorScheme }) => {
         setStyles(getStyles(getTheme(colorScheme)));
+      });
+
+      (async () => {
+        console.log('x')
+        await DataStore.clear()
+        await DataStore.start()
+        const x = await DataStore.query(Session, 'c52916e9-009c-434a-ba88-66cac2097f6e::jdavis')
+        console.log(x)
       });
     }, []);
 

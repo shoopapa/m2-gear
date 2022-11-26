@@ -9,8 +9,6 @@ import { RootScreen } from './root-screen';
 import { AuthScreen } from './pages/auth/authScreen';
 import { useTheme } from './styles/theme';
 
-import * as _ from './utils/time-ago';
-
 export type AuthParamsList = {
   AuthScreen: {};
   MainScreen: {};

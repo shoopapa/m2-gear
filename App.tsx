@@ -14,7 +14,7 @@ Amplify.configure({
   },
   maxRecordsToSync: 20,
   DataStore: {
-    authModeStrategyType: AuthModeStrategyType.DEFAULT,
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH,
   },
 });
 
