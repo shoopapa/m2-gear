@@ -67,7 +67,6 @@ export const getTheme = (mode: 'light' | 'dark' | undefined | null) => {
 const defaultTheme = 'light';
 export const useTheme = () => {
   const scheme = Appearance.getColorScheme() ?? defaultTheme //this won't work in dev mode
-  console.log('scheme', scheme)
   const [theme, settheme] = useState(
     getTheme(scheme),
   );

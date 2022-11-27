@@ -24,7 +24,6 @@ export const Record = withTheme((props: RecordProps) => {
         sort: (s) => s.updatedAt(SortDirection.DESCENDING),
       }).subscribe((snapshot) => {
         const { items } = snapshot;
-        console.log(items)
         setsessions(items.slice(0, 10));
       });
       return () => subscription.unsubscribe();

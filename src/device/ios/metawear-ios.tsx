@@ -62,7 +62,6 @@ export const downloadLog = async (): Promise<{linearAcceration: LinearAcceration
   const quaternion: QuaternionType = [[],[],[],[],[]];
   const linearAcceration: LinearAccerationType = [[],[],[],[]];
   global.MW.addListener('onQuaternionData', (body: string) => {
-    console.log(body)
     const [t,w,x,y,z] = JSON.parse(body) as QuaternionRecord;
     quaternion[0].push(t);
     quaternion[1].push(w);
