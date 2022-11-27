@@ -30,7 +30,7 @@ export const DownloadModal = withTheme(
 
     return (
       <Modal
-        style={{ backgroundColor: 'pink' }}
+        style={{ backgroundColor: 'red' }}
         animationType="fade"
         transparent={true}
         visible={vis}
@@ -42,7 +42,8 @@ export const DownloadModal = withTheme(
         >
           <View
             style={{
-              // ...styles?.modalView,
+              ...styles?.modalView,
+              backgroundColor: theme.colors.background,
               padding: '5%',
               height: 300,
               justifyContent: 'space-evenly',
@@ -55,6 +56,7 @@ export const DownloadModal = withTheme(
             />
             <Text
               style={{
+                color: colors.text,
                 fontSize: 15,
                 padding: 5,
                 textAlign: 'center',
