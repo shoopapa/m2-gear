@@ -67,6 +67,7 @@ export const RootScreen = withTheme(
     const [styles, setStyles] = useState(getStyles(getTheme('light')));
 
     useEffect(() => {
+      setStyles(getStyles(getTheme(Appearance.getColorScheme())));
       Appearance.addChangeListener(({ colorScheme }) => {
         setStyles(getStyles(getTheme(colorScheme)));
       });

@@ -60,6 +60,7 @@ export const SessionChart = withTheme(
         bezier
         height={240}
         chartConfig={{
+          labelColor: () => theme.colors.text,
           propsForBackgroundLines: {
             strokeDasharray: null,
           },
