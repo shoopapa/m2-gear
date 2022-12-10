@@ -37,7 +37,7 @@ const LoggingControls = withTheme(
     const PreviewEvent = (n: number = 1) => {
       if (sample.current === 4) {
         setPreviewData((v) => {
-          if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH ?? '10', 10)) {
+          if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH, 10)) {
             v.shift();
           }
           return [...v, n];

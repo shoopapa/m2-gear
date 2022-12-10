@@ -1,0 +1,19 @@
+type Session @model @auth(
+  rules: [
+    {allow: owner}
+  ]
+) {
+  id: ID!
+  name: String
+  quaternionTimestamp: [Float!]!
+  quaternionW: [Float!]!
+  quaternionX: [Float!]!
+  quaternionY: [Float!]!
+  quaternionZ: [Float!]!
+  linearAccerationTimestamp: [Float!]!
+  linearAccerationX: [Float!]!
+  linearAccerationY: [Float!]!
+  linearAccerationZ: [Float!]!
+}
+
+
