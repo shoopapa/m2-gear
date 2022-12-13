@@ -4,8 +4,9 @@ import { schema } from './schema';
 
 
 
-const { Session } = initSchema(schema);
+const { Session, SessionSection } = initSchema(schema);
 
 export {
-  Session
+  Session,
+  SessionSection
 };

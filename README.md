@@ -24,3 +24,8 @@ delete the team-provider-info.json file: rm amplify/team-provider-info.json
 initialize/pull the project locally `amplify pull --appId <app-id> --envName <env-name>`
 use amplify env pull to pull additional envs such as staging: `amplify env pull --envName staging`
 attempt to push resources changes with amplify push
+
+# reminders/notes
+
+if you connect the app to a staging instances and the install a dev testflight instance the device will not connect,
+because it still wants to connect to the old device, it needs to be reset now.
