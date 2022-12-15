@@ -4,12 +4,11 @@ import { RecordParamList } from '../../tabs/record/record-tab';
 import { ActivityIndicator, Button, Text, withTheme } from 'react-native-paper';
 import { ThemeType } from '../../styles/theme';
 import { DataStore } from 'aws-amplify';
-import { Session, SessionSection } from '../../models';
+import { Session } from '../../models';
 import { View } from 'react-native';
 import { SessionChart } from '../../components/session-chart/session-chart';
 import { StyleContext } from '../../styles/styles';
 import { timeAgo } from '../../utils/time-ago';
-import { useFocusEffect } from '@react-navigation/native';
 
 const getHighestOfArray = (arr: number[]): number => {
   const max = Math.max(...arr);
@@ -104,8 +103,8 @@ export const SessionPage = withTheme(
         <Button
           mode="contained"
           color={colors.error}
-          onPress={() => {
-            DataStore.delete(session);
+          onPress={async () => {
+            await DataStore.delete(session);
             navigation.goBack();
           }}
         >

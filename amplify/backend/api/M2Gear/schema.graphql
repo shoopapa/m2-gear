@@ -26,5 +26,6 @@ type SessionSection @model
   sessionId: ID! @index(name: "bySection", sortKeyFields: ["start", "end"])
   start: Float!
   end: Float!
+  session: Session @belongsTo(fields: ["sessionId"])
 }
 

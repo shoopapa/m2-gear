@@ -100,7 +100,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "sessionId"
+                        "associatedWith": "session"
                     }
                 },
                 "createdAt": {
@@ -158,13 +158,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "sessionId": {
-                    "name": "sessionId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "start": {
                     "name": "start",
                     "isArray": false,
@@ -178,6 +171,19 @@ export const schema = {
                     "type": "Float",
                     "isRequired": true,
                     "attributes": []
+                },
+                "session": {
+                    "name": "session",
+                    "isArray": false,
+                    "type": {
+                        "model": "Session"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "sessionId"
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -248,5 +254,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.2",
-    "version": "3ee26fe363ea857a6eb9cf82cca26cad"
+    "version": "24f6ffe721ca3c8b98db9ceb491d6c41"
 };
