@@ -16,6 +16,22 @@ export const getSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -44,6 +60,10 @@ export const listSessions = /* GraphQL */ `
         linearAccerationX
         linearAccerationY
         linearAccerationZ
+        sections {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -81,6 +101,90 @@ export const syncSessions = /* GraphQL */ `
         linearAccerationX
         linearAccerationY
         linearAccerationZ
+        sections {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getSessionSection = /* GraphQL */ `
+  query GetSessionSection($id: ID!, $start: Float!) {
+    getSessionSection(id: $id, start: $start) {
+      id
+      sessionId
+      start
+      end
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const listSessionSections = /* GraphQL */ `
+  query ListSessionSections(
+    $id: ID
+    $start: ModelFloatKeyConditionInput
+    $filter: ModelSessionSectionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listSessionSections(
+      id: $id
+      start: $start
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        sessionId
+        start
+        end
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncSessionSections = /* GraphQL */ `
+  query SyncSessionSections(
+    $filter: ModelSessionSectionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncSessionSections(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        sessionId
+        start
+        end
         createdAt
         updatedAt
         _version

@@ -98,6 +98,28 @@ export type Session = {
   linearAccerationX: Array< number >,
   linearAccerationY: Array< number >,
   linearAccerationZ: Array< number >,
+  sections?: ModelSessionSectionConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  owner?: string | null,
+};
+
+export type ModelSessionSectionConnection = {
+  __typename: "ModelSessionSectionConnection",
+  items:  Array<SessionSection | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type SessionSection = {
+  __typename: "SessionSection",
+  id: string,
+  sessionId: string,
+  start: number,
+  end: number,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -126,21 +148,20 @@ export type DeleteSessionInput = {
   _version?: number | null,
 };
 
-export type ModelSessionFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  quaternionTimestamp?: ModelFloatInput | null,
-  quaternionW?: ModelFloatInput | null,
-  quaternionX?: ModelFloatInput | null,
-  quaternionY?: ModelFloatInput | null,
-  quaternionZ?: ModelFloatInput | null,
-  linearAccerationTimestamp?: ModelFloatInput | null,
-  linearAccerationX?: ModelFloatInput | null,
-  linearAccerationY?: ModelFloatInput | null,
-  linearAccerationZ?: ModelFloatInput | null,
-  and?: Array< ModelSessionFilterInput | null > | null,
-  or?: Array< ModelSessionFilterInput | null > | null,
-  not?: ModelSessionFilterInput | null,
+export type CreateSessionSectionInput = {
+  id?: string | null,
+  sessionId: string,
+  start: number,
+  end: number,
+  _version?: number | null,
+};
+
+export type ModelSessionSectionConditionInput = {
+  sessionId?: ModelIDInput | null,
+  end?: ModelFloatInput | null,
+  and?: Array< ModelSessionSectionConditionInput | null > | null,
+  or?: Array< ModelSessionSectionConditionInput | null > | null,
+  not?: ModelSessionSectionConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -159,12 +180,68 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type UpdateSessionSectionInput = {
+  id: string,
+  sessionId?: string | null,
+  start: number,
+  end?: number | null,
+  _version?: number | null,
+};
+
+export type DeleteSessionSectionInput = {
+  id: string,
+  start: number,
+  _version?: number | null,
+};
+
+export type ModelSessionFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  quaternionTimestamp?: ModelFloatInput | null,
+  quaternionW?: ModelFloatInput | null,
+  quaternionX?: ModelFloatInput | null,
+  quaternionY?: ModelFloatInput | null,
+  quaternionZ?: ModelFloatInput | null,
+  linearAccerationTimestamp?: ModelFloatInput | null,
+  linearAccerationX?: ModelFloatInput | null,
+  linearAccerationY?: ModelFloatInput | null,
+  linearAccerationZ?: ModelFloatInput | null,
+  and?: Array< ModelSessionFilterInput | null > | null,
+  or?: Array< ModelSessionFilterInput | null > | null,
+  not?: ModelSessionFilterInput | null,
+};
+
 export type ModelSessionConnection = {
   __typename: "ModelSessionConnection",
   items:  Array<Session | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
+
+export type ModelFloatKeyConditionInput = {
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type ModelSessionSectionFilterInput = {
+  id?: ModelIDInput | null,
+  sessionId?: ModelIDInput | null,
+  start?: ModelFloatInput | null,
+  end?: ModelFloatInput | null,
+  and?: Array< ModelSessionSectionFilterInput | null > | null,
+  or?: Array< ModelSessionSectionFilterInput | null > | null,
+  not?: ModelSessionSectionFilterInput | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelSubscriptionSessionFilterInput = {
   id?: ModelSubscriptionIDInput | null,
@@ -224,6 +301,15 @@ export type ModelSubscriptionFloatInput = {
   notIn?: Array< number | null > | null,
 };
 
+export type ModelSubscriptionSessionSectionFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  sessionId?: ModelSubscriptionIDInput | null,
+  start?: ModelSubscriptionFloatInput | null,
+  end?: ModelSubscriptionFloatInput | null,
+  and?: Array< ModelSubscriptionSessionSectionFilterInput | null > | null,
+  or?: Array< ModelSubscriptionSessionSectionFilterInput | null > | null,
+};
+
 export type CreateSessionMutationVariables = {
   input: CreateSessionInput,
   condition?: ModelSessionConditionInput | null,
@@ -243,6 +329,24 @@ export type CreateSessionMutation = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -271,6 +375,24 @@ export type UpdateSessionMutation = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -299,6 +421,87 @@ export type DeleteSessionMutation = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type CreateSessionSectionMutationVariables = {
+  input: CreateSessionSectionInput,
+  condition?: ModelSessionSectionConditionInput | null,
+};
+
+export type CreateSessionSectionMutation = {
+  createSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateSessionSectionMutationVariables = {
+  input: UpdateSessionSectionInput,
+  condition?: ModelSessionSectionConditionInput | null,
+};
+
+export type UpdateSessionSectionMutation = {
+  updateSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteSessionSectionMutationVariables = {
+  input: DeleteSessionSectionInput,
+  condition?: ModelSessionSectionConditionInput | null,
+};
+
+export type DeleteSessionSectionMutation = {
+  deleteSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -326,6 +529,24 @@ export type GetSessionQuery = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -357,6 +578,11 @@ export type ListSessionsQuery = {
       linearAccerationX: Array< number >,
       linearAccerationY: Array< number >,
       linearAccerationZ: Array< number >,
+      sections?:  {
+        __typename: "ModelSessionSectionConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -392,6 +618,90 @@ export type SyncSessionsQuery = {
       linearAccerationX: Array< number >,
       linearAccerationY: Array< number >,
       linearAccerationZ: Array< number >,
+      sections?:  {
+        __typename: "ModelSessionSectionConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetSessionSectionQueryVariables = {
+  id: string,
+  start: number,
+};
+
+export type GetSessionSectionQuery = {
+  getSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListSessionSectionsQueryVariables = {
+  id?: string | null,
+  start?: ModelFloatKeyConditionInput | null,
+  filter?: ModelSessionSectionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListSessionSectionsQuery = {
+  listSessionSections?:  {
+    __typename: "ModelSessionSectionConnection",
+    items:  Array< {
+      __typename: "SessionSection",
+      id: string,
+      sessionId: string,
+      start: number,
+      end: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncSessionSectionsQueryVariables = {
+  filter?: ModelSessionSectionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncSessionSectionsQuery = {
+  syncSessionSections?:  {
+    __typename: "ModelSessionSectionConnection",
+    items:  Array< {
+      __typename: "SessionSection",
+      id: string,
+      sessionId: string,
+      start: number,
+      end: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -423,6 +733,24 @@ export type OnCreateSessionSubscription = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -451,6 +779,24 @@ export type OnUpdateSessionSubscription = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -479,6 +825,87 @@ export type OnDeleteSessionSubscription = {
     linearAccerationX: Array< number >,
     linearAccerationY: Array< number >,
     linearAccerationZ: Array< number >,
+    sections?:  {
+      __typename: "ModelSessionSectionConnection",
+      items:  Array< {
+        __typename: "SessionSection",
+        id: string,
+        sessionId: string,
+        start: number,
+        end: number,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnCreateSessionSectionSubscriptionVariables = {
+  filter?: ModelSubscriptionSessionSectionFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateSessionSectionSubscription = {
+  onCreateSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateSessionSectionSubscriptionVariables = {
+  filter?: ModelSubscriptionSessionSectionFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateSessionSectionSubscription = {
+  onUpdateSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteSessionSectionSubscriptionVariables = {
+  filter?: ModelSubscriptionSessionSectionFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteSessionSectionSubscription = {
+  onDeleteSessionSection?:  {
+    __typename: "SessionSection",
+    id: string,
+    sessionId: string,
+    start: number,
+    end: number,
     createdAt: string,
     updatedAt: string,
     _version: number,

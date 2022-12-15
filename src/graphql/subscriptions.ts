@@ -19,6 +19,22 @@ export const onCreateSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -45,6 +61,22 @@ export const onUpdateSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -71,6 +103,79 @@ export const onDeleteSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const onCreateSessionSection = /* GraphQL */ `
+  subscription OnCreateSessionSection(
+    $filter: ModelSubscriptionSessionSectionFilterInput
+    $owner: String
+  ) {
+    onCreateSessionSection(filter: $filter, owner: $owner) {
+      id
+      sessionId
+      start
+      end
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const onUpdateSessionSection = /* GraphQL */ `
+  subscription OnUpdateSessionSection(
+    $filter: ModelSubscriptionSessionSectionFilterInput
+    $owner: String
+  ) {
+    onUpdateSessionSection(filter: $filter, owner: $owner) {
+      id
+      sessionId
+      start
+      end
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const onDeleteSessionSection = /* GraphQL */ `
+  subscription OnDeleteSessionSection(
+    $filter: ModelSubscriptionSessionSectionFilterInput
+    $owner: String
+  ) {
+    onDeleteSessionSection(filter: $filter, owner: $owner) {
+      id
+      sessionId
+      start
+      end
       createdAt
       updatedAt
       _version

@@ -14,6 +14,18 @@ type Session @model @auth(
   linearAccerationX: [Float!]!
   linearAccerationY: [Float!]!
   linearAccerationZ: [Float!]!
+  sections: [SessionSection!] @hasMany(indexName: "bySection", fields: ["id"])
 }
-
+type SessionSection @model
+ @auth(
+  rules: [
+    {allow: owner}
+  ]
+) {
+  id: ID! @primaryKey(sortKeyFields: ["start"])
+  sessionId: ID! @index(name: "bySection", sortKeyFields: ["start", "end"])
+  start: Float!
+  end: Float!
+  session: Session @belongsTo(fields: ["sessionId"])
+}
 

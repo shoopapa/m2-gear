@@ -1,19 +1,18 @@
-import React, { useContext, useState, useRef } from 'react';
-import { View } from 'react-native';
-import * as MetaWear from '../../device/ios/metawear-ios';
+import React, { useContext, useState, useRef, useCallback, useEffect } from 'react';
+import { Pressable, View } from 'react-native';
 
 import { ThemeType } from '../../styles/theme';
-import { Button, withTheme } from 'react-native-paper';
-import DeviceContext from '../../device/device-context';
-
-import { saveSession } from '../../utils/save-session';
+import {  withTheme } from 'react-native-paper';
 import { SessionChart } from '../../components/session-chart/session-chart';
 import { RecordParamList } from './record-tab';
 import { SubNavigatorProps } from '../../types/sub-navigator-props';
-import Config from 'react-native-config';
 import { LinearAccerationType, QuaternionType } from '../../types/data-format';
-import { DownloadModal } from './download-modal';
 import { StyleContext } from '../../styles/styles';
+
+import { LoggingControls } from './LoggingControls';
+import {  simpleSection } from '../../utils/save-session';
+import DeviceContext from '../../device/device-context';
+import Config from 'react-native-config';
 
 type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   RecordParamList,
@@ -21,128 +20,80 @@ type SessionScreenProps = { theme: ThemeType } & SubNavigatorProps<
   'record-tab'
 >;
 
-type LoggingControlsProps = {
-  previewData: number[];
-  setPreviewData: React.Dispatch<React.SetStateAction<number[]>>;
-  clearData: () => void;
-} & { theme: ThemeType };
-
-const LoggingControls = withTheme(
-  ({ setPreviewData, previewData, clearData, theme }: LoggingControlsProps) => {
-    const { colors } = theme;
-    const [device] = useContext(DeviceContext);
-    const sample = useRef(0);
-    const [downloadModalVis, setdownloadModalVis] = useState(false);
-
-    const PreviewEvent = (n: number = 1) => {
-      if (sample.current === 4) {
-        setPreviewData((v) => {
-          if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH, 10)) {
-            v.shift();
-          }
-          return [...v, n];
-        });
-        sample.current = 0;
-        return;
-      }
-      sample.current += 1;
-    };
-
-    const buttons = () => {
-      if (previewData.length === 0) {
-        return (
-          <Button
-            mode="contained"
-            disabled={!device.isConnected}
-            style={{
-              backgroundColor: colors.primary,
-              margin: '2%',
-              width: '100%',
-            }}
-            onPress={() => {
-              clearData();
-              MetaWear.onPreviewData(PreviewEvent);
-              MetaWear.startPreviewStream();
-              MetaWear.startLog();
-            }}
-          >
-            start
-          </Button>
-        );
-      }
-
-      return (
-        <Button
-          mode="contained"
-          style={{
-            margin: '2%',
-            width: '100%',
-            backgroundColor: colors.error,
-          }}
-          onPress={() => {
-            MetaWear.stopPreviewStream();
-            MetaWear.stopLog();
-            setdownloadModalVis(true);
-          }}
-        >
-          Stop
-        </Button>
-      );
-    };
-
-    const onDownload = async (name: string) => {
-      const { linearAcceration, quaternion } = await MetaWear.downloadLog();
-      await saveSession(linearAcceration, quaternion, name);
-      setdownloadModalVis(false);
-      clearData();
-    };
-
-    return (
-      <View
-        style={{
-          width: '100%',
-          paddingHorizontal: '5%',
-          height: '30%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: theme.colors.defaultBackgroundColor,
-        }}
-      >
-        {buttons()}
-        <DownloadModal
-          onDelete={() => {
-            clearData();
-            setdownloadModalVis(false);
-          }}
-          setvis={setdownloadModalVis}
-          vis={downloadModalVis}
-          onDownload={onDownload}
-        />
-      </View>
-    );
-  },
-);
-
 export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
   const linearAcceration = useRef<LinearAccerationType>([[], [], [], []]);
   const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
+  const [sectionData, setsectionData] = useState<number[]>([]);
+  const [pressed, setPressed] = useState(false)
   const styles = useContext(StyleContext);
+  const [device] = useContext(DeviceContext);
+  const sample = useRef(0);
+
+  const [sections, setSections] = useState<simpleSection[]>([])
 
   const clearData = () => {
     linearAcceration.current = [[], [], [], []];
     quaternion.current = [[], [], [], [], []];
     setPreviewData([]);
+    setsectionData([]);
   };
 
+  useEffect(() => {
+    setsectionData(v=>{
+      if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH ?? "150", 10)) {
+        v.shift();
+      }
+      return [...v, pressed? 2 : 0]
+    })
+  }, [pressed,previewData])
+
+
+  const PreviewEvent = useCallback((n: number = 1) => {
+    if (sample.current === 4) {
+      setPreviewData((v) => {
+        if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH ?? "150", 10)) {
+          v.shift();
+        }
+        return [...v, n]
+      });
+      sample.current = 0;
+      return;
+    }
+    sample.current += 1;
+  },[pressed,previewData]);
+
+  const startSection = () => {
+    if (device.isStreaming === false) return;
+    setPressed(true)
+    const newSection: simpleSection = {
+      start: Date.now()/1000
+    }
+    setSections(v=>([...v, newSection]))
+  }
+
+  const endSection = () => {
+    if (device.isStreaming === false) return;
+    if (sections.length == 0 || sections[sections.length-1]?.start === undefined ) return;
+    setPressed(false)
+    setSections(v=>{
+      v[v.length-1].end = Date.now()/1000
+      return v
+    })
+  }
+
   return (
-    <View style={styles.container}>
-      <SessionChart data={[previewData]} theme={theme} />
+    <View style={{...styles.container,   alignItems: 'flex-start'}}>
+      <Pressable
+        onPressIn={startSection}
+        onPressOut={endSection}
+      >
+        <SessionChart data={[previewData,sectionData]} theme={theme} epochStart={0} epochEnd={100}  />
+      </Pressable>
       <LoggingControls
+        sections={sections}
         previewData={previewData}
-        setPreviewData={setPreviewData}
+        PreviewEvent={PreviewEvent}
         clearData={clearData}
       />
     </View>

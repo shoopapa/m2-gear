@@ -28,21 +28,42 @@ export const SessionPage = withTheme(
   ({ route, navigation, theme }: RecordProps) => {
     const { colors } = theme;
     const { id } = route.params;
+    const [errorLoading, setErrorLoading] = useState(false)
     const [session, setsession] = useState<Session | null>(null);
+    const [sectionData, setsectionData] = useState<number[]>([]);
     const styles = useContext(StyleContext);
 
-    useEffect(() => {
+    React.useEffect(() => {
       const sub = DataStore.observeQuery(Session, (p) =>
         p.id.eq(id)
-      ).subscribe((snap) => {
+      ).subscribe(async (snap) => {
         const { items } = snap;
-        setsession(items[0]);
+        const session = items[0]
+        if (session === undefined) {
+          setErrorLoading(true)
+          return
+        }
+        const sections = await session.sections.toArray()
+        setsession(session);
+        let section: number[] = []
+        session.linearAccerationTimestamp.forEach(f=>{
+          section.push(
+            sections.some(a=>a.start < f && f < a.end ) ? 5 : 0
+          )
+        })
+        setsectionData(section)
       });
 
       return () => {
         sub.unsubscribe();
       };
-    }, [id]);
+    }, [id])
+
+    if (errorLoading === true) {
+      return (
+        <Text>Error loading session with id {id}</Text>
+      )
+    }
 
     if (session === null) {
       return (
@@ -53,15 +74,19 @@ export const SessionPage = withTheme(
     }
 
     return (
-      <View style={styles.container}>
-        <SessionChart
-          data={[
-            session.linearAccerationX,
-            session.linearAccerationY,
-            session.linearAccerationZ,
-          ]}
-          theme={theme}
-        />
+      <View style={{...styles.container,   alignItems: 'flex-start'}}>
+        <View style={{height:'40%'}}>
+
+          <SessionChart
+            data={[
+              session.linearAccerationX,
+              session.linearAccerationY,
+              session.linearAccerationZ,
+              sectionData,
+            ]}
+            theme={theme}
+          />
+        </View>
 
         <Text>Recorded: {session.createdAt? timeAgo.format(new Date(session.createdAt)): ''}</Text>
         <Text>Session ID: {session.id}</Text>
@@ -78,8 +103,8 @@ export const SessionPage = withTheme(
         <Button
           mode="contained"
           color={colors.error}
-          onPress={() => {
-            DataStore.delete(session);
+          onPress={async () => {
+            await DataStore.delete(session);
             navigation.goBack();
           }}
         >

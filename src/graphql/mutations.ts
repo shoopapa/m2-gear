@@ -19,6 +19,22 @@ export const createSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -45,6 +61,22 @@ export const updateSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -71,6 +103,79 @@ export const deleteSession = /* GraphQL */ `
       linearAccerationX
       linearAccerationY
       linearAccerationZ
+      sections {
+        items {
+          id
+          sessionId
+          start
+          end
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const createSessionSection = /* GraphQL */ `
+  mutation CreateSessionSection(
+    $input: CreateSessionSectionInput!
+    $condition: ModelSessionSectionConditionInput
+  ) {
+    createSessionSection(input: $input, condition: $condition) {
+      id
+      sessionId
+      start
+      end
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const updateSessionSection = /* GraphQL */ `
+  mutation UpdateSessionSection(
+    $input: UpdateSessionSectionInput!
+    $condition: ModelSessionSectionConditionInput
+  ) {
+    updateSessionSection(input: $input, condition: $condition) {
+      id
+      sessionId
+      start
+      end
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const deleteSessionSection = /* GraphQL */ `
+  mutation DeleteSessionSection(
+    $input: DeleteSessionSectionInput!
+    $condition: ModelSessionSectionConditionInput
+  ) {
+    deleteSessionSection(input: $input, condition: $condition) {
+      id
+      sessionId
+      start
+      end
       createdAt
       updatedAt
       _version
