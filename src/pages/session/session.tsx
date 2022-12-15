@@ -44,6 +44,7 @@ export const SessionPage = withTheme(
           return
         }
         const sections = await session.sections.toArray()
+        console.log(sections)
         setsession(session);
         let section: number[] = []
         session.linearAccerationTimestamp.forEach(f=>{

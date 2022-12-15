@@ -124,6 +124,29 @@ export const getSessionSection = /* GraphQL */ `
       sessionId
       start
       end
+      session {
+        id
+        name
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
+        sections {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       createdAt
       updatedAt
       _version
@@ -155,6 +178,25 @@ export const listSessionSections = /* GraphQL */ `
         sessionId
         start
         end
+        session {
+          id
+          name
+          quaternionTimestamp
+          quaternionW
+          quaternionX
+          quaternionY
+          quaternionZ
+          linearAccerationTimestamp
+          linearAccerationX
+          linearAccerationY
+          linearAccerationZ
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         createdAt
         updatedAt
         _version
@@ -185,6 +227,25 @@ export const syncSessionSections = /* GraphQL */ `
         sessionId
         start
         end
+        session {
+          id
+          name
+          quaternionTimestamp
+          quaternionW
+          quaternionX
+          quaternionY
+          quaternionZ
+          linearAccerationTimestamp
+          linearAccerationX
+          linearAccerationY
+          linearAccerationZ
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         createdAt
         updatedAt
         _version

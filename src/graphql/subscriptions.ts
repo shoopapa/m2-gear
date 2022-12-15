@@ -138,6 +138,29 @@ export const onCreateSessionSection = /* GraphQL */ `
       sessionId
       start
       end
+      session {
+        id
+        name
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
+        sections {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       createdAt
       updatedAt
       _version
@@ -157,6 +180,29 @@ export const onUpdateSessionSection = /* GraphQL */ `
       sessionId
       start
       end
+      session {
+        id
+        name
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
+        sections {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       createdAt
       updatedAt
       _version
@@ -176,6 +222,29 @@ export const onDeleteSessionSection = /* GraphQL */ `
       sessionId
       start
       end
+      session {
+        id
+        name
+        quaternionTimestamp
+        quaternionW
+        quaternionX
+        quaternionY
+        quaternionZ
+        linearAccerationTimestamp
+        linearAccerationX
+        linearAccerationY
+        linearAccerationZ
+        sections {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       createdAt
       updatedAt
       _version

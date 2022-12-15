@@ -14,9 +14,7 @@ export const saveSession = async (
     return null;
   }
   try {
-    const proms = []
-
-    const session = new Session({
+    const session = await DataStore.save(new Session({
       name,
       linearAccerationTimestamp: a[0],
       linearAccerationX: a[1],
@@ -27,21 +25,20 @@ export const saveSession = async (
       quaternionX: q[2],
       quaternionY: q[3],
       quaternionZ: q[4],
-    });
-    proms.push(DataStore.save(session));
+    }))
 
+    const proms = []
     if (sections !== undefined) {
       sections.forEach(s=>{
         const {start,end} = s
         if (end === undefined || start === undefined) return;
-        const section = new SessionSection({start, end, sessionId: session.id})
+        const section = new SessionSection({start, end, session})
         proms.push(DataStore.save(section))
       })
-      proms.push()
     }
+    await Promise.all(proms)
 
-    return await Promise.all(proms)
-
+    return;
   } catch (e) {
     console.warn('failed to save session, please try again');
     console.log(e);
