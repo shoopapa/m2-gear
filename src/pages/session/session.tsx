@@ -46,18 +46,12 @@ export const SessionPage = withTheme(
         }
         const sections = await session.sections.toArray()
         setsession(session);
-        let now = session.linearAccerationTimestamp[0]*1000
-        const end = session.linearAccerationTimestamp[session.linearAccerationTimestamp.length-1]*1000
-        console.log(session.linearAccerationTimestamp)
         let section: number[] = []
-        console.log(now,end) // for some reason the section are not ligning up
         session.linearAccerationTimestamp.forEach(f=>{
           section.push(
-            sections.some(a=>a.start < now && now < a.end ) ? 5 : 0
+            sections.some(a=>a.start < f && f < a.end ) ? 5 : 0
           )
-          now += 15
         })
-        console.log(Math.max(...section))
         setsectionData(section)
       });
 

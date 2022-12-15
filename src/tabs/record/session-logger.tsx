@@ -67,7 +67,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
     if (device.isStreaming === false) return;
     setPressed(true)
     const newSection: simpleSection = {
-      start: Date.now()
+      start: Date.now()/1000
     }
     setSections(v=>([...v, newSection]))
   }
@@ -77,7 +77,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
     if (sections.length == 0 || sections[sections.length-1]?.start === undefined ) return;
     setPressed(false)
     setSections(v=>{
-      v[v.length-1].end = Date.now()
+      v[v.length-1].end = Date.now()/1000
       return v
     })
   }
