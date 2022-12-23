@@ -27,7 +27,7 @@ export const saveSession = async (
       quaternionZ: q[4],
     }))
 
-    const proms = []
+    const proms: Promise<any>[] = []
     if (sections !== undefined) {
       sections.forEach(s=>{
         const {start,end} = s

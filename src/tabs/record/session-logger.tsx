@@ -25,10 +25,10 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
   const quaternion = useRef<QuaternionType>([[], [], [], [], []]);
   const [previewData, setPreviewData] = useState<number[]>([]);
   const [sectionData, setsectionData] = useState<number[]>([]);
-  const [pressed, setPressed] = useState(false)
   const styles = useContext(StyleContext);
   const [device] = useContext(DeviceContext);
   const sample = useRef(0);
+  const pressed = useRef(false);
 
   const [sections, setSections] = useState<simpleSection[]>([])
 
@@ -44,9 +44,9 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
       if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH ?? "150", 10)) {
         v.shift();
       }
-      return [...v, pressed? 2 : 0]
+      return [...v, pressed.current? 2 : 0]
     })
-  }, [pressed,previewData])
+  }, [previewData])
 
 
   const PreviewEvent = useCallback((n: number = 1) => {
@@ -61,11 +61,11 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
       return;
     }
     sample.current += 1;
-  },[pressed,previewData]);
+  },[previewData]);
 
   const startSection = () => {
     if (device.isStreaming === false) return;
-    setPressed(true)
+    pressed.current = true
     const newSection: simpleSection = {
       start: Date.now()/1000
     }
@@ -75,7 +75,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
   const endSection = () => {
     if (device.isStreaming === false) return;
     if (sections.length == 0 || sections[sections.length-1]?.start === undefined ) return;
-    setPressed(false)
+    pressed.current =  false
     setSections(v=>{
       v[v.length-1].end = Date.now()/1000
       return v
@@ -87,6 +87,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
       <Pressable
         onPressIn={startSection}
         onPressOut={endSection}
+        pressRetentionOffset={1000}
       >
         <SessionChart data={[previewData,sectionData]} theme={theme} epochStart={0} epochEnd={100}  />
       </Pressable>
