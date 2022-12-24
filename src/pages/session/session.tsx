@@ -37,9 +37,6 @@ export const SessionPage = withTheme(
     const styles = useContext(StyleContext);
 
     React.useEffect(() => {
-      DataStore.query(SessionSection).then(x=>{
-        console.log('sections',x)
-      })
 
       const sub = DataStore.observeQuery(Session, (p) =>
         p.id.eq(id)

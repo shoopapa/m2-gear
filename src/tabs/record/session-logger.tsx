@@ -37,6 +37,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
     quaternion.current = [[], [], [], [], []];
     setPreviewData([]);
     setsectionData([]);
+    setSections([]);
   };
 
   useEffect(() => {
