@@ -1,6 +1,6 @@
 import { ModelInit, MutableModel } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
 
 type SessionMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
@@ -52,18 +52,18 @@ export declare const Session: (new (init: ModelInit<Session, SessionMetaData>) =
 
 type EagerSessionSection = {
   readonly id: string;
+  readonly sessionID: string;
   readonly start: number;
   readonly end: number;
-  readonly session?: Session | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazySessionSection = {
   readonly id: string;
+  readonly sessionID: string;
   readonly start: number;
   readonly end: number;
-  readonly session: AsyncItem<Session | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

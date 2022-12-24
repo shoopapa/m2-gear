@@ -14,7 +14,7 @@ type Session @model @auth(
   linearAccerationX: [Float!]!
   linearAccerationY: [Float!]!
   linearAccerationZ: [Float!]!
-  sections: [SessionSection!] @hasMany(indexName: "bySection", fields: ["id"])
+  sections: [SessionSection!] @hasMany(indexName: "bySession", fields: ["id"])
 }
 type SessionSection @model
  @auth(
@@ -22,10 +22,9 @@ type SessionSection @model
     {allow: owner}
   ]
 ) {
-  id: ID! @primaryKey(sortKeyFields: ["start"])
-  sessionId: ID! @index(name: "bySection", sortKeyFields: ["start", "end"])
+  id: ID!
+  sessionID: ID! @index(name: "bySession", sortKeyFields: ["start"])
   start: Float!
   end: Float!
-  session: Session @belongsTo(fields: ["sessionId"])
 }
 

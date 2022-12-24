@@ -100,7 +100,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "session"
+                        "associatedWith": "sessionID"
                     }
                 },
                 "createdAt": {
@@ -158,6 +158,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "sessionID": {
+                    "name": "sessionID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "start": {
                     "name": "start",
                     "isArray": false,
@@ -171,19 +178,6 @@ export const schema = {
                     "type": "Float",
                     "isRequired": true,
                     "attributes": []
-                },
-                "session": {
-                    "name": "session",
-                    "isArray": false,
-                    "type": {
-                        "model": "Session"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "sessionId"
-                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -212,20 +206,10 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
+                        "name": "bySession",
                         "fields": [
-                            "id",
+                            "sessionID",
                             "start"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "bySection",
-                        "fields": [
-                            "sessionId",
-                            "start",
-                            "end"
                         ]
                     }
                 },
@@ -254,5 +238,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.2",
-    "version": "24f6ffe721ca3c8b98db9ceb491d6c41"
+    "version": "86def3f71feb9b9d7eefd2c4ef32d724"
 };

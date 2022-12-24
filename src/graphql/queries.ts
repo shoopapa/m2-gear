@@ -19,7 +19,7 @@ export const getSession = /* GraphQL */ `
       sections {
         items {
           id
-          sessionId
+          sessionID
           start
           end
           createdAt
@@ -118,35 +118,12 @@ export const syncSessions = /* GraphQL */ `
   }
 `;
 export const getSessionSection = /* GraphQL */ `
-  query GetSessionSection($id: ID!, $start: Float!) {
-    getSessionSection(id: $id, start: $start) {
+  query GetSessionSection($id: ID!) {
+    getSessionSection(id: $id) {
       id
-      sessionId
+      sessionID
       start
       end
-      session {
-        id
-        name
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        sections {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
       createdAt
       updatedAt
       _version
@@ -158,45 +135,16 @@ export const getSessionSection = /* GraphQL */ `
 `;
 export const listSessionSections = /* GraphQL */ `
   query ListSessionSections(
-    $id: ID
-    $start: ModelFloatKeyConditionInput
     $filter: ModelSessionSectionFilterInput
     $limit: Int
     $nextToken: String
-    $sortDirection: ModelSortDirection
   ) {
-    listSessionSections(
-      id: $id
-      start: $start
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
+    listSessionSections(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        sessionId
+        sessionID
         start
         end
-        session {
-          id
-          name
-          quaternionTimestamp
-          quaternionW
-          quaternionX
-          quaternionY
-          quaternionZ
-          linearAccerationTimestamp
-          linearAccerationX
-          linearAccerationY
-          linearAccerationZ
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          owner
-        }
         createdAt
         updatedAt
         _version
@@ -224,28 +172,9 @@ export const syncSessionSections = /* GraphQL */ `
     ) {
       items {
         id
-        sessionId
+        sessionID
         start
         end
-        session {
-          id
-          name
-          quaternionTimestamp
-          quaternionW
-          quaternionX
-          quaternionY
-          quaternionZ
-          linearAccerationTimestamp
-          linearAccerationX
-          linearAccerationY
-          linearAccerationZ
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          owner
-        }
         createdAt
         updatedAt
         _version

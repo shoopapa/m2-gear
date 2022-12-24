@@ -1,6 +1,6 @@
 import { DataStore } from 'aws-amplify';
 import { Section } from 'react-native-paper/lib/typescript/components/List/List';
-import { Session, SessionSection } from '../models';
+import { LazySessionSection, Session, SessionSection } from '../models';
 import { LinearAccerationType, QuaternionType } from '../types/data-format';
 
 export type simpleSection = {start?:number, end?:number}
@@ -14,7 +14,7 @@ export const saveSession = async (
     return null;
   }
   try {
-    const session = await DataStore.save(new Session({
+    const session = new Session({
       name,
       linearAccerationTimestamp: a[0],
       linearAccerationX: a[1],
@@ -25,18 +25,19 @@ export const saveSession = async (
       quaternionX: q[2],
       quaternionY: q[3],
       quaternionZ: q[4],
-    }))
+    })
 
-    const proms: Promise<any>[] = []
+    await DataStore.save(session)
+
+    let sectionModels: SessionSection[] = []
     if (sections !== undefined) {
       sections.forEach(s=>{
         const {start,end} = s
         if (end === undefined || start === undefined) return;
-        const section = new SessionSection({start, end, session})
-        proms.push(DataStore.save(section))
+        sectionModels.push(new SessionSection({start, end, sessionID:session.id}))
       })
     }
-    await Promise.all(proms)
+    await Promise.all(sectionModels.map(s=> DataStore.save(s) ))
 
     return;
   } catch (e) {
