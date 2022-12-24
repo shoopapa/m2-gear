@@ -4,11 +4,14 @@ import { RecordParamList } from '../../tabs/record/record-tab';
 import { ActivityIndicator, Button, Text, withTheme } from 'react-native-paper';
 import { ThemeType } from '../../styles/theme';
 import { DataStore } from 'aws-amplify';
-import { Session } from '../../models';
+import { Session, SessionSection } from '../../models';
 import { View } from 'react-native';
 import { SessionChart } from '../../components/session-chart/session-chart';
 import { StyleContext } from '../../styles/styles';
 import { timeAgo } from '../../utils/time-ago';
+
+import { deleteSession } from '../../graphql/mutations';
+import { API } from 'aws-amplify';
 
 const getHighestOfArray = (arr: number[]): number => {
   const max = Math.max(...arr);
@@ -34,6 +37,10 @@ export const SessionPage = withTheme(
     const styles = useContext(StyleContext);
 
     React.useEffect(() => {
+      DataStore.query(SessionSection).then(x=>{
+        console.log('sections',x)
+      })
+
       const sub = DataStore.observeQuery(Session, (p) =>
         p.id.eq(id)
       ).subscribe(async (snap) => {
@@ -44,7 +51,6 @@ export const SessionPage = withTheme(
           return
         }
         const sections = await session.sections.toArray()
-        console.log(sections)
         setsession(session);
         let section: number[] = []
         session.linearAccerationTimestamp.forEach(f=>{
@@ -101,16 +107,22 @@ export const SessionPage = withTheme(
         <Text>
           Peak Y Acceration: {getHighestOfArray(session.linearAccerationZ)}g
         </Text>
-        <Button
+        {/* <Button
           mode="contained"
           color={colors.error}
           onPress={async () => {
-            await DataStore.delete(session);
+            await Promise.all((await session.sections.toArray()).map(async section=> {
+              await DataStore.delete(SessionSection, s=> s.id.eq(section.id) );
+            }))
+
+            // await API.graphql({query: deleteSession, variables:{input:{id: session.id}}})
+            await DataStore.delete(session)
+
             navigation.goBack();
           }}
         >
           Delete Session
-        </Button>
+        </Button> */}
       </View>
     );
   },

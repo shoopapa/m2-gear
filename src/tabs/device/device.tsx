@@ -119,6 +119,15 @@ export const Device = withTheme(({ navigation, theme }: DeviceProps) => {
         >
           Sign Out
         </Button>
+        <Button
+          mode="contained"
+          style={{ backgroundColor: colors.error, margin: '2%' }}
+          onPress={async () => {
+            DataStore.clear();
+          }}
+        >
+          Clear DataStore
+        </Button>
       </Drawer.Section>
     </View>
   );

@@ -22,7 +22,7 @@ export const onCreateSession = /* GraphQL */ `
       sections {
         items {
           id
-          sessionId
+          sessionID
           start
           end
           createdAt
@@ -64,7 +64,7 @@ export const onUpdateSession = /* GraphQL */ `
       sections {
         items {
           id
-          sessionId
+          sessionID
           start
           end
           createdAt
@@ -106,7 +106,7 @@ export const onDeleteSession = /* GraphQL */ `
       sections {
         items {
           id
-          sessionId
+          sessionID
           start
           end
           createdAt
@@ -135,32 +135,9 @@ export const onCreateSessionSection = /* GraphQL */ `
   ) {
     onCreateSessionSection(filter: $filter, owner: $owner) {
       id
-      sessionId
+      sessionID
       start
       end
-      session {
-        id
-        name
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        sections {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
       createdAt
       updatedAt
       _version
@@ -177,32 +154,9 @@ export const onUpdateSessionSection = /* GraphQL */ `
   ) {
     onUpdateSessionSection(filter: $filter, owner: $owner) {
       id
-      sessionId
+      sessionID
       start
       end
-      session {
-        id
-        name
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        sections {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
       createdAt
       updatedAt
       _version
@@ -219,32 +173,9 @@ export const onDeleteSessionSection = /* GraphQL */ `
   ) {
     onDeleteSessionSection(filter: $filter, owner: $owner) {
       id
-      sessionId
+      sessionID
       start
       end
-      session {
-        id
-        name
-        quaternionTimestamp
-        quaternionW
-        quaternionX
-        quaternionY
-        quaternionZ
-        linearAccerationTimestamp
-        linearAccerationX
-        linearAccerationY
-        linearAccerationZ
-        sections {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
       createdAt
       updatedAt
       _version
