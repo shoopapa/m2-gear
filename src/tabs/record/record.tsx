@@ -27,8 +27,6 @@ export const Record = withTheme((props: RecordProps) => {
         setsessions(items.slice(0, 10));
       });
       return () => subscription.unsubscribe();
-
-
     }, []),
   );
 
