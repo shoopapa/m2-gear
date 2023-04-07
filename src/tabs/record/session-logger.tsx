@@ -42,7 +42,7 @@ export const SessionLogger = withTheme(({ theme }: SessionScreenProps) => {
 
   useEffect(() => {
     setsectionData(v=>{
-      if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH ?? "150", 10)) {
+      if (v.length > parseInt(Config.PREVIEW_DATA_LENGTH ?? "75", 10)) {
         v.shift();
       }
       return [...v, pressed.current? 2 : 0]
